@@ -1,5 +1,11 @@
 package org.csu.mydb.config;
 
+import ch.qos.logback.classic.LoggerContext;
+import org.csu.mydb.Main;
+import org.csu.mydb.log.LoggerManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,29 +14,29 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ConfigManager {
+public class ConfigLoader {
 
     // 是否已经加载
     private boolean isLoaded = false;
 
+    private static final Properties props = new Properties();
+
     // 单例实例（静态内部类保证线程安全）
     private static class Holder {
-        static final ConfigManager INSTANCE = new ConfigManager();
+        static final ConfigLoader INSTANCE = new ConfigLoader();
     }
 
     // 配置存储结构：[section] → {key: value}
     private final Map<String, Map<String, String>> configData = new ConcurrentHashMap<>();
 
     // 私有构造函数（防止外部实例化）
-    private ConfigManager() {
-        // 初始化时加载默认配置（可选）
-        loadDefaultConfig();
+    private ConfigLoader() {
     }
 
     /**
      * 获取单例实例（线程安全）
      */
-    public static ConfigManager getInstance() {
+    public static ConfigLoader getInstance() {
         return Holder.INSTANCE;
     }
 
@@ -41,7 +47,16 @@ public class ConfigManager {
     public CompletableFuture<Void> loadConfigAsync(String configPath) {
         return CompletableFuture.runAsync(() -> {
             try {
+                // 1. 加载配置文件
                 loadConfig(configPath);  // 原有同步加载逻辑
+
+                // 2. 读取日志配置并设置系统属性（关键步骤）
+                Map<String, String> logConfig = getSection("log");
+                LoggerManager.setLogbackProperties(logConfig);
+
+                // 3. 初始化日志框架（Logback会自动读取系统属性）
+                LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+                context.reset(); // 重置默认配置（可选，确保加载最新属性）
             } catch (IOException e) {
                 throw new RuntimeException("异步加载配置失败", e);
             }
@@ -154,37 +169,6 @@ public class ConfigManager {
     }
 
     /**
-     * 加载默认配置（可选，用于补充缺失的配置项）
-     */
-    private void loadDefaultConfig() {
-        // 示例默认配置（可根据需求扩展）
-        Map<String, Map<String, String>> defaultConfig = new HashMap<>();
-
-        // 存储模块默认配置
-        Map<String, String> storageConfig = new HashMap<>();
-        storageConfig.put("page_size", "4096");
-        storageConfig.put("buffer_pool_size", "100");
-        storageConfig.put("max_connections", "1000");
-        defaultConfig.put("storage", storageConfig);
-
-        // 日志模块默认配置
-        Map<String, String> logConfig = new HashMap<>();
-        logConfig.put("level", "INFO");
-        logConfig.put("path", "logs/mydb.log");
-        defaultConfig.put("log", logConfig);
-
-        // 合并到主配置（优先使用用户配置，无则用默认）
-        defaultConfig.forEach((section, keys) -> {
-            configData.putIfAbsent(section, new ConcurrentHashMap<>());
-            keys.forEach((key, value) -> {
-                if (!configData.get(section).containsKey(key)) {
-                    configData.get(section).put(key, value);
-                }
-            });
-        });
-    }
-
-    /**
      * 获取字符串类型配置（支持默认值）
      */
     public String getString(String section, String key, String defaultValue) {
@@ -218,5 +202,19 @@ public class ConfigManager {
      */
     public boolean contains(String section, String key) {
         return configData.containsKey(section) && configData.get(section).containsKey(key.toLowerCase());
+    }
+
+    /**
+     * 获取指定节的配置
+     * @param sectionName 配置项
+     * @return 配置项设置
+     */
+    public Map<String, String> getSection(String sectionName) {
+        if (!isLoaded) {
+            throw new IllegalStateException("配置未加载，请先调用loadConfig()");
+        }
+        // 转换为小写
+        String normalizedSection = sectionName.toLowerCase();
+        return configData.getOrDefault(normalizedSection, Collections.emptyMap());
     }
 }

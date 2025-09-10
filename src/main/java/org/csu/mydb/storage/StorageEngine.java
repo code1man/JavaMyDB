@@ -1,6 +1,6 @@
 package org.csu.mydb.storage;
 
-import org.csu.mydb.config.ConfigManager;
+import org.csu.mydb.config.ConfigLoader;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,9 +17,9 @@ public class StorageEngine {
 
     public StorageEngine() {
         // 从 ConfigManager 获取配置（带默认值）
-        this.pageSize = ConfigManager.getInstance().getInt("storage", "page_size", 4096);
-        this.bufferPoolSize = ConfigManager.getInstance().getInt("storage", "buffer_pool_size", 100);
-        this.maxConnections = ConfigManager.getInstance().getInt("storage", "max_connections", 1000);
+        this.pageSize = ConfigLoader.getInstance().getInt("storage", "page_size", 4096);
+        this.bufferPoolSize = ConfigLoader.getInstance().getInt("storage", "buffer_pool_size", 100);
+        this.maxConnections = ConfigLoader.getInstance().getInt("storage", "max_connections", 1000);
 
         prePath = "";
         isOpen = false;
