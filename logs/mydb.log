@@ -1,0 +1,6 @@
+2025-09-10 16:06:57.488 [main] INFO  com.example.mydb.LogbackTest - Info级别日志（应输出到控制台和文件）
+2025-09-10 16:06:57.489 [main] WARN  com.example.mydb.LogbackTest - Warn级别日志（应输出到控制台和文件）
+2025-09-10 16:06:57.490 [main] ERROR com.example.mydb.LogbackTest - Error级别日志（应输出到控制台和文件）
+2025-09-10 16:08:32.685 [main] INFO  com.example.mydb.LogbackTest - Info级别日志（应输出到控制台和文件）
+2025-09-10 16:08:32.685 [main] WARN  com.example.mydb.LogbackTest - Warn级别日志（应输出到控制台和文件）
+2025-09-10 16:08:32.686 [main] ERROR com.example.mydb.LogbackTest - Error级别日志（应输出到控制台和文件）
