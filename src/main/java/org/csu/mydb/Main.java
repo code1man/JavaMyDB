@@ -11,14 +11,14 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        try {
-            // 加载配置文件（路径相对于 resource 目录）
-            ConfigManager.getInstance().loadConfig("config/mydb.ini");
-            System.out.println("配置加载成功！");
-        } catch (IOException e) {
-            System.err.println("配置加载失败: " + e.getMessage());
-            System.exit(1);  // 配置缺失时终止程序
-        }
+        // 异步读取配置文件
+        ConfigManager.getInstance().loadConfigAsync("config/mydb.ini")
+                .thenRun(() -> System.out.println("配置加载完成，启动应用..."))
+                .exceptionally(e -> {
+                    System.err.println("配置加载失败: " + e.getMessage());
+                    System.exit(1);
+                    return null;
+                });
 
         // 初始化模块
         StorageEngine storageEngine = new StorageEngine();
