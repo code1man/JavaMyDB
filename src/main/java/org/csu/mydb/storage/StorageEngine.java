@@ -1,5 +1,7 @@
 package org.csu.mydb.storage;
 
+import org.csu.mydb.config.ConfigManager;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +11,24 @@ public class StorageEngine {
     private boolean isOpen = false;    // 是否已打开数据库
     private final List<Table> tables = new ArrayList<>();  // 当前打开的表列表
 
-    // 构造函数（初始化默认值）
+    private final int pageSize;
+    private final int bufferPoolSize;
+    private final int maxConnections;
+
     public StorageEngine() {
+        // 从 ConfigManager 获取配置（带默认值）
+        this.pageSize = ConfigManager.getInstance().getInt("storage", "page_size", 4096);
+        this.bufferPoolSize = ConfigManager.getInstance().getInt("storage", "buffer_pool_size", 100);
+        this.maxConnections = ConfigManager.getInstance().getInt("storage", "max_connections", 1000);
+
         prePath = "";
         isOpen = false;
         tables.clear();
+
+        System.out.println("存储引擎初始化参数：");
+        System.out.println("page_size=" + pageSize);
+        System.out.println("buffer_pool_size=" + bufferPoolSize);
+        System.out.println("max_connections=" + maxConnections);
     }
 
     // 析构函数（Java 中通过 finalize 或显式关闭处理，此处显式关闭更安全）
