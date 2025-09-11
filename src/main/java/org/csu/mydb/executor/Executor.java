@@ -4,7 +4,6 @@ import org.csu.mydb.cli.ParsedCommand;
 import org.csu.mydb.storage.StorageEngine;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Executor {
@@ -24,25 +23,19 @@ public class Executor {
         if (cmd == null || cmd.getType() == null) {
             return false;
         }
-        switch (cmd.getType()) {
-            case CREATE_DB:
-                return executeCreateDatabase(cmd);
-            case DROP_DB:
-                return executeDropDatabase(cmd);
-            case OPEN_DB:
-                return executeOpenDatabase(cmd);
-            case CLOSE_DB:
-                return executeCloseDatabase(cmd);
-            case CREATE_TABLE:
-                return executeCreateTable(cmd);
-            case DROP_TABLE:
-                return executeDropTable(cmd);
-            case EXIT:
-                return false;  // 退出命令返回 false，终止循环
-            default:
+        return switch (cmd.getType()) {
+            case CREATE_DB -> executeCreateDatabase(cmd);
+            case DROP_DB -> executeDropDatabase(cmd);
+            case OPEN_DB -> executeOpenDatabase(cmd);
+            case CLOSE_DB -> executeCloseDatabase(cmd);
+            case CREATE_TABLE -> executeCreateTable(cmd);
+            case DROP_TABLE -> executeDropTable(cmd);
+            case EXIT -> false;  // 退出命令返回 false，终止循环
+            default -> {
                 System.out.println("未知命令或未实现");
-                return true;  // 继续循环
-        }
+                yield true;
+            }
+        };
     }
 
     /**

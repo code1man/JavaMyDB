@@ -1,5 +1,6 @@
 package org.csu.mydb.storage;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,9 +22,9 @@ public class PageManager {
     /**
      * 全局页标识符 (表空间ID + 页号)
      */
-    static class GlobalPageId {
-        final int spaceId; // 表空间ID
-        final int pageNo; // 页号
+    public static class GlobalPageId {
+        public final int spaceId; // 表空间ID
+        public final int pageNo; // 页号
 
         public GlobalPageId(int spaceId, int pageNo) {
             this.spaceId = spaceId;
@@ -47,19 +48,19 @@ public class PageManager {
     /**
      * 页头元数据（24字节）
      */
-    static class PageHeader {
-        int pageNo;          // 4字节 - 页号
-        int prevPage;        // 4字节 - 上一页
-        int nextPage;        // 4字节 - 下一页
-        short recordCount;   // 2字节 - 记录数
-        short freeSpace;     // 2字节 - 空闲空间大小
-        short slotCount;     // 2字节 - 槽位数
-        short firstFreeSlot; // 2字节 - 第一个空闲槽位索引
-        short lastSlotOffset; // 2字节 - 最后一个槽位的相对页的偏移量
-        byte pageType;       // 1字节 - 页类型 (0=数据页, 1=索引页)
-        byte flags;          // 1字节 - 标志位
-        int checksum;        // 4字节 - 校验和
-        boolean isDirty;    // 1字节 - 是否为脏页
+    public static class PageHeader {
+        public int pageNo;          // 4字节 - 页号
+        public int prevPage;        // 4字节 - 上一页
+        public int nextPage;        // 4字节 - 下一页
+        public short recordCount;   // 2字节 - 记录数
+        public short freeSpace;     // 2字节 - 空闲空间大小
+        public short slotCount;     // 2字节 - 槽位数
+        public short firstFreeSlot; // 2字节 - 第一个空闲槽位索引
+        public short lastSlotOffset; // 2字节 - 最后一个槽位的相对页的偏移量
+        public byte pageType;       // 1字节 - 页类型 (0=数据页, 1=索引页)
+        public byte flags;          // 1字节 - 标志位
+        public int checksum;        // 4字节 - 校验和
+        public boolean isDirty;    // 1字节 - 是否为脏页
 
 
         /**
@@ -133,7 +134,7 @@ public class PageManager {
     /**
      * 槽位结构（6字节）
      */
-    static class Slot {
+    public static class Slot {
         short offset;   // 2字节 - 记录在数据区的偏移量
         short length;   // 2字节 - 记录长度
         byte status;    // 1字节 - 状态 (0=空闲, 1=使用中, 2=已删除)
@@ -165,7 +166,7 @@ public class PageManager {
     /**
      * 数据页
      */
-    static class DataPage {
+    public static class DataPage {
         PageHeader header;
 
         //每个记录的位置
@@ -229,7 +230,7 @@ public class PageManager {
                     return false; // 空间不足（槽位数组和数据区相遇）
                 }
             }
-            //0 1 | 2 3 4 5 | 6 7 8 9
+            // 0 1 | 2 3 4 5 | 6 7 8 9
 
             // 分配槽位
             int slotIndex;
@@ -325,5 +326,18 @@ public class PageManager {
         public boolean updateRecord(int slotIndex) {
             return false;
         }
+
+        public PageHeader getHeader() {
+            return header;
+        }
+    }
+
+    // 随便写的
+    public static void writePage(DataPage page, int spaceId) throws IOException {
+    }
+
+    public static DataPage readPage(GlobalPageId pageId) throws IOException {
+        DataPage page = new DataPage(pageId.pageNo);
+        return page;
     }
 }
