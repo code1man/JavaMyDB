@@ -5,6 +5,7 @@ import org.csu.mydb.storage.PageManager;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Mock 版本的 PageManager
@@ -15,6 +16,19 @@ public class MockPageManager {
 
     // 模拟多张表空间：spaceId → (pageNo → DataPage)
     private static final Map<Integer, ConcurrentHashMap<Integer, PageManager.DataPage>> fakeDisk = new ConcurrentHashMap<>();
+    private static final AtomicInteger nextPageNo = new AtomicInteger(0);
+
+    /**
+     * 创建一个新的 DataPage 并写入一条数据
+     */
+    public static PageManager.DataPage newPage(PageManager.GlobalPageId pid, String data) {
+        fakeDisk.putIfAbsent(pid.spaceId, new ConcurrentHashMap<>());
+        PageManager.DataPage page = new PageManager.DataPage(pid.pageNo);
+        page.addRecord(data.getBytes());
+        fakeDisk.get(pid.spaceId).put(pid.pageNo, page);
+        return page;
+    }
+
 
     /**
      * 模拟写入磁盘
