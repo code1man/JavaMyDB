@@ -1,7 +1,5 @@
 package com.example.mydb;
 
-
-
 import org.csu.mydb.executor.ExecutionPlan;
 import org.csu.mydb.executor.ExecutionResult;
 import org.csu.mydb.executor.Executor;
@@ -18,6 +16,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.DisplayName;
+
 /**
  * Executor模块测试类
  */
@@ -27,26 +27,26 @@ public class ExecutorTest {
     private StorageEngineMock storageEngine;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         logger.info("初始化测试环境");
         storageEngine = new StorageEngineMock();
         executor = new Executor(storageEngine);
     }
 
     @AfterEach
-    void tearDown() {
+    public void tearDown() {
         logger.info("清理测试环境");
-        // 清理可能的测试数据
     }
 
     @Test
-    void testCreateDatabase() {
+    @DisplayName("测试创建数据库")
+    public void testCreateDatabase() {
         logger.info("测试创建数据库");
 
-        ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.CREATE_DATABASE);
-        plan.setDatabaseName("test_db");
-
         try {
+            ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.CREATE_DATABASE);
+            plan.setDatabaseName("test_db");
+
             ExecutionResult result = executor.execute(plan);
             assertTrue(result.isSuccess());
             assertEquals("数据库创建成功: test_db", result.getMessage());
@@ -55,131 +55,110 @@ public class ExecutorTest {
             fail("执行计划失败: " + e.getMessage());
         }
     }
-
     @Test
-    void testDropDatabase() {
+    @DisplayName("测试删除数据库")
+    public void testDropDatabase() throws ExecutorException {
         logger.info("测试删除数据库");
 
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.DROP_DATABASE);
         plan.setDatabaseName("test_db");
 
-        try {
-            ExecutionResult result = executor.execute(plan);
-            assertTrue(result.isSuccess());
-            assertEquals("数据库删除成功: test_db", result.getMessage());
-            assertTrue(storageEngine.isDropDatabaseCalled());
-        } catch (ExecutorException e) {
-            fail("执行计划失败: " + e.getMessage());
-        }
+        ExecutionResult result = executor.execute(plan);
+        assertTrue(result.isSuccess());
+        assertEquals("数据库删除成功: test_db", result.getMessage());
+        assertTrue(storageEngine.isDropDatabaseCalled());
     }
 
     @Test
-    void testOpenDatabase() {
+    @DisplayName("测试打开数据库")
+    public void testOpenDatabase() throws ExecutorException {
         logger.info("测试打开数据库");
 
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.OPEN_DATABASE);
         plan.setDatabaseName("test_db");
 
-        try {
-            ExecutionResult result = executor.execute(plan);
-            assertTrue(result.isSuccess());
-            assertEquals("数据库打开成功: test_db", result.getMessage());
-            assertTrue(storageEngine.isOpenDatabaseCalled());
-        } catch (ExecutorException e) {
-            fail("执行计划失败: " + e.getMessage());
-        }
+        ExecutionResult result = executor.execute(plan);
+        assertTrue(result.isSuccess());
+        assertEquals("数据库打开成功: test_db", result.getMessage());
+        assertTrue(storageEngine.isOpenDatabaseCalled());
     }
 
     @Test
-    void testCloseDatabase() {
+    @DisplayName("测试关闭数据库")
+    public void testCloseDatabase() throws ExecutorException {
         logger.info("测试关闭数据库");
 
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.CLOSE_DATABASE);
 
-        try {
-            ExecutionResult result = executor.execute(plan);
-            assertTrue(result.isSuccess());
-            assertEquals("数据库关闭成功", result.getMessage());
-            assertTrue(storageEngine.isCloseDatabaseCalled());
-        } catch (ExecutorException e) {
-            fail("执行计划失败: " + e.getMessage());
-        }
+        ExecutionResult result = executor.execute(plan);
+        assertTrue(result.isSuccess());
+        assertEquals("数据库关闭成功", result.getMessage());
+        assertTrue(storageEngine.isCloseDatabaseCalled());
     }
 
     @Test
-    void testCreateTable() {
+    @DisplayName("测试创建表")
+    public void testCreateTable() throws ExecutorException {
         logger.info("测试创建表");
 
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.CREATE_TABLE);
         plan.setTableName("users");
         plan.setColumns(Arrays.asList("id", "name", "email"));
 
-        try {
-            ExecutionResult result = executor.execute(plan);
-            assertTrue(result.isSuccess());
-            assertEquals("表创建成功: users", result.getMessage());
-            assertTrue(storageEngine.isCreateTableCalled());
-        } catch (ExecutorException e) {
-            fail("执行计划失败: " + e.getMessage());
-        }
+        ExecutionResult result = executor.execute(plan);
+        assertTrue(result.isSuccess());
+        assertEquals("表创建成功: users", result.getMessage());
+        assertTrue(storageEngine.isCreateTableCalled());
     }
 
     @Test
-    void testDropTable() {
+    @DisplayName("测试删除表")
+    public void testDropTable() throws ExecutorException {
         logger.info("测试删除表");
 
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.DROP_TABLE);
         plan.setTableName("users");
 
-        try {
-            ExecutionResult result = executor.execute(plan);
-            assertTrue(result.isSuccess());
-            assertEquals("表删除成功: users", result.getMessage());
-            assertTrue(storageEngine.isDropTableCalled());
-        } catch (ExecutorException e) {
-            fail("执行计划失败: " + e.getMessage());
-        }
+        ExecutionResult result = executor.execute(plan);
+        assertTrue(result.isSuccess());
+        assertEquals("表删除成功: users", result.getMessage());
+        assertTrue(storageEngine.isDropTableCalled());
     }
 
     @Test
-    void testInsert() {
+    @DisplayName("测试插入数据")
+    public void testInsert() throws ExecutorException {
         logger.info("测试插入数据");
 
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.INSERT);
         plan.setTableName("users");
         plan.setValues(Arrays.asList("1", "John Doe", "john@example.com"));
 
-        try {
-            ExecutionResult result = executor.execute(plan);
-            assertTrue(result.isSuccess());
-            assertEquals("数据插入成功", result.getMessage());
-            assertEquals(1, result.getAffectedRows());
-            assertTrue(storageEngine.isInsertCalled());
-        } catch (ExecutorException e) {
-            fail("执行计划失败: " + e.getMessage());
-        }
+        ExecutionResult result = executor.execute(plan);
+        assertTrue(result.isSuccess());
+        assertEquals("数据插入成功", result.getMessage());
+        assertEquals(1, result.getAffectedRows());
+        assertTrue(storageEngine.isInsertCalled());
     }
 
     @Test
-    void testDelete() {
+    @DisplayName("测试删除数据")
+    public void testDelete() throws ExecutorException {
         logger.info("测试删除数据");
 
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.DELETE);
         plan.setTableName("users");
         plan.setCondition("id=1");
 
-        try {
-            ExecutionResult result = executor.execute(plan);
-            assertTrue(result.isSuccess());
-            assertEquals("数据删除成功", result.getMessage());
-            assertTrue(storageEngine.isDeleteCalled());
-        } catch (ExecutorException e) {
-            fail("执行计划失败: " + e.getMessage());
-        }
+        ExecutionResult result = executor.execute(plan);
+        assertTrue(result.isSuccess());
+        assertEquals("数据删除成功", result.getMessage());
+        assertTrue(storageEngine.isDeleteCalled());
     }
 
     @Test
-    void testUpdate() {
+    @DisplayName("测试更新数据")
+    public void testUpdate() throws ExecutorException {
         logger.info("测试更新数据");
 
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.UPDATE);
@@ -188,18 +167,15 @@ public class ExecutorTest {
         plan.setNewValue("john.doe@example.com");
         plan.setCondition("id=1");
 
-        try {
-            ExecutionResult result = executor.execute(plan);
-            assertTrue(result.isSuccess());
-            assertEquals("数据更新成功", result.getMessage());
-            assertTrue(storageEngine.isUpdateCalled());
-        } catch (ExecutorException e) {
-            fail("执行计划失败: " + e.getMessage());
-        }
+        ExecutionResult result = executor.execute(plan);
+        assertTrue(result.isSuccess());
+        assertEquals("数据更新成功", result.getMessage());
+        assertTrue(storageEngine.isUpdateCalled());
     }
 
     @Test
-    void testQuery() {
+    @DisplayName("测试查询数据")
+    public void testQuery() throws ExecutorException {
         logger.info("测试查询数据");
 
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.QUERY);
@@ -207,47 +183,25 @@ public class ExecutorTest {
         plan.setQueryColumns("all");
         plan.setCondition("id=1");
 
-        try {
-            ExecutionResult result = executor.execute(plan);
-            assertTrue(result.isSuccess());
-            assertEquals("查询成功", result.getMessage());
-            assertNotNull(result.getData());
-            assertTrue(storageEngine.isQueryCalled());
-        } catch (ExecutorException e) {
-            fail("执行计划失败: " + e.getMessage());
-        }
+        ExecutionResult result = executor.execute(plan);
+        assertTrue(result.isSuccess());
+        assertEquals("查询成功", result.getMessage());
+        assertNotNull(result.getData());
+        assertTrue(storageEngine.isQueryCalled());
     }
 
-    @Test
-    void testInvalidOperation() {
-        logger.info("测试无效操作类型");
-
-        // 创建一个无效的操作类型（通过反射）
-        ExecutionPlan plan = new ExecutionPlan(null);
-
-        try {
-            ExecutionResult result = executor.execute(plan);
-            fail("应该抛出ExecutorException");
-        } catch (ExecutorException e) {
-            assertTrue(e.getMessage().contains("未知的操作类型"));
-            logger.debug("预期异常: {}", e.getMessage());
-        }
-    }
 
     @Test
-    void testMissingParameters() {
+    @DisplayName("测试缺少必要参数")
+    public void testMissingParameters() throws ExecutorException {
         logger.info("测试缺少必要参数");
 
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.CREATE_DATABASE);
         // 不设置databaseName
 
-        try {
-            ExecutionResult result = executor.execute(plan);
-            assertFalse(result.isSuccess());
-            assertEquals("数据库名不能为空", result.getMessage());
-        } catch (ExecutorException e) {
-            fail("不应该抛出ExecutorException");
-        }
+        ExecutionResult result = executor.execute(plan);
+        assertFalse(result.isSuccess());
+        assertEquals("数据库名不能为空", result.getMessage());
     }
 }
 

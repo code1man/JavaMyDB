@@ -2,7 +2,10 @@ package org.csu.mydb.executor;
 
 
 
+import org.csu.mydb.cli.ParsedCommand;
 import org.csu.mydb.storage.StorageEngine;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -223,5 +226,32 @@ public class Executor {
     // 获取存储引擎实例（用于测试或其他用途）
     public StorageEngine getStorageEngine() {
         return storageEngine;
+    }
+
+
+    /**
+     * 执行给定的ParsedCommand
+     * @param command 解析后的命令
+     * @return 是否继续执行CLI循环（true继续，false退出）
+     * @throws ExecutorException 执行异常
+     */
+    public boolean execute(ParsedCommand command) throws ExecutorException {
+        // 将ParsedCommand转换为ExecutionPlan
+        ExecutionPlan plan = CommandToPlanConverter.convert(command);
+        if (plan == null) {
+            throw new ExecutorException("无法转换命令类型: " + command.getType());
+        }
+
+        // 执行转换后的计划
+        ExecutionResult result = execute(plan);
+
+        // 如果命令是 EXIT 或 CLOSE_DATABASE，就返回 false，告诉 CLI 退出循环
+        switch (plan.getOperationType()) {
+            case CLOSE_DATABASE:
+            case QUERY:
+                return false;
+            default:
+                return true;
+        }
     }
 }
