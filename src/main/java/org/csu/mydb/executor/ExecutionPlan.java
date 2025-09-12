@@ -19,7 +19,8 @@ public class ExecutionPlan {
         INSERT,
         DELETE,
         UPDATE,
-        QUERY
+        QUERY,
+        EXIT
     }
 
     private OperationType operationType;

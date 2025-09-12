@@ -8,7 +8,7 @@ import org.csu.mydb.storage.StorageEngine;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ArrayList;
+
 
 /**
  * 执行器主类
@@ -54,6 +54,8 @@ public class Executor {
                     return executeUpdate(plan);
                 case QUERY:
                     return executeQuery(plan);
+                case EXIT:
+                    return new ExecutionResult(true, "退出命令已执行");
                 default:
                     throw new ExecutorException("未知的操作类型: " + plan.getOperationType());
             }
@@ -246,11 +248,12 @@ public class Executor {
         // 执行转换后的计划
         ExecutionResult result = execute(plan);
 
-        // 如果命令是 EXIT 或 CLOSE_DATABASE，就返回 false，告诉 CLI 退出循环
         switch (plan.getOperationType()) {
+            case EXIT:
+                return false; // 明确退出 CLI
             case CLOSE_DATABASE:
-            case QUERY:
-                return false;
+                // 仅关闭数据库，不退出 CLI
+                return true;
             default:
                 return true;
         }

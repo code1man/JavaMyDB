@@ -1,11 +1,7 @@
 package org.csu.mydb.executor;
 
-
-
 import org.csu.mydb.cli.ParsedCommand;
 import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * 将ParsedCommand转换为ExecutionPlan的转换器
@@ -20,6 +16,10 @@ public class CommandToPlanConverter {
     public static ExecutionPlan convert(ParsedCommand command) {
         // 将CommandType映射到OperationType
         ExecutionPlan.OperationType operationType = mapOperationType(command.getType());
+        if (operationType == null) {
+            return null;
+        }
+
         ExecutionPlan plan = new ExecutionPlan(operationType);
 
         // 根据命令类型设置不同的参数
@@ -100,6 +100,7 @@ public class CommandToPlanConverter {
             case UPDATE: return ExecutionPlan.OperationType.UPDATE;
             case DELETE: return ExecutionPlan.OperationType.DELETE;
             case SELECT: return ExecutionPlan.OperationType.QUERY;
+            case EXIT: return ExecutionPlan.OperationType.EXIT;   // 新增 EXIT 映射
             default: return null;
         }
     }
