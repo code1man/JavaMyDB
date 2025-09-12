@@ -1,10 +1,11 @@
 package org.csu.mydb.storage;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 //页管理系统
 public class PageManager {
@@ -14,14 +15,15 @@ public class PageManager {
 //    public static final int DEFAULT_FANOUT = 100; // B+树默认分支因子
     public static final int PAGE_HEADER_SIZE = 29; // 页头大小
     public static final int SLOT_SIZE = 6; // 槽位大小
-//    public static final int SLOT_COUNT =100; // 默认一页中槽位数
+
+
+//    public static final int SLOT_COUNT = 100; // 默认一页中槽位数
 
     // ========================== 核心数据结构 ==========================
-
     /**
      * 全局页标识符 (表空间ID + 页号)
      */
-    static class GlobalPageId {
+    public static class GlobalPageId {
         final int spaceId; // 表空间ID
         final int pageNo; // 页号
 
@@ -42,12 +44,20 @@ public class PageManager {
         public int hashCode() {
             return Objects.hash(spaceId, pageNo);
         }
+
+        public int getSpaceId() {
+            return spaceId;
+        }
+
+        public int getPageNo() {
+            return pageNo;
+        }
     }
 
     /**
      * 页头元数据（24字节）
      */
-    static class PageHeader {
+    public static class PageHeader {
         int pageNo;          // 4字节 - 页号
         int prevPage;        // 4字节 - 上一页
         int nextPage;        // 4字节 - 下一页
@@ -128,12 +138,60 @@ public class PageManager {
 
             return header;
         }
+
+        public int getPageNo() {
+            return pageNo;
+        }
+
+        public int getPrevPage() {
+            return prevPage;
+        }
+
+        public int getNextPage() {
+            return nextPage;
+        }
+
+        public short getRecordCount() {
+            return recordCount;
+        }
+
+        public short getFreeSpace() {
+            return freeSpace;
+        }
+
+        public short getSlotCount() {
+            return slotCount;
+        }
+
+        public short getFirstFreeSlot() {
+            return firstFreeSlot;
+        }
+
+        public short getLastSlotOffset() {
+            return lastSlotOffset;
+        }
+
+        public byte getPageType() {
+            return pageType;
+        }
+
+        public byte getFlags() {
+            return flags;
+        }
+
+        public int getChecksum() {
+            return checksum;
+        }
+
+        public boolean isDirty() {
+            return isDirty;
+        }
     }
 
     /**
      * 槽位结构（6字节）
      */
-    static class Slot {
+    public static class Slot {
         short offset;   // 2字节 - 记录在数据区的偏移量
         short length;   // 2字节 - 记录长度
         byte status;    // 1字节 - 状态 (0=空闲, 1=使用中, 2=已删除)
@@ -160,12 +218,28 @@ public class PageManager {
             slot.nextFree = buffer.get();
             return slot;
         }
+
+        public short getOffset() {
+            return offset;
+        }
+
+        public short getLength() {
+            return length;
+        }
+
+        public byte getStatus() {
+            return status;
+        }
+
+        public byte getNextFree() {
+            return nextFree;
+        }
     }
 
     /**
      * 数据页
      */
-    static class DataPage {
+    public static class DataPage {
         PageHeader header;
 
         //每个记录的位置
@@ -211,25 +285,43 @@ public class PageManager {
         public boolean addRecord(byte[] record) {
             int recordSize = record.length;
 
-            // 所需空间 = 记录大小 + 新槽位大小
-            int requiredSpace = recordSize + SLOT_SIZE;
+            // 所需空间
+            int requiredSpace;
 
-            // 检查剩余空间是否足够(还要进行下面的判断，页的管理可能存在碎片化)
-            if (header.freeSpace < requiredSpace) {
-                return false;
-            }
-
+            //先判断有无空闲槽位
             // 检查是否需要新增槽位
             boolean needNewSlot = (header.firstFreeSlot == -1);
 
+            //如果需要
             if (needNewSlot) {
-                // 检查是否有空间添加新槽位
+                // 所需空间 = 记录大小 + 新槽位大小
+                requiredSpace = recordSize + SLOT_SIZE;
+
+                // 检查剩余空间是否足够(还要进行下面的判断，页的管理可能存在碎片化)
+                if (header.freeSpace < requiredSpace) {
+                    return false;
+                }
+
+                // 检查是否有空间添加新槽位+数据
                 int newSlotEnd = slotsStartOffset + (slots.size() + 1) * SLOT_SIZE;
                 if (newSlotEnd > dataStartOffset - recordSize) {
                     return false; // 空间不足（槽位数组和数据区相遇）
                 }
+            }   //0 1 | 2 3 4 5 | 6 7 8 9
+            else {
+                requiredSpace = recordSize;
+
+                // 检查剩余空间是否足够(还要进行下面的判断，页的管理可能存在碎片化)
+                if (header.freeSpace < requiredSpace) {
+                    return false;
+                }
+
+                // 检查是否有空间添加数据
+                int slotEnd = slotsStartOffset + slots.size() * SLOT_SIZE;
+                if (slotEnd > dataStartOffset - recordSize) {
+                    return false; // 空间不足（槽位数组和数据区相遇）
+                }
             }
-            //0 1 | 2 3 4 5 | 6 7 8 9
 
             // 分配槽位
             int slotIndex;
@@ -237,12 +329,14 @@ public class PageManager {
                 // 重用空闲槽位
                 slotIndex = header.firstFreeSlot;
                 Slot slot = slots.get(slotIndex);
+                //相当于更新空闲链表
                 header.firstFreeSlot = slot.nextFree;
 
                 // 更新槽位信息
                 slot.offset = (short) (dataStartOffset - recordSize);
                 slot.length = (short) recordSize;
                 slot.status = 1;
+
             } else {
                 // 添加新槽位，上面已经验证过空间够了
                 slotIndex = slots.size();
@@ -257,14 +351,25 @@ public class PageManager {
                 header.lastSlotOffset = (short) (slotsStartOffset + (slots.size() - 1) * SLOT_SIZE);
             }
 
-            // 写入记录数据
-            System.arraycopy(record, 0, pageData, dataStartOffset - recordSize, recordSize);
+
             dataStartOffset -= recordSize;
 
             // 更新页头
-            header.recordCount++;
+            header.recordCount += 1;
             header.freeSpace -= requiredSpace;
             header.isDirty = true;
+
+            // 写入记录数据
+            System.arraycopy(record, 0, pageData, dataStartOffset - recordSize, recordSize);
+            //写入槽位数据
+            int slotsOffset = PAGE_HEADER_SIZE;
+            for (Slot slot : slots) {
+                byte[] slotBytes = slot.toBytes();
+                System.arraycopy(slotBytes, 0, pageData, slotsOffset, SLOT_SIZE);
+                slotsOffset += SLOT_SIZE;
+            }
+            //写入页头数据
+            System.arraycopy(header.toBytes(), 0, pageData, 0, PAGE_HEADER_SIZE);
 
             return true;
         }
@@ -288,6 +393,7 @@ public class PageManager {
         /**
          * 释放记录
          * 数据为逻辑删除，但是槽位放出来
+         * 考虑空闲链表的维护
          */
         public boolean freeRecord(int slotIndex) {
             if (slotIndex < 0 || slotIndex >= slots.size()) {
@@ -319,11 +425,492 @@ public class PageManager {
 
         /**
          * 修改记录
-         * 原本数据还保留，但是槽位信息得改，并且相当于新增记录
-         * 但是记录的长度可能不一样，要考虑空间够不够的问题
+         * 覆盖：但是记录的长度可能不一样
+         * or新增记录：要考虑空间够不够的问题
+         * @param slotIndex 要修改的记录槽位索引
+         * @param newRecord 新记录数据
+         * @return 修改是否成功
          */
-        public boolean updateRecord(int slotIndex) {
-            return false;
+        public boolean updateRecord(int slotIndex, byte[] newRecord) {
+            if (slotIndex < 0 || slotIndex >= slots.size()) {
+                return false; // 无效槽位索引
+            }
+
+            Slot slot = slots.get(slotIndex);
+            if (slot.status != 1) { // 确保槽位当前是使用状态
+                return false;
+            }
+
+            int oldLength = slot.length;
+            int newLength = newRecord.length;
+
+            // 情况1：新记录长度 <= 旧记录长度
+            if (newLength <= oldLength) {
+                // 直接在原位置覆盖
+                System.arraycopy(newRecord, 0, pageData, slot.offset, newLength);
+
+                // 更新槽位信息
+                slot.length = (short)newLength;
+
+                // 更新空闲空间（如果新记录更短）
+                if (newLength < oldLength) {
+                    header.freeSpace += (oldLength - newLength);
+                }
+
+                header.isDirty = true;
+                return true;
+            }
+
+            // 情况2：新记录长度 > 旧记录长度
+            // 检查是否有足够空间容纳增长部分
+            int spaceNeeded = newLength - oldLength;
+            if (header.freeSpace < spaceNeeded) {
+                return false; // 空间不足
+            }
+
+            // 尝试在数据区尾部分配新空间
+            int newOffset = dataStartOffset - newLength;
+            if (newOffset < (slotsStartOffset + slots.size() * SLOT_SIZE)) {
+                // 空间不足（槽位数组和数据区重叠）
+                return false;
+            }
+
+            // 迁移记录到新位置
+//            System.arraycopy(data, slot.offset, data, newOffset, oldLength); // 复制旧数据
+            System.arraycopy(newRecord, 0, pageData, newOffset, newLength);    // 覆盖新数据
+
+            // 更新槽位信息
+            slot.offset = (short)newOffset;
+            slot.length = (short)newLength;
+
+            // 释放旧空间
+            header.freeSpace += oldLength; // 释放旧空间
+            header.freeSpace -= newLength; // 占用新空间
+
+            // 更新数据区起始位置
+            dataStartOffset = newOffset;
+
+            header.isDirty = true;
+            return true;
+        }
+
+        /**
+         * 序列化整个数据页
+         * 原本这个记录就是序列化之后存进去的
+         * 额外序列化一下页头和槽位数组
+         */
+        public byte[] toBytes() {
+            // 1. 序列化页头
+            byte[] headerBytes = header.toBytes();
+            System.arraycopy(headerBytes, 0, pageData, 0, PAGE_HEADER_SIZE);
+
+            // 2. 序列化槽位数组
+            int slotsOffset = PAGE_HEADER_SIZE;
+            for (Slot slot : slots) {
+                byte[] slotBytes = slot.toBytes();
+                System.arraycopy(slotBytes, 0, pageData, slotsOffset, SLOT_SIZE);
+                slotsOffset += SLOT_SIZE;
+            }
+
+            // 3. 填充槽位数组后的空闲区域（如果有）
+            int slotsEnd = PAGE_HEADER_SIZE + slots.size() * SLOT_SIZE;
+            if (slotsEnd < dataStartOffset) {
+                Arrays.fill(pageData, slotsEnd, dataStartOffset, (byte)0);
+            }
+
+            // 4. 数据区已经在pageData中（在添加记录时已写入）
+            // 注意：数据区从dataStartOffset开始到PAGE_SIZE结束
+
+            return pageData;
+        }
+
+        /**
+         * 从字节数组反序列化数据页
+         */
+        public static DataPage fromBytes(byte[] pageData) {
+            if (pageData.length != PAGE_SIZE) {
+                throw new IllegalArgumentException("Invalid page size");
+            }
+
+            // 1. 反序列化页头
+            byte[] headerData = Arrays.copyOfRange(pageData, 0, PAGE_HEADER_SIZE);
+            PageHeader pageHeader = PageHeader.fromBytes(headerData);
+
+            //先从页头中获得页号
+            DataPage page = new DataPage(pageHeader.pageNo);
+            System.arraycopy(pageData, 0, page.pageData, 0, PAGE_SIZE);
+            page.header = pageHeader;
+
+            // 2. 反序列化槽位数组
+            int slotsStart = PAGE_HEADER_SIZE;
+            int slotsEnd = slotsStart + page.header.slotCount * SLOT_SIZE;
+
+            for (int i = 0; i < page.header.slotCount; i++) {
+                int slotStart = slotsStart + i * SLOT_SIZE;
+                byte[] slotData = Arrays.copyOfRange(pageData, slotStart, slotStart + SLOT_SIZE);
+                Slot slot = Slot.fromBytes(slotData);
+                page.slots.add(slot);
+            }
+
+            // 3. 确定数据区起始位置
+            // 查找最小的槽位偏移量
+            int minOffset = PAGE_SIZE;
+            for (Slot slot : page.slots) {
+                if (slot.status == 1 && slot.offset < minOffset) {
+                    minOffset = slot.offset;
+                }
+            }
+            page.dataStartOffset = minOffset;
+
+            return page;
+        }
+
+        public PageHeader getHeader() {
+            return header;
+        }
+
+        public List<Slot> getSlots() {
+            return slots;
+        }
+
+        public byte[] getPageData() {
+            return pageData;
+        }
+
+        public int getSlotsStartOffset() {
+            return slotsStartOffset;
+        }
+
+        public int getDataStartOffset() {
+            return dataStartOffset;
         }
     }
+
+    // ====================== 文件管理 ======================
+    private final Map<Integer, RandomAccessFile> openFiles = new HashMap<>();
+    private final Map<Integer, String> filePaths = new HashMap<>();
+    private final ReentrantReadWriteLock fileLock = new ReentrantReadWriteLock();
+
+    // ====================== 页管理 ======================
+    private final Map<Integer, Integer> rootPages = new HashMap<>(); // spaceId -> rootPageNo
+    private final Map<Integer, Integer> freePageHeads = new HashMap<>(); // spaceId -> freePageHead
+
+    public Map<Integer, RandomAccessFile> getOpenFiles() {
+        return openFiles;
+    }
+
+    public Map<Integer, String> getFilePaths() {
+        return filePaths;
+    }
+
+    public ReentrantReadWriteLock getFileLock() {
+        return fileLock;
+    }
+
+    public Map<Integer, Integer> getRootPages() {
+        return rootPages;
+    }
+
+    public Map<Integer, Integer> getFreePageHeads() {
+        return freePageHeads;
+    }
+
+    /**
+     * 打开表空间文件（不管新建表，读表都要）
+     * 相当于保存某个文件到    内存里面
+     */
+    public void openFile(int spaceId, String filePath) throws IOException {
+        fileLock.writeLock().lock();
+        try {
+            File file = new File(filePath);
+            RandomAccessFile raf;
+
+            if (file.exists()) {
+                raf = new RandomAccessFile(file, "rw");
+
+                //这里应该先看缓存---------------------------------------------------------------------
+
+                //这里应该先放进去
+                openFiles.put(spaceId, raf);
+                // 读取文件头获取空闲页链表头
+                DataPage headerPage = readPageFromDisk(spaceId, 0);
+                freePageHeads.put(spaceId, headerPage.header.nextPage);
+            } else {
+                raf = new RandomAccessFile(file, "rw");
+                // 初始化文件
+                initializeFile(spaceId, raf);
+                openFiles.put(spaceId, raf);
+            }
+
+            filePaths.put(spaceId, filePath);
+        } finally {
+            fileLock.writeLock().unlock();
+        }
+    }
+
+    /**
+     * 关闭所有文件
+     * 内存中删除文
+     */
+    public void closeAllFiles() throws IOException {
+        fileLock.writeLock().lock();
+        try {
+//            flushAllDirtyPages();
+            for (RandomAccessFile raf : openFiles.values()) {
+                raf.close();
+            }
+            openFiles.clear();
+            filePaths.clear();
+        } finally {
+            fileLock.writeLock().unlock();
+        }
+    }
+
+    /**
+     * 分配新页
+     * 注意是分配，有点类似与进程，分配出去后就不空闲了
+     */
+    public int allocatePage(int spaceId) throws IOException {
+        fileLock.writeLock().lock();
+        try {
+            // 检查空闲页链表
+            if (freePageHeads.containsKey(spaceId) && freePageHeads.get(spaceId) != -1) {
+                int pageNo = freePageHeads.get(spaceId);
+                DataPage page = getPage(spaceId, pageNo);
+                freePageHeads.put(spaceId, page.header.nextPage);
+                return pageNo;
+            }
+
+            // 没有空闲页，扩展文件
+            RandomAccessFile raf = openFiles.get(spaceId);
+            long fileSize = raf.length();
+            int newPageNo = (int) (fileSize / PAGE_SIZE);
+
+            // 扩展文件
+            raf.setLength(fileSize + PAGE_SIZE);
+
+            // 初始化新页
+            DataPage newPage = new DataPage(newPageNo);
+
+            //这里应该先放到缓存里面--------------------------------------------------------
+            //设置成dirty
+            writePageToDisk(spaceId, newPageNo, newPage);
+
+            return newPageNo;
+        } finally {
+            fileLock.writeLock().unlock();
+        }
+    }
+
+    /**
+     * 释放页
+     */
+    public void freePage(int spaceId, int pageNo) throws IOException {
+        fileLock.writeLock().lock();
+        try {
+            DataPage page = getPage(spaceId, pageNo);
+
+            // 重置页内容
+            page.header.recordCount = 0;
+            page.header.freeSpace = (short)(PAGE_SIZE - PAGE_HEADER_SIZE);
+
+            // 添加到空闲链表头部
+            int currentHead = freePageHeads.getOrDefault(spaceId, -1);
+            page.header.nextPage = currentHead;
+            freePageHeads.put(spaceId, pageNo);
+
+            // 更新文件头页
+            DataPage headerPage = getPage(spaceId, 0);
+            headerPage.header.nextPage = pageNo;
+            headerPage.header.isDirty = true;
+        } finally {
+            fileLock.writeLock().unlock();
+        }
+    }
+
+    /**
+     * 添加记录
+     */
+    public boolean addRecord(int spaceId, int pageNo, byte[] record) throws IOException {
+        DataPage page = getPage(spaceId, pageNo);
+        boolean success = page.addRecord(record);
+//        if (success) {
+//            markPageDirty(spaceId, pageNo);
+//        }
+
+        //放到缓存里面--------------------------------------------------------
+
+        return success;
+    }
+
+    /**
+     * 获取记录
+     */
+    public byte[] getRecord(int spaceId, int pageNo, int slotIndex) throws IOException {
+        DataPage page = getPage(spaceId, pageNo);
+        return page.getRecord(slotIndex);
+    }
+
+    /**
+     * 释放记录
+     */
+    public boolean freeRecord(int spaceId, int pageNo, int slotIndex) throws IOException {
+        DataPage page = getPage(spaceId, pageNo);
+        boolean success = page.freeRecord(slotIndex);
+//        if (success) {
+//            markPageDirty(spaceId, pageNo);
+//        }
+        return success;
+    }
+
+    /**
+     * 修改记录
+     */
+    public boolean updateRecord(int spaceId, int pageNo, int slotIndex, byte[] newRecord) throws IOException {
+        DataPage page = getPage(spaceId, pageNo);
+        boolean success = page.updateRecord(slotIndex, newRecord);
+//        if (success) {
+//            markPageDirty(spaceId, pageNo);
+//        }
+        return success;
+    }
+
+    // ====================== 缓存管理 ======================
+
+    /**
+     * 获取页（带缓存）
+     */
+    public DataPage getPage(int spaceId, int pageNo) throws IOException {
+        GlobalPageId pageId = new GlobalPageId(spaceId, pageNo);
+
+//        // 检查缓存
+//        if (bufferPool.containsKey(pageId)) {
+//            // 更新LRU队列
+//            synchronized (lruQueue) {
+//                lruQueue.remove(pageId);
+//                lruQueue.addFirst(pageId);
+//            }
+//            return bufferPool.get(pageId);
+//        }
+
+        // 缓存未命中，从磁盘读取
+        DataPage page = readPageFromDisk(spaceId, pageNo);
+
+//        // 如果缓存已满，淘汰最近最少使用的页
+//        if (bufferPool.size() >= BUFFER_POOL_SIZE) {
+//            synchronized (lruQueue) {
+//                GlobalPageId evictedId = lruQueue.removeLast();
+//                DataPage evictedPage = bufferPool.remove(evictedId);
+//
+//                // 如果是脏页，写回磁盘
+//                if (evictedPage.header.isDirty) {
+//                    writePageToDisk(
+//                            evictedId.spaceId,
+//                            evictedId.pageNo,
+//                            evictedPage
+//                    );
+//                }
+//            }
+//        }
+//
+//        // 添加新页到缓存
+//        bufferPool.put(pageId, page);
+//        synchronized (lruQueue) {
+//            lruQueue.addFirst(pageId);
+//        }
+
+        return page;
+    }
+
+//    /**
+//     * 标记页为脏页
+//     */
+//    private void markPageDirty(int spaceId, int pageNo) {
+//        GlobalPageId pageId = new GlobalPageId(spaceId, pageNo);
+//        DataPage page = bufferPool.get(pageId);
+//        if (page != null) {
+//            page.header.isDirty = true;
+//        }
+//    }
+//
+//    /**
+//     * 刷回所有脏页
+//     */
+//    public void flushAllDirtyPages() throws IOException {
+//        fileLock.writeLock().lock();
+//        try {
+//            for (Map.Entry<GlobalPageId, DataPage> entry : bufferPool.entrySet()) {
+//                if (entry.getValue().header.isDirty) {
+//                    writePageToDisk(
+//                            entry.getKey().spaceId,
+//                            entry.getKey().pageNo,
+//                            entry.getValue()
+//                    );
+//                    entry.getValue().header.isDirty = false;
+//                }
+//            }
+//        } finally {
+//            fileLock.writeLock().unlock();
+//        }
+//    }
+
+    // ====================== 私有辅助方法 ======================
+
+    /**
+     * 初始化文件
+     */
+    private void initializeFile(int spaceId, RandomAccessFile raf) throws IOException {
+        // 创建文件头页
+        DataPage headerPage = new DataPage(0);
+        headerPage.header.nextPage = -1; // 初始无空闲页
+        raf.write(headerPage.toBytes());
+
+        // 设置空闲页链表头
+        freePageHeads.put(spaceId, -1);
+    }
+
+    /**
+     * 从磁盘读取页
+     */
+    public DataPage readPageFromDisk(int spaceId, int pageNo) throws IOException {
+        fileLock.readLock().lock();
+        try {
+            RandomAccessFile raf = openFiles.get(spaceId);
+            if (raf == null) {
+                throw new IOException("Space not found: " + spaceId);
+            }
+
+            long offset = (long) pageNo * PAGE_SIZE;
+            raf.seek(offset);
+
+            byte[] pageData = new byte[PAGE_SIZE];
+            raf.readFully(pageData);
+
+            return DataPage.fromBytes(pageData);
+        } finally {
+            fileLock.readLock().unlock();
+        }
+    }
+
+    /**
+     * 写入页到磁盘
+     */
+    public void writePageToDisk(int spaceId, int pageNo, DataPage page) throws IOException {
+        fileLock.writeLock().lock();
+        try {
+            RandomAccessFile raf = openFiles.get(spaceId);
+            if (raf == null) {
+                throw new IOException("Space not found: " + spaceId);
+            }
+
+            long offset = (long) pageNo * PAGE_SIZE;
+            raf.seek(offset);
+            raf.write(page.toBytes());
+        } finally {
+            fileLock.writeLock().unlock();
+        }
+    }
+
 }
+
+
