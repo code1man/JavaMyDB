@@ -46,9 +46,7 @@ public class ParserTest {
         parser.printParseTable();
 
         // 测试示例 SQL
-        String sql = "create table game(\n" +
-                "price int not NULL\n" +
-                ")";
+        String sql = "insert into student values (6,'ff');";
         List<Lexer.Token> tokens = Lexer.tokenize(sql);
 
         parser.parse(tokens);

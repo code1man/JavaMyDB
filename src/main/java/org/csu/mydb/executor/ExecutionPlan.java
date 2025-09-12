@@ -37,7 +37,6 @@ public class ExecutionPlan {
     public ExecutionPlan(OperationType operationType) {
         this.operationType = operationType;
     }
-
     // Getter和Setter方法
     public OperationType getOperationType() {
         return operationType;
