@@ -10,12 +10,12 @@ import java.util.Objects;
 //页管理系统
 public class PageManager {
     // ========================== 常量定义 ==========================
-    public static final int PAGE_SIZE = 4096; // 4KB页大小
+    public static int PAGE_SIZE = 4096; // 4KB页大小
     //    public static final int BUFFER_POOL_SIZE = 100; // 缓存池大小
-//    public static final int DEFAULT_FANOUT = 100; // B+树默认分支因子
+    //    public static final int DEFAULT_FANOUT = 100; // B+树默认分支因子
     public static final int PAGE_HEADER_SIZE = 29; // 页头大小
     public static final int SLOT_SIZE = 6; // 槽位大小
-//    public static final int SLOT_COUNT =100; // 默认一页中槽位数
+    //    public static final int SLOT_COUNT =100; // 默认一页中槽位数
 
     // ========================== 核心数据结构 ==========================
 
@@ -188,7 +188,7 @@ public class PageManager {
             this.header.slotCount = 0;
             this.header.firstFreeSlot = -1; //因为还没新建槽位
             this.header.lastSlotOffset = -1; //因为还没新建槽位
-            this.header.freeSpace = PAGE_SIZE - PAGE_HEADER_SIZE; // 初始空闲空间
+            this.header.freeSpace = (short) (PAGE_SIZE - PAGE_HEADER_SIZE); // 初始空闲空间
             this.header.pageType = 0; // 数据页
             this.header.isDirty = true; // 新建一个页需要保存到磁盘
             this.pageData = new byte[PAGE_SIZE];

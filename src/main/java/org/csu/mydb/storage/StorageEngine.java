@@ -1,6 +1,7 @@
 package org.csu.mydb.storage;
 
 import org.csu.mydb.config.ConfigLoader;
+import org.csu.mydb.storage.BPlusTree.BPlusTree;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -11,27 +12,21 @@ public class StorageEngine {
     private boolean isOpen = false;    // 是否已打开数据库
     private final List<Table> tables = new ArrayList<>();  // 当前打开的表列表
 
-    private final int pageSize;
-    private final int bufferPoolSize;
-    private final int maxConnections;
-
     public StorageEngine() {
-        // 从 ConfigManager 获取配置（带默认值）
-        this.pageSize = ConfigLoader.getInstance().getInt("storage", "page_size", 4096);
-        this.bufferPoolSize = ConfigLoader.getInstance().getInt("storage", "buffer_pool_size", 100);
-        this.maxConnections = ConfigLoader.getInstance().getInt("storage", "max_connections", 1000);
+        // 从 ConfigManager 获取配置
+        DBMS.BUFFER_POOL.setPoolSize(ConfigLoader.getInstance().getInt("storage", "buffer_pool_size", 100));
+        PageManager.PAGE_SIZE = ConfigLoader.getInstance().getInt("storage", "page_size", 4096);
 
         prePath = "";
         isOpen = false;
         tables.clear();
 
-        System.out.println("存储引擎初始化参数：");
-        System.out.println("page_size=" + pageSize);
-        System.out.println("buffer_pool_size=" + bufferPoolSize);
-        System.out.println("max_connections=" + maxConnections);
+        System.out.println("存储引擎初始化: pageSize="
+                + PageManager.PAGE_SIZE
+                + ", bufferPoolSize=" + DBMS.BUFFER_POOL.getPoolSize());
     }
 
-    // 析构函数（Java 中通过 finalize 或显式关闭处理，此处显式关闭更安全）
+    // 析构函数
     @Override
     protected void finalize() throws Throwable {
         try {
@@ -42,43 +37,37 @@ public class StorageEngine {
     }
 
     /**
-     * 打开数据库（对应 C++ 的 myOpenDataBase）
+     * 打开数据库
      *
      * @param dataBaseName 数据库名
      */
-    public void myOpenDataBase(String dataBaseName) {
-        if (isOpen) {
-            System.out.println("请先关闭当前打开的数据库");
-            return;
-        }
-        String path = "save/repos/" + dataBaseName;  // 硬编码数据库根路径
-        File dbDir = new File(path);
+    public void myOpenDataBase(String dbName) {
+        File dbDir = new File("save/repos/" + dbName);
         if (!dbDir.exists()) {
-            System.out.println("该数据库不存在");
+            System.out.println("数据库不存在");
             return;
         }
-        prePath = path + "/";  // 更新路径前缀（如 "save/repos/db1/"）
+        prePath = dbDir.getPath() + "/";
         isOpen = true;
-        System.out.println("打开数据库成功");
+        // 加载表元信息
+        for (File file : dbDir.listFiles()) {
+            if (file.getName().endsWith(".ibd")) {
+                String tableName = file.getName().replace(".ibd", "");
+                int spaceId = SpaceManager.allocateSpace();
+                BPlusTree<Integer> primaryIndex = new BPlusTree<>();
+                tables.add(new Table(tableName, file.getPath(), new ArrayList<>(), spaceId, primaryIndex));
+            }
+        }
+        System.out.println("打开数据库成功: " + dbName);
     }
 
     /**
      * 关闭数据库（对应 C++ 的 myCloseDataBase）
      */
     public void myCloseDataBase() {
-        // 关闭所有打开的表文件流
-        for (Table table : tables) {
-            if (table.getFp() != null) {
-                try {
-                    table.getFp().close();  // 关闭文件流
-                } catch (IOException e) {
-                    System.out.println("关闭表文件失败: " + e.getMessage());
-                }
-            }
-        }
-        tables.clear();       // 清空表列表
-        prePath = "";         // 重置路径前缀
-        isOpen = false;       // 标记为未打开
+        tables.clear();
+        prePath = "";
+        isOpen = false;
         System.out.println("关闭数据库成功");
     }
 
@@ -133,20 +122,18 @@ public class StorageEngine {
             System.out.println("无选中数据库，请先打开数据库");
             return;
         }
-        String tablePath = prePath + tableName + ".txt";  // 表文件路径（如 "save/repos/db1/users.txt"）
+        String tablePath = prePath + tableName + ".txt";
         File tableFile = new File(tablePath);
         if (tableFile.exists()) {
             System.out.println("该表已经存在!");
             return;
         }
-        // 写入表结构到文件（列名+类型，简化示例）
         try (FileWriter writer = new FileWriter(tableFile)) {
-            // 写入表头（列名）
             writer.write("表名:" + tableName + "\n");
             for (String col : columns) {
-                writer.write(col + "\n");  // 每行一个列名（实际可扩展类型信息）
+                writer.write(col + "\n");
             }
-            // 将表元数据加入内存列表
+            writer.write("\n"); // 空行分隔元数据和数据
             tables.add(new Table(tableName, tablePath, columns));
             System.out.println("创建新表成功!");
         } catch (IOException e) {
@@ -408,7 +395,7 @@ public class StorageEngine {
     }
 
     /**
-     * 查询数据（对应 C++ 的 myQuery）
+     * 查询数据
      *
      * @param tableName 表名
      * @param columns   要查询的列名（如 ["id", "name"]，"all" 表示所有列）

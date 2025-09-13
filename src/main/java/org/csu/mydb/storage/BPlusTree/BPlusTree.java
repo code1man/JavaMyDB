@@ -1,5 +1,6 @@
 package org.csu.mydb.storage.BPlusTree;
 
+import org.csu.mydb.storage.DBMS;
 import org.csu.mydb.storage.PageManager;
 import org.csu.mydb.storage.bufferPool.BufferPool;
 
@@ -10,11 +11,9 @@ public class BPlusTree<K extends Comparable<K>> {
 
     private final int order;
     private BPlusNode root;
-    private final BufferPool bufferPool; // 注入的 BufferPool，用于加载/写入 DataPage
 
-    public BPlusTree(int order, BufferPool bufferPool) {
+    public BPlusTree(int order) {
         this.order = Math.max(3, order); // 最小阶数保护
-        this.bufferPool = bufferPool;
         this.root = new LeafNode();
     }
 
@@ -62,7 +61,6 @@ public class BPlusTree<K extends Comparable<K>> {
 
         @Override
         boolean isOverflow() {
-            // leaf capacity roughly order - 1 keys (conservative)
             return values.size() > order - 1;
         }
 
@@ -81,7 +79,7 @@ public class BPlusTree<K extends Comparable<K>> {
     public PageManager.DataPage search(K key) throws IOException {
         PageManager.GlobalPageId gid = searchGid(key);
         if (gid == null) return null;
-        return bufferPool.getPage(gid);
+        return DBMS.BUFFER_POOL.getPage(gid);
     }
 
     /**
@@ -111,7 +109,7 @@ public class BPlusTree<K extends Comparable<K>> {
                 if (key.compareTo(start) >= 0) {
                     PageManager.GlobalPageId gid = leaf.values.get(i);
                     // 通过 bufferPool 获取真实 DataPage
-                    PageManager.DataPage page = bufferPool.getPage(gid);
+                    PageManager.DataPage page = DBMS.BUFFER_POOL.getPage(gid);
                     if (page != null) {
                         result.add(page);
                     }
@@ -153,7 +151,7 @@ public class BPlusTree<K extends Comparable<K>> {
         PageManager.DataPage page = new PageManager.DataPage(pageNo);
         page.addRecord(record);
         // 把数据写入缓冲池（并标记脏页）
-        bufferPool.putPage(page, spaceId);
+        DBMS.BUFFER_POOL.putPage(page, spaceId);
         PageManager.GlobalPageId gid = new PageManager.GlobalPageId(spaceId, pageNo);
         insert(key, gid);
     }
@@ -195,7 +193,7 @@ public class BPlusTree<K extends Comparable<K>> {
                 if (k.compareTo(end) > 0) return result;
                 if (k.compareTo(start) >= 0) {
                     PageManager.GlobalPageId gid = leaf.values.get(i);
-                    if (gid != null) result.add(bufferPool.getPage(gid));
+                    if (gid != null) result.add(DBMS.BUFFER_POOL.getPage(gid));
                     else result.add(null);
                 }
             }
