@@ -106,7 +106,7 @@ public class BPlusTreeTest {
     @Test
     void testInsertAndSearch() throws IOException {
         PageManager.GlobalPageId pid = new PageManager.GlobalPageId(1, 1);
-        PageManager.DataPage page = MockPageManager.newPage(pid, "row1");
+        PageManager.Page page = MockPageManager.newPage(pid, "row1");
         bufferPool.putPage(page, pid.spaceId);
         tree.insert(10, pid);  // 插入 DataPage
         assertEquals(page, tree.search(10)); // 返回 DataPage

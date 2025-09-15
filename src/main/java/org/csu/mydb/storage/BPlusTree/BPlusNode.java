@@ -20,27 +20,32 @@ public abstract class BPlusNode<K extends Comparable<K>> {
     protected List<K> keys; // 键列表
     protected boolean isLeaf;
     protected TypeHandler<K> keyHandler;
+    protected PageManager pageManager = new PageManager();
+
+    // 父节点引用（统一放这里）
+    protected InternalNode<K> parent;
 
     // 从磁盘加载页数据到内存（缓存）
     public void load() throws IOException {
         if (gid == null) throw new IllegalStateException("GlobalPageId not initialized");
-        byte[] pageData = PageManager.readPage(gid); // 调用 PageManager 读取页
-        this.header = PageManager.PageHeader.fromBytes(pageData); // 反序列化页头
+        PageManager.Page pageData = pageManager.readPageFromDisk(gid.spaceId, gid.pageNo); // 调用 PageManager 读取页
+        this.header = pageData.getHeader();
         this.slots = new ArrayList<>();
         int slotsStart = PAGE_HEADER_SIZE;
         int slotsEnd = slotsStart + header.slotCount * SLOT_SIZE;
-        ByteBuffer buffer = ByteBuffer.wrap(pageData, slotsStart, slotsEnd - slotsStart);
+        ByteBuffer buffer = ByteBuffer.wrap(pageData.getPageData(), slotsStart, slotsEnd - slotsStart);
         for (int i = 0; i < header.slotCount; i++) {
             slots.add(PageManager.Slot.fromBytes(buffer.array())); // 反序列化槽位
         }
         this.keys = new ArrayList<>();
-        deserializeKeys(pageData); // 子类实现：从数据区解析键
+        deserializeKeys(pageData.getPageData()); // 子类实现：从数据区解析键
     }
 
     // 将内存中的节点数据保存到磁盘（更新页）
     public void save() throws IOException {
         byte[] pageData = serializeToPage(); // 序列化节点到页数据
-        PageManager.writePage(pageData, gid.spaceId); // 调用 PageManager 写入页
+
+        pageManager.writePageToDisk(gid.spaceId, gid.pageNo, PageManager.Page.fromBytes(pageData)); // 调用 PageManager 写入页
         this.header.isDirty = false; // 标记页为干净
     }
 

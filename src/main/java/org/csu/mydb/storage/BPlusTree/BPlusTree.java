@@ -19,7 +19,7 @@ public class BPlusTree<K extends Comparable<K>> {
     public BPlusTree(int order, TypeHandler<K> keyHandler, int spaceId) throws IOException {
         this.order = Math.max(3, order); // 最小阶数保护
         this.keyHandler = keyHandler;
-        this.root = new LeafNode<>(keyHandler);
+        this.root = new LeafNode<>(keyHandler, 3); // 我想要的效果是根节点永远是page3，其他的可以改
         // 初始化根节点的页号
         root.gid = new GlobalPageId(spaceId, 3);
         root.load(); // 加载页（此时页为空）
@@ -31,7 +31,7 @@ public class BPlusTree<K extends Comparable<K>> {
         LeafNode<K> leaf = findLeaf(key);
         leaf.load(); // 加载页到缓存
         int idx = Collections.binarySearch(leaf.keys, key);
-        return idx >= 0 ? leaf.values.get(idx) : null;
+        return idx >= 0 ? leaf.gid : null;
     }
 
     // 查找键所在的叶子节点
@@ -44,14 +44,16 @@ public class BPlusTree<K extends Comparable<K>> {
             }
             int idx = Collections.binarySearch(internal.keys, key);
             int childIdx = idx >= 0 ? idx + 1 : -idx - 1;
-            node.deserializeKeys(PageManager.readPage(internal.children.get(childIdx))); // 加载子节点页
+            PageManager pageManager = new PageManager();
+            GlobalPageId childId = internal.children.get(childIdx);
+            node.deserializeKeys(pageManager.readPageFromDisk(childId.spaceId, childId.pageNo).getPageData()); // 加载子节点页
         }
         return (LeafNode<K>) node;
     }
 
     // 插入键值对（键 + 数据页指针）
-    public void insert(K key, GlobalPageId value) throws IOException {
+    public void insert(K key, byte[] records ,GlobalPageId value) throws IOException {
         LeafNode<K> leaf = findLeaf(key);
-        leaf.insert(key, value, order); // 叶子节点插入
+        leaf.insert(key, records, order); // 叶子节点插入
     }
 }

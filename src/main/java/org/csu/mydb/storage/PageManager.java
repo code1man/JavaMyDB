@@ -14,11 +14,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PageManager implements DiskAccessor {
     // ========================== 常量定义 ==========================
     public static final int PAGE_SIZE = 4096; // 4KB页大小
-    //    public static final int BUFFER_POOL_SIZE = 100; // 缓存池大小
-//    public static final int DEFAULT_FANOUT = 100; // B+树默认分支因子
     public static final int PAGE_HEADER_SIZE = 41; // 页头大小
     public static final int SLOT_SIZE = 6; // 槽位大小
-//    public static final int SLOT_COUNT =100; // 默认一页中槽位数
 
     // 添加非静态 BufferPool 引用
     private BufferPool bufferPool;
@@ -253,7 +250,7 @@ public class PageManager implements DiskAccessor {
      * 我想把他抽象成页
      */
     public static class Page {
-        PageHeader header;
+        public PageHeader header;
 
         //每个记录的位置
         List<Slot> slots = new ArrayList<>();
@@ -281,18 +278,6 @@ public class PageManager implements DiskAccessor {
             this.header.nextFreePage = -1;//初始化
             this.header.nextFragPage = -1;//初始化
             this.pageData = new byte[PAGE_SIZE];
-
-            /*// 计算槽位数组占用空间
-            int slotsAreaSize = calculateSlotsAreaSize();
-
-            // 初始化数据区（总空间减去页头和槽位数组）
-            this.data = new byte[PAGE_SIZE - PAGE_HEADER_SIZE - slotsAreaSize];
-
-            // 设置空闲空间（初始时只有数据区可用）
-            this.header.freeSpace = (short) data.length;
-
-            // 初始化槽位
-            initSlots(slotsAreaSize / SLOT_SIZE);*/
         }
 
         /**
@@ -438,8 +423,6 @@ public class PageManager implements DiskAccessor {
 
             return true;
         }
-
-
 
         /**
          * 修改记录
@@ -713,8 +696,6 @@ public class PageManager implements DiskAccessor {
             Page newPage = new Page(newPageNo);
 
             //这里应该先放到缓存里面--------------------------------------------------------
-            //设置成dirty
-//            writePageToDisk(spaceId, newPageNo, newPage);
             bufferPool.putPage(newPage, spaceId);
 
             return newPageNo;
@@ -758,9 +739,6 @@ public class PageManager implements DiskAccessor {
     public boolean addRecord(int spaceId, int pageNo, byte[] record) throws IOException {
         Page page = getPage(spaceId, pageNo);
         boolean success = page.addRecord(record);
-//        if (success) {
-//            markPageDirty(spaceId, pageNo);
-//        }
 
         //放到缓存里面--------------------------------------------------------
         bufferPool.putPage(page, spaceId);
@@ -782,9 +760,7 @@ public class PageManager implements DiskAccessor {
     public boolean freeRecord(int spaceId, int pageNo, int slotIndex) throws IOException {
         Page page = getPage(spaceId, pageNo);
         boolean success = page.freeRecord(slotIndex);
-//        if (success) {
-//            markPageDirty(spaceId, pageNo);
-//        }
+
         bufferPool.putPage(page, spaceId);
 
         return success;
@@ -796,9 +772,7 @@ public class PageManager implements DiskAccessor {
     public boolean updateRecord(int spaceId, int pageNo, int slotIndex, byte[] newRecord) throws IOException {
         Page page = getPage(spaceId, pageNo);
         boolean success = page.updateRecord(slotIndex, newRecord);
-//        if (success) {
-//            markPageDirty(spaceId, pageNo);
-//        }
+
         bufferPool.putPage(page, spaceId);
 
         return success;
@@ -812,76 +786,8 @@ public class PageManager implements DiskAccessor {
     public Page getPage(int spaceId, int pageNo) throws IOException {
         GlobalPageId pageId = new GlobalPageId(spaceId, pageNo);
 
-//        // 检查缓存
-//        if (bufferPool.containsKey(pageId)) {
-//            // 更新LRU队列
-//            synchronized (lruQueue) {
-//                lruQueue.remove(pageId);
-//                lruQueue.addFirst(pageId);
-//            }
-//            return bufferPool.get(pageId);
-//        }
-
-        // 缓存未命中，从磁盘读取
-//        DataPage page = readPageFromDisk(spaceId, pageNo);
-
-//        // 如果缓存已满，淘汰最近最少使用的页
-//        if (bufferPool.size() >= BUFFER_POOL_SIZE) {
-//            synchronized (lruQueue) {
-//                GlobalPageId evictedId = lruQueue.removeLast();
-//                DataPage evictedPage = bufferPool.remove(evictedId);
-//
-//                // 如果是脏页，写回磁盘
-//                if (evictedPage.header.isDirty) {
-//                    writePageToDisk(
-//                            evictedId.spaceId,
-//                            evictedId.pageNo,
-//                            evictedPage
-//                    );
-//                }
-//            }
-//        }
-//
-//        // 添加新页到缓存
-//        bufferPool.put(pageId, page);
-//        synchronized (lruQueue) {
-//            lruQueue.addFirst(pageId);
-//        }
-
         return bufferPool.getPage(pageId);
     }
-
-//    /**
-//     * 标记页为脏页
-//     */
-//    private void markPageDirty(int spaceId, int pageNo) {
-//        GlobalPageId pageId = new GlobalPageId(spaceId, pageNo);
-//        DataPage page = bufferPool.get(pageId);
-//        if (page != null) {
-//            page.header.isDirty = true;
-//        }
-//    }
-//
-//    /**
-//     * 刷回所有脏页
-//     */
-//    public void flushAllDirtyPages() throws IOException {
-//        fileLock.writeLock().lock();
-//        try {
-//            for (Map.Entry<GlobalPageId, DataPage> entry : bufferPool.entrySet()) {
-//                if (entry.getValue().header.isDirty) {
-//                    writePageToDisk(
-//                            entry.getKey().spaceId,
-//                            entry.getKey().pageNo,
-//                            entry.getValue()
-//                    );
-//                    entry.getValue().header.isDirty = false;
-//                }
-//            }
-//        } finally {
-//            fileLock.writeLock().unlock();
-//        }
-//    }
 
     // ====================== 私有辅助方法 ======================
 
