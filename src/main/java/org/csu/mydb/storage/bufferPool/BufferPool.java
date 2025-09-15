@@ -1,6 +1,7 @@
 package org.csu.mydb.storage.bufferPool;
 
 import org.csu.mydb.storage.PageManager;
+import org.csu.mydb.storage.disk.DiskAccessor;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,12 +11,15 @@ public class BufferPool {
     protected int poolSize;
 
     protected final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
-    protected final LRUCache<PageManager.GlobalPageId, PageManager.DataPage> pageCache;
+    protected final LRUCache<PageManager.GlobalPageId, PageManager.Page> pageCache;
     protected final ConcurrentHashMap<PageManager.GlobalPageId, DirtyPageNode> dirtyPages;
 
 
     protected final float FLUSH_THRESHOLD_RATIO = 0.1f;
 
+    private final DiskAccessor diskAccessor;
+
+    // 脏页链表
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
@@ -36,19 +40,20 @@ public class BufferPool {
     private final DirtyPageNode dirtyTail = new DirtyPageNode(null, -1);
     protected int dirtyCount = 0;
 
-    public BufferPool(int poolSize) {
+    public BufferPool(int poolSize, DiskAccessor diskAccessor) {
         this.poolSize = poolSize;
         this.pageCache = new LRUCache<>(poolSize);
         this.dirtyPages = new ConcurrentHashMap<>();
+        this.diskAccessor = diskAccessor;
         dirtyHead.next = dirtyTail;
         dirtyTail.prev = dirtyHead;
     }
 
     /// 获取页（优先缓存，未命中读磁盘）
-    public byte[] getPage(PageManager.GlobalPageId pageId) throws IOException {
+    public PageManager.Page getPage(PageManager.GlobalPageId pageId) throws IOException {
         lock.readLock().lock();
         try {
-            PageManager.DataPage page = pageCache.get(pageId);
+            PageManager.Page page = pageCache.get(pageId);
             if (page != null) return page;
         } finally {
             lock.readLock().unlock();
@@ -56,19 +61,21 @@ public class BufferPool {
 
         lock.writeLock().lock();
         try {
-            PageManager.DataPage page = pageCache.get(pageId);
+            PageManager.Page page = pageCache.get(pageId);
             if (page != null) return page;
 
-            page = PageManager.readPage(pageId);
-            pageCache.put(pageId, page);
+            page = diskAccessor.readPageFromDisk(pageId.spaceId, pageId.pageNo);
+            if (page != null) {
+                pageCache.put(pageId, page);
+            }
             return page;
         } finally {
             lock.writeLock().unlock();
         }
     }
 
-    /// 写入页并标记脏页
-    public void putPage(PageManager.DataPage page, int spaceId) {
+    // 写入页并标记脏页
+    public void putPage(PageManager.Page page, int spaceId) {
         PageManager.GlobalPageId pageId = new PageManager.GlobalPageId(spaceId, page.getHeader().pageNo);
         lock.writeLock().lock();
         try {
@@ -94,9 +101,10 @@ public class BufferPool {
             DirtyPageNode cur = dirtyHead.next;
             while (cur != dirtyTail) {
                 PageManager.GlobalPageId pageId = cur.pageId;
-                PageManager.DataPage page = pageCache.get(pageId);
+                PageManager.Page page = pageCache.get(pageId);
                 if (page != null) {
-                    PageManager.writePage(page, pageId.spaceId);
+//                    PageManager.writePage(page, pageId.spaceId);
+                    diskAccessor.writePageToDisk(pageId.spaceId, pageId.pageNo, page);
                     page.getHeader().isDirty = false;
                 }
                 dirtyPages.remove(pageId);
@@ -116,9 +124,10 @@ public class BufferPool {
         try {
             PageManager.GlobalPageId lruPageId = pageCache.getEldestKey();
             if (lruPageId != null) {
-                PageManager.DataPage page = pageCache.get(lruPageId);
+                PageManager.Page page = pageCache.get(lruPageId);
                 if (page != null && dirtyPages.containsKey(lruPageId)) {
-                    PageManager.writePage(page, lruPageId.spaceId);
+//                    PageManager.writePage(page, lruPageId.spaceId);
+                    diskAccessor.writePageToDisk(lruPageId.spaceId, lruPageId.pageNo, page);
                     dirtyPages.remove(lruPageId);
                     page.getHeader().isDirty = false;
                     dirtyCount--;
@@ -155,9 +164,10 @@ public class BufferPool {
         DirtyPageNode cur = dirtyHead.next;
         while (cur != dirtyTail && flushed < batchSize) {
             PageManager.GlobalPageId pageId = cur.pageId;
-            PageManager.DataPage page = pageCache.get(pageId);
+            PageManager.Page page = pageCache.get(pageId);
             if (page != null) {
-                PageManager.writePage(page, pageId.spaceId);
+//                PageManager.writePage(page, pageId.spaceId);
+                diskAccessor.writePageToDisk(pageId.spaceId, pageId.pageNo, page);
                 page.getHeader().isDirty = false;
             }
             dirtyPages.remove(pageId);

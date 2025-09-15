@@ -25,7 +25,7 @@ public class BufferPoolTest {
         // 每次测试前清空“假磁盘”
         MockPageManager.reset();
 
-        bufferPool = new BufferPool(150) {
+        bufferPool = new BufferPool(150, new PageManager()) {
             @Override
             public PageManager.DataPage getPage(PageManager.GlobalPageId globalPageId) throws IOException {
                 // 读锁优先检查缓存

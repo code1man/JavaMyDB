@@ -1,7 +1,6 @@
 package com.example.mydb;
 
 import org.csu.mydb.storage.BPlusTree.BPlusTree;
-import org.csu.mydb.storage.DBMS;
 import org.csu.mydb.storage.PageManager;
 import org.csu.mydb.storage.bufferPool.BufferPool;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +23,7 @@ public class BPlusTreeTest {
         // 每次测试前清空“假磁盘”
         MockPageManager.reset();
 
-        DBMS.BUFFER_POOL = new BufferPool(150) {
+        bufferPool = new BufferPool(150) {
             @Override
             public byte[] getPage(PageManager.GlobalPageId globalPageId) throws IOException {
                 // 读锁优先检查缓存
