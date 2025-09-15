@@ -2,6 +2,9 @@ package org.csu.mydb.storage;
 
 import org.csu.mydb.storage.bufferPool.BufferPool;
 import org.csu.mydb.storage.disk.DiskAccessor;
+import org.csu.mydb.storage.storageFiles.FileHeader;
+import org.csu.mydb.storage.storageFiles.page.DataPage;
+import org.csu.mydb.storage.storageFiles.page.IndexPage;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,30 +90,25 @@ public class PageManager implements DiskAccessor {
         /**
          * 序列化为字节数组
          */
-        byte[] toBytes() {
+        public byte[] toBytes() {
             ByteBuffer buffer = ByteBuffer.allocate(PAGE_HEADER_SIZE);
 
-            // 写入整型字段
+            // 写入所有字段（按声明顺序）
             buffer.putInt(pageNo);
             buffer.putInt(prevPage);
             buffer.putInt(nextPage);
-
-            // 写入短整型字段
             buffer.putShort(recordCount);
             buffer.putShort(freeSpace);
             buffer.putShort(slotCount);
             buffer.putShort(firstFreeSlot);
             buffer.putShort(lastSlotOffset);
-
-            // 写入字节字段
             buffer.put(pageType);
             buffer.put(flags);
-
-            // 写入校验和
             buffer.putInt(checksum);
-
-            // 写入布尔字段
             buffer.put(isDirty ? (byte) 1 : (byte) 0);
+            buffer.putInt(rightPointer);
+            buffer.putInt(nextFreePage);
+            buffer.putInt(nextFragPage);
 
             return buffer.array();
         }
@@ -118,35 +116,31 @@ public class PageManager implements DiskAccessor {
         /**
          * 从字节数组反序列化
          */
-        static PageHeader fromBytes(byte[] data) {
-            if (data.length < PAGE_HEADER_SIZE) {
+        public static PageHeader fromBytes(byte[] data) {
+            if (data == null || data.length < PAGE_HEADER_SIZE) {
                 throw new IllegalArgumentException("Invalid header data size");
             }
 
             ByteBuffer buffer = ByteBuffer.wrap(data);
+
             PageHeader header = new PageHeader();
 
-            // 读取整型字段
+            // 读取所有字段（按声明顺序）
             header.pageNo = buffer.getInt();
             header.prevPage = buffer.getInt();
             header.nextPage = buffer.getInt();
-
-            // 读取短整型字段
             header.recordCount = buffer.getShort();
             header.freeSpace = buffer.getShort();
             header.slotCount = buffer.getShort();
             header.firstFreeSlot = buffer.getShort();
             header.lastSlotOffset = buffer.getShort();
-
-            // 读取字节字段
             header.pageType = buffer.get();
             header.flags = buffer.get();
-
-            // 读取校验和
             header.checksum = buffer.getInt();
-
-            // 读取布尔字段
             header.isDirty = buffer.get() == 1;
+            header.rightPointer = buffer.getInt();
+            header.nextFreePage = buffer.getInt();
+            header.nextFragPage = buffer.getInt();
 
             return header;
         }
@@ -613,6 +607,7 @@ public class PageManager implements DiskAccessor {
     // ====================== 页管理 ======================
     private static final Map<Integer, Integer> rootPages = new HashMap<>(); // spaceId -> rootPageNo
     private static final Map<Integer, Integer> freePageHeads = new HashMap<>(); // spaceId -> freePageHead
+    private static final Map<Integer, Integer> fragPageHeads = new HashMap<>(); // spaceId -> fragPageHead
 
     public Map<Integer, RandomAccessFile> getOpenFiles() {
         return openFiles;
@@ -650,12 +645,14 @@ public class PageManager implements DiskAccessor {
                 //这里应该先放进去
                 openFiles.put(spaceId, raf);
 
-                //这里应该先看缓存---------------------------------------------------------------------
-                //这里需要修改一下
+                //找到第0页
                 Page headerPage = getPage(spaceId,0);
-                //缓存里面已经包含看磁盘了
+//                //缓存里面已经包含看磁盘了
+//
+//                freePageHeads.put(spaceId, headerPage.header.nextPage);
+                freePageHeads.put(spaceId, ByteBuffer.wrap(headerPage.getRecord(2)).getInt());
+                fragPageHeads.put(spaceId, ByteBuffer.wrap(headerPage.getRecord(3)).getInt());
 
-                freePageHeads.put(spaceId, headerPage.header.nextPage);
             } else {
                 raf = new RandomAccessFile(file, "rw");
                 // 初始化文件
@@ -890,23 +887,46 @@ public class PageManager implements DiskAccessor {
      */
     private void initializeFile(int spaceId, RandomAccessFile raf) throws IOException {
         // 创建文件头页
-        Page headerPage = new Page(0);
-        headerPage.header.nextPage = -1; // 初始无空闲页
-        raf.write(headerPage.toBytes());
+        Page headerPage = new DataPage(0);
+        //写入数据
+        FileHeader fileHeader = new FileHeader(spaceId, 4, 3, -1);
+        List<byte[]> list = fileHeader.toBytesList();
+
+        for (byte[] data : list){
+            addRecord(spaceId, 0, data);
+        }
+
+        //暂时不用
+        Page page1 = new DataPage(1);
+        Page page2 = new DataPage(2);
+        //索引根页
+        Page page3 = new IndexPage(3);
+
+//        raf.write(headerPage.toBytes());
+        bufferPool.putPage(headerPage, spaceId);
+        bufferPool.putPage(page1, spaceId);
+        bufferPool.putPage(page2, spaceId);
+        bufferPool.putPage(page3, spaceId);
 
         // 设置空闲页链表头
-        freePageHeads.put(spaceId, -1);
+        freePageHeads.put(spaceId, 3);
+        fragPageHeads.put(spaceId, -1);
     }
 
     /**
      * 从磁盘读取页
      */
-    public Page readPageFromDisk(int spaceId, int pageNo) throws IOException {
+    public Page readPage(int spaceId, int pageNo) throws IOException {
         fileLock.readLock().lock();
         try {
+            //这是先从内存中读文件
             RandomAccessFile raf = openFiles.get(spaceId);
             if (raf == null) {
-                throw new IOException("Space not found: " + spaceId);
+                //内存里面找不到，从"磁盘"找,还是会使用到缓存
+                File file = new File(filePaths.get(spaceId));
+                raf = new RandomAccessFile(file,"rw");
+                //找到了放缓存
+                openFiles.put(spaceId, raf);
             }
 
             long offset = (long) pageNo * PAGE_SIZE;
@@ -918,7 +938,6 @@ public class PageManager implements DiskAccessor {
             Page page = Page.fromBytes(pageData);
 
             //读完磁盘后记得要放入缓存
-
             return page;
         } finally {
             fileLock.readLock().unlock();
@@ -928,12 +947,16 @@ public class PageManager implements DiskAccessor {
     /**
      * 写入页到磁盘
      */
-    public void writePageToDisk(int spaceId, int pageNo, Page page) throws IOException {
+    public void writePage(int spaceId, int pageNo, Page page) throws IOException {
         fileLock.writeLock().lock();
         try {
             RandomAccessFile raf = openFiles.get(spaceId);
             if (raf == null) {
-                throw new IOException("Space not found: " + spaceId);
+                //内存里面找不到，从"磁盘"找,还是会使用到缓存
+                File file = new File(filePaths.get(spaceId));
+                raf = new RandomAccessFile(file,"rw");
+                //找到了放缓存
+                openFiles.put(spaceId, raf);
             }
 
             long offset = (long) pageNo * PAGE_SIZE;
@@ -944,12 +967,12 @@ public class PageManager implements DiskAccessor {
         }
     }
 
-    // 写入磁盘(弃用)
-    public static void writePage(Page page, int spaceId) throws IOException {
-    }
-
-    //从磁盘里面获取(弃用)
-    public static Page readPage(GlobalPageId pageId) throws IOException {
-        return null;
-    }
+//    // 写入磁盘(弃用)
+//    public static void writePage(Page page, int spaceId) throws IOException {
+//    }
+//
+//    //从磁盘里面获取(弃用)
+//    public static Page readPage(GlobalPageId pageId) throws IOException {
+//        return null;
+//    }
 }
