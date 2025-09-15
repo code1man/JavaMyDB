@@ -1,5 +1,7 @@
 package org.csu.mydb.storage.storageFiles.page.record;
 
+import java.nio.ByteBuffer;
+
 //记录头
 public class RecordHead {
 
@@ -40,6 +42,33 @@ public class RecordHead {
         this.isDeleted = isDeleted;
         this.recordType = recordType;
         this.nextRecord = nextRecord;
+    }
+
+
+    /**
+     * 序列化：将 RecordHead 转为 byte[]
+     */
+    public byte[] toBytes() {
+        ByteBuffer buffer = ByteBuffer.allocate(4); // 1(bool) + 1(bool) + 2(short) = 4字节
+        // 注意：Java 的 boolean 在 ByteBuffer 中需手动转为 1/0
+        buffer.put((byte) (isDeleted ? 1 : 0));
+        buffer.put((byte) (recordType ? 1 : 0));
+        buffer.putShort(nextRecord);
+        return buffer.array();
+    }
+
+    /**
+     * 反序列化：从 byte[] 解析出 RecordHead
+     */
+    public static RecordHead fromBytes(byte[] data) {
+        if (data == null || data.length < 4) {
+            throw new IllegalArgumentException("Invalid RecordHead data size");
+        }
+        ByteBuffer buffer = ByteBuffer.wrap(data);
+        boolean isDeleted = buffer.get() == 1;
+        boolean recordType = buffer.get() == 1;
+        short nextRecord = buffer.getShort();
+        return new RecordHead(isDeleted, recordType, nextRecord);
     }
 
 }

@@ -1,5 +1,9 @@
 package org.csu.mydb.storage.storageFiles;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
 //每个表空间的第0页（即页0）存的数据
 public class FileHeader {
 
@@ -52,5 +56,27 @@ public class FileHeader {
 
     public void setFirstFragPage(int firstFragPage) {
         this.firstFragPage = firstFragPage;
+    }
+
+    //每个部分分别转成byte[]
+    public List<byte[]> toBytesList() {
+        List<byte[]> list = new ArrayList<>();
+
+        ByteBuffer buffer1 = ByteBuffer.allocate(4);
+        ByteBuffer buffer2 = ByteBuffer.allocate(4);
+        ByteBuffer buffer3 = ByteBuffer.allocate(4);
+        ByteBuffer buffer4 = ByteBuffer.allocate(4);
+
+        buffer1.putInt(spaceId);
+        buffer2.putInt(pageCount);
+        buffer3.putInt(firstFreePage);
+        buffer4.putInt(firstFragPage);
+
+        list.add(buffer1.array());
+        list.add(buffer2.array());
+        list.add(buffer3.array());
+        list.add(buffer4.array());
+
+        return list;
     }
 }

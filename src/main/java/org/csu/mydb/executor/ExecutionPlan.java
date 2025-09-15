@@ -9,6 +9,7 @@ import java.util.List;
  * 包含要执行的操作类型和参数
  */
 public class ExecutionPlan {
+
     public enum OperationType {
         CREATE_DATABASE,
         DROP_DATABASE,
@@ -32,7 +33,10 @@ public class ExecutionPlan {
     private String setColumn;
     private String newValue;
     private String queryColumns;
-
+    private String tableAlias;
+    private String joinTableName;
+    private String joinTableAlias;
+    private String joinCondition;
     // 构造函数
     public ExecutionPlan(OperationType operationType) {
         this.operationType = operationType;
@@ -109,6 +113,17 @@ public class ExecutionPlan {
     public void setQueryColumns(String queryColumns) {
         this.queryColumns = queryColumns;
     }
+    public String getTableAlias() { return tableAlias; }
+    public void setTableAlias(String a) { this.tableAlias = a; }
+
+    public String getJoinTableName() { return joinTableName; }
+    public void setJoinTableName(String t) { this.joinTableName = t; }
+
+    public String getJoinTableAlias() { return joinTableAlias; }
+    public void setJoinTableAlias(String a) { this.joinTableAlias = a; }
+
+    public String getJoinCondition() { return joinCondition; }
+    public void setJoinCondition(String c) { this.joinCondition = c; }
 
     @Override
     public String toString() {
@@ -122,6 +137,10 @@ public class ExecutionPlan {
                 ", setColumn='" + setColumn + '\'' +
                 ", newValue='" + newValue + '\'' +
                 ", queryColumns='" + queryColumns + '\'' +
+                ", tableAlias='" + tableAlias + '\'' +
+                ", joinTableName='" + joinTableName + '\'' +
+                ", joinTableAlias='" + joinTableAlias + '\'' +
+                ", joinCondition='" + joinCondition + '\'' +
                 '}';
     }
 }
