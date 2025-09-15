@@ -1,12 +1,10 @@
 package org.csu.mydb.storage;
 
+import org.csu.mydb.storage.Table.Column.Column;
 import org.csu.mydb.storage.bufferPool.BufferPool;
 import org.csu.mydb.storage.storageFiles.page.record.DataRecord;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.List;
 

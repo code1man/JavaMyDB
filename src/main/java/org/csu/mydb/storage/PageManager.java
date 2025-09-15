@@ -1,10 +1,18 @@
 package org.csu.mydb.storage;
 
+import org.csu.mydb.storage.BPlusTree.BPlusNode;
+import org.csu.mydb.storage.BPlusTree.InternalNode;
+import org.csu.mydb.storage.BPlusTree.LeafNode;
+import org.csu.mydb.storage.Table.Column.Column;
+import org.csu.mydb.storage.Table.Column.RecordSerializer;
+import org.csu.mydb.storage.Table.Key;
 import org.csu.mydb.storage.bufferPool.BufferPool;
 import org.csu.mydb.storage.disk.DiskAccessor;
 import org.csu.mydb.storage.storageFiles.FileHeader;
 import org.csu.mydb.storage.storageFiles.page.DataPage;
 import org.csu.mydb.storage.storageFiles.page.IndexPage;
+import org.csu.mydb.storage.storageFiles.page.PageType;
+import org.csu.mydb.util.Pair.Pair;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,11 +20,12 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Collectors;
 
 //页管理系统
 public class PageManager implements DiskAccessor {
     // ========================== 常量定义 ==========================
-    public static final int PAGE_SIZE = 4096; // 4KB页大小
+    public static int PAGE_SIZE = 4096; // 4KB页大小
     public static final int PAGE_HEADER_SIZE = 41; // 页头大小
     public static final int SLOT_SIZE = 6; // 槽位大小
 
@@ -265,7 +274,7 @@ public class PageManager implements DiskAccessor {
             this.header.slotCount = 0;
             this.header.firstFreeSlot = -1; //因为还没新建槽位
             this.header.lastSlotOffset = -1; //因为还没新建槽位
-            this.header.freeSpace = PAGE_SIZE - PAGE_HEADER_SIZE; // 初始空闲空间
+            this.header.freeSpace = (short) (PAGE_SIZE - PAGE_HEADER_SIZE); // 初始空闲空间
 //            this.header.pageType = 0; // 先不设置类型
             this.header.isDirty = true; // 新建一个页需要保存到磁盘
             this.header.rightPointer = -1; // 没有最右指针
@@ -488,6 +497,22 @@ public class PageManager implements DiskAccessor {
 
             header.isDirty = true;
             return true;
+        }
+
+        /**
+         * 清空全部记录变成空页
+         */
+        public void clearRecords(){
+            for (int i = 0; i <slots.size(); i++) {
+                freeRecord(i);
+            }
+        }
+
+        /**
+         * 返回记录条数
+         */
+        public int getRecordCount() {
+            return header.recordCount;
         }
 
         /**
@@ -723,7 +748,7 @@ public class PageManager implements DiskAccessor {
             headerPage.header.nextPage = pageNo;
             headerPage.header.isDirty = true;
 
-            //清除的页也要标记成脏页
+            // TODO: 清除的页直接丢掉
             bufferPool.putPage(page, spaceId);
         } finally {
             fileLock.writeLock().unlock();
@@ -829,6 +854,7 @@ public class PageManager implements DiskAccessor {
             RandomAccessFile raf = openFiles.get(spaceId);
             if (raf == null) {
                 //内存里面找不到，从"磁盘"找,还是会使用到缓存
+                System.out.println(filePaths);
                 File file = new File(filePaths.get(spaceId));
                 raf = new RandomAccessFile(file,"rw");
                 //找到了放缓存
@@ -871,5 +897,107 @@ public class PageManager implements DiskAccessor {
         } finally {
             fileLock.writeLock().unlock();
         }
+    }
+
+    // ----------- B+树节点读写方法 --------------
+    /**
+     * 根据 PageType 从磁盘加载 B+ 树节点
+     */
+    public BPlusNode<Key> loadNode(GlobalPageId gid, InternalNode parent, List<Column> keyColumns) throws IOException {
+        // 从磁盘读取 Page
+        Page page = readPage(gid.spaceId, gid.pageNo);
+        if (page == null) throw new IOException("Page not found: " + gid.pageNo);
+
+        PageHeader header = page.getHeader();
+        BPlusNode<Key> node;
+
+        switch (header.pageType) {
+            case PageType.DATA_PAGE: // 假设叶子节点类型是 1
+                LeafNode leaf = new LeafNode(gid, header, this);
+                leaf.parent = parent;
+
+                // 遍历每条记录，反序列化列数据
+                for (int i = 0; i < page.getRecordCount(); i++) {
+                    byte[] recordData = page.getRecord(i);
+                    List<Object> rowColumns = RecordSerializer.deserializeRow(recordData, keyColumns);
+                    leaf.records.add(rowColumns);
+
+                    // 根据主键列生成 Key，并加入 keys
+                    Key key = new Key(
+                            keyColumns.stream().map(col -> rowColumns.get(rowColumns.indexOf(col))).collect(Collectors.toList()),
+                            keyColumns
+                    );
+                    leaf.keys.add(key);
+                }
+                node = leaf;
+                break;
+
+            case PageType.INDEX_PAGE: // 假设内部节点类型是 0
+                InternalNode internal = new InternalNode(gid, header, this);
+                internal.parent = parent;
+
+                for (int i = 0; i < page.getRecordCount(); i++) {
+                    byte[] keyData = page.getRecord(i);
+                    Pair<Key, Integer> pair = RecordSerializer.deserializeKeyPtr(keyData, keyColumns);
+                    internal.keys.add(pair.getFirst());
+
+                    // 加载子节点指针
+                    internal.children.add(pair.getSecond());
+                }
+                node = internal;
+                break;
+
+            default:
+                throw new IOException("Unknown page type: " + header.pageType);
+        }
+
+        return node;
+    }
+
+    /**
+     * 保存叶子节点
+     */
+    public void writeLeafNode(LeafNode node, List<Column> tableColumns) throws IOException {
+        // 获取该节点所在的页
+        Page page = getPage(node.gid.spaceId, node.gid.pageNo);
+
+        // 清空原有记录
+        page.clearRecords();
+
+        // 将每条记录（列数据）序列化写入 Page
+        for (List<Object> rowColumns : node.records) {
+            byte[] recordData = RecordSerializer.serialize(rowColumns, tableColumns);
+            page.addRecord(recordData);  // 使用 Page 内部方法添加
+        }
+
+        // 写回磁盘（永久化）
+        writePage(node.gid.spaceId, node.gid.pageNo, page);
+
+        // 设置脏标记为 false
+        node.header.isDirty = false;
+    }
+
+    /**
+     * 保存内部节点
+     */
+    public void writeInternalNode(InternalNode node) throws IOException {
+        Page page = getPage(node.gid.spaceId, node.gid.pageNo);
+
+        // 清空原有记录
+        page.clearRecords();
+
+        // 内部节点只保存 keys 和子节点引用
+        for (int i = 0; i < node.keys.size(); i++) {
+            Key key = node.keys.get(i);
+            int childPageNo = node.children.get(i); // 对应子页号
+            byte[] keyPtrData = RecordSerializer.serializeKeyPtr(key.getValues(), key.getKeyColumns(), childPageNo);
+            page.addRecord(keyPtrData);
+        }
+
+
+        // 写回磁盘
+        writePage(node.gid.spaceId, node.gid.pageNo, page);
+
+        node.header.isDirty = false;
     }
 }

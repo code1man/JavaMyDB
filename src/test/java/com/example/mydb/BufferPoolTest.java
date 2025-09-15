@@ -27,11 +27,11 @@ public class BufferPoolTest {
 
         bufferPool = new BufferPool(150, new PageManager()) {
             @Override
-            public PageManager.DataPage getPage(PageManager.GlobalPageId globalPageId) throws IOException {
+            public PageManager.Page getPage(PageManager.GlobalPageId globalPageId) throws IOException {
                 // 读锁优先检查缓存
                 lock.readLock().lock();
                 try {
-                    PageManager.DataPage page = pageCache.get(globalPageId);
+                    PageManager.Page page = pageCache.get(globalPageId);
                     if (page != null) {
                         System.out.printf("[Thread-%s] Cache Hit %s%n",
                                 Thread.currentThread().getName(), globalPageIdToString(globalPageId));
@@ -45,7 +45,7 @@ public class BufferPoolTest {
                 // 写锁加载磁盘页（双重检查）
                 lock.writeLock().lock();
                 try {
-                    PageManager.DataPage page = pageCache.get(globalPageId);
+                    PageManager.Page page = pageCache.get(globalPageId);
                     if (page != null) {
                         cacheHit.incrementAndGet();
                         return page;
@@ -63,7 +63,7 @@ public class BufferPoolTest {
             }
 
             @Override
-            public void putPage(PageManager.DataPage page, int spaceId) {
+            public void putPage(PageManager.Page page, int spaceId) {
                 PageManager.GlobalPageId globalPageId = new PageManager.GlobalPageId(spaceId, page.getHeader().pageNo);
                 lock.writeLock().lock();
                 try {
@@ -82,7 +82,7 @@ public class BufferPoolTest {
                 lock.writeLock().lock();
                 try {
                     for (PageManager.GlobalPageId globalPageId : dirtyPages.keySet()) {
-                        PageManager.DataPage page = pageCache.get(globalPageId);
+                        PageManager.Page page = pageCache.get(globalPageId);
                         if (page != null) {
                             System.out.printf("[Thread-%s] Flush %s to Mock%n",
                                     Thread.currentThread().getName(), globalPageIdToString(globalPageId));
@@ -104,19 +104,19 @@ public class BufferPoolTest {
 
     @Test
     void testPutAndGetPage() throws IOException {
-        PageManager.DataPage page1 = new PageManager.DataPage(1);
+        PageManager.Page page1 = new PageManager.Page(1);
         assertTrue(page1.addRecord("hello".getBytes()));
 
         bufferPool.putPage(page1, 0); // spaceId=0
 
-        PageManager.DataPage cached = bufferPool.getPage(new PageManager.GlobalPageId(0, 1));
+        PageManager.Page cached = bufferPool.getPage(new PageManager.GlobalPageId(0, 1));
         assertNotNull(cached);
         assertEquals("hello", new String(cached.getRecord(0)));
     }
 
     @Test
     void testFlushAndReload() throws IOException {
-        PageManager.DataPage page2 = new PageManager.DataPage(2);
+        PageManager.Page page2 = new PageManager.Page(2);
         page2.addRecord("world".getBytes());
         bufferPool.putPage(page2, 0);
 
@@ -124,7 +124,7 @@ public class BufferPoolTest {
 
         // 清空缓存，强制从“磁盘”读
         bufferPool.evictLRUPage();
-        PageManager.DataPage reloaded = bufferPool.getPage(new PageManager.GlobalPageId(0, 2));
+        PageManager.Page reloaded = bufferPool.getPage(new PageManager.GlobalPageId(0, 2));
         assertNotNull(reloaded);
         assertEquals("world", new String(reloaded.getRecord(0)));
     }
@@ -132,7 +132,7 @@ public class BufferPoolTest {
     @Test
     void testConcurrentAccessWithStateLog() throws InterruptedException, IOException {
         // 先准备一页数据写入“磁盘”
-        PageManager.DataPage page1 = new PageManager.DataPage(1);
+        PageManager.Page page1 = new PageManager.Page(1);
         page1.addRecord("Alice".getBytes());
         MockPageManager.writePage(page1, 0);
 
@@ -148,7 +148,7 @@ public class BufferPoolTest {
                     Thread.sleep(200L * threadId); // 故意错开，制造竞争
 
                     System.out.printf("[Thread-%d] 正在尝试 getPage...%n", threadId);
-                    PageManager.DataPage loaded = bufferPool.getPage(new PageManager.GlobalPageId(0, 1));
+                    PageManager.Page loaded = bufferPool.getPage(new PageManager.GlobalPageId(0, 1));
 
                     System.out.printf("[Thread-%d] 成功获取 Space-0 PageNo=1, Data=%s%n",
                             threadId, new String(loaded.getRecord(0)));
@@ -173,7 +173,7 @@ public class BufferPoolTest {
         // 1. 先批量写入 500 条数据到不同表空间
         for (int i = 1; i <= initialRecords; i++) {
             int spaceId = ThreadLocalRandom.current().nextInt(spaceCount); // 0~2
-            PageManager.DataPage page = new PageManager.DataPage(i);
+            PageManager.Page page = new PageManager.Page(i);
             page.addRecord(("Initial-Data-" + i).getBytes());
             bufferPool.putPage(page, spaceId);
         }
@@ -197,13 +197,13 @@ public class BufferPoolTest {
 
                         // 读取
                         try {
-                            PageManager.DataPage loaded = bufferPool.getPage(new PageManager.GlobalPageId(spaceId, pageNo));
+                            PageManager.Page loaded = bufferPool.getPage(new PageManager.GlobalPageId(spaceId, pageNo));
                             loaded.getRecord(0);
                         } catch (IOException ignored) {
                         }
 
                         // 写入
-                        PageManager.DataPage page = new PageManager.DataPage(pageNo);
+                        PageManager.Page page = new PageManager.Page(pageNo);
                         page.addRecord(("Thread-" + threadId + "-Update-" + i).getBytes());
                         bufferPool.putPage(page, spaceId);
                     }

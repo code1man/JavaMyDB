@@ -40,7 +40,7 @@ public class InsertRecordTest {
         assertTrue(file.exists(), "表空间文件应已创建");
 
         // 3. 验证文件头页已初始化
-        PageManager.DataPage headerPage = pageManager.readPageFromDisk(SPACE_ID, 0);
+        PageManager.Page headerPage = pageManager.readPage(SPACE_ID, 0);
         assertNotNull(headerPage, "文件头页应存在");
 
         // 4. 验证页头信息
@@ -65,7 +65,7 @@ public class InsertRecordTest {
         assertTrue(success, "记录插入应成功");
 
         // 3. 获取根页
-        PageManager.DataPage rootPage = pageManager.getPage(SPACE_ID, ROOT_PAGE);
+        PageManager.Page rootPage = pageManager.getPage(SPACE_ID, ROOT_PAGE);
 
         // 4. 验证页状态
         PageManager.PageHeader header1 = rootPage.getHeader();

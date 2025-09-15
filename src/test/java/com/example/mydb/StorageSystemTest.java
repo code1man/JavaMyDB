@@ -53,7 +53,7 @@ class StorageSystemTest {
         assertEquals(PageManager.PAGE_SIZE, file.length(), "文件大小应为PAGE_SIZE");
 
         // 3. 验证文件头页
-        PageManager.DataPage headerPage = pageManager.getPage(SPACE_ID, ROOT_PAGE);
+        PageManager.Page headerPage = pageManager.getPage(SPACE_ID, ROOT_PAGE);
         PageManager.PageHeader header = headerPage.getHeader();
 
         assertEquals(0, header.getPageNo(), "文件头页号应为0");
@@ -85,7 +85,7 @@ class StorageSystemTest {
         assertEquals(PageManager.PAGE_SIZE * 2, file.length(), "文件大小应为2页");
 
         // 4. 验证新页状态
-        PageManager.DataPage newPage = pageManager.getPage(SPACE_ID, newPageNo);
+        PageManager.Page newPage = pageManager.getPage(SPACE_ID, newPageNo);
         PageManager.PageHeader header = newPage.getHeader();
 
         assertEquals(newPageNo, header.getPageNo(), "页号应匹配");
@@ -118,7 +118,7 @@ class StorageSystemTest {
         assertTrue(success, "记录插入应成功");
 
         // 4. 获取根页
-        PageManager.DataPage rootPage = pageManager.getPage(SPACE_ID, ROOT_PAGE);
+        PageManager.Page rootPage = pageManager.getPage(SPACE_ID, ROOT_PAGE);
 
         // 5. 验证页状态
         PageManager.PageHeader header = rootPage.getHeader();
@@ -166,7 +166,7 @@ class StorageSystemTest {
         assertTrue(success, "记录更新应成功");
 
         // 4. 验证更新
-        PageManager.DataPage page = pageManager.getPage(SPACE_ID, ROOT_PAGE);
+        PageManager.Page page = pageManager.getPage(SPACE_ID, ROOT_PAGE);
         byte[] retrieved = page.getRecord(0);
         assertArrayEquals(updatedBytes, retrieved, "更新后的记录内容应匹配");
 
@@ -201,7 +201,7 @@ class StorageSystemTest {
         assertTrue(success, "记录删除应成功");
 
         // 3. 验证页状态
-        PageManager.DataPage page = pageManager.getPage(SPACE_ID, ROOT_PAGE);
+        PageManager.Page page = pageManager.getPage(SPACE_ID, ROOT_PAGE);
         PageManager.PageHeader header = page.getHeader();
         assertEquals(0, header.getRecordCount(), "记录数应为0");
 
@@ -227,11 +227,11 @@ class StorageSystemTest {
         pageManager.openFile(SPACE_ID, TEST_FILE);
 
         // 2. 首次获取页（应缓存未命中）
-        PageManager.DataPage page1 = pageManager.getPage(SPACE_ID, ROOT_PAGE);
+        PageManager.Page page1 = pageManager.getPage(SPACE_ID, ROOT_PAGE);
         assertNotNull(page1, "应获取到页");
 
         // 3. 再次获取同一页（应缓存命中）
-        PageManager.DataPage page2 = pageManager.getPage(SPACE_ID, ROOT_PAGE);
+        PageManager.Page page2 = pageManager.getPage(SPACE_ID, ROOT_PAGE);
         assertSame(page1, page2, "应返回相同的页对象（缓存命中）");
     }
 
@@ -251,7 +251,7 @@ class StorageSystemTest {
         pageManager.addRecord(SPACE_ID, ROOT_PAGE, recordBytes);
 
         // 2. 获取页并验证脏页状态
-        PageManager.DataPage page = pageManager.getPage(SPACE_ID, ROOT_PAGE);
+        PageManager.Page page = pageManager.getPage(SPACE_ID, ROOT_PAGE);
         assertTrue(page.getHeader().isDirty(), "修改后页应为脏页");
 
         // 3. 手动刷回脏页
@@ -261,7 +261,7 @@ class StorageSystemTest {
         assertFalse(page.getHeader().isDirty(), "刷回后脏页标志应清除");
 
         // 5. 从磁盘重新加载验证
-        PageManager.DataPage diskPage = pageManager.readPageFromDisk(SPACE_ID, ROOT_PAGE);
+        PageManager.Page diskPage = pageManager.readPage(SPACE_ID, ROOT_PAGE);
         byte[] retrieved = diskPage.getRecord(0);
         assertArrayEquals(recordBytes, retrieved, "磁盘上的记录应与内存一致");
     }
@@ -317,7 +317,7 @@ class StorageSystemTest {
         }
 
         // 3. 验证页状态
-        PageManager.DataPage page = pageManager.getPage(SPACE_ID, ROOT_PAGE);
+        PageManager.Page page = pageManager.getPage(SPACE_ID, ROOT_PAGE);
         PageManager.PageHeader header = page.getHeader();
 
         assertEquals(recordCount, header.getRecordCount(), "记录数应为" + recordCount);
@@ -383,7 +383,7 @@ class StorageSystemTest {
 //        pageManager.openFile(SPACE_ID, TEST_FILE);
 //
 //        // 5. 验证记录不存在（未提交）
-//        PageManager.DataPage page = pageManager.getPage(SPACE_ID, ROOT_PAGE);
+//        PageManager.Page page = pageManager.getPage(SPACE_ID, ROOT_PAGE);
 //        assertEquals(0, page.getHeader().getRecordCount(), "未提交的记录不应存在");
 //
 //        // 6. 插入记录并提交
@@ -420,8 +420,8 @@ class StorageSystemTest {
 //        int page2 = pageManager.allocatePage(SPACE_ID);
 //
 //        // 3. 获取页填充缓存
-//        PageManager.DataPage p1 = pageManager.getPage(SPACE_ID, page1);
-//        PageManager.DataPage p2 = pageManager.getPage(SPACE_ID, page2);
+//        PageManager.Page p1 = pageManager.getPage(SPACE_ID, page1);
+//        PageManager.Page p2 = pageManager.getPage(SPACE_ID, page2);
 //
 //        // 4. 修改页1使其成为脏页
 //        String recordData = "DirtyPage";
@@ -429,10 +429,10 @@ class StorageSystemTest {
 //
 //        // 5. 分配第三页（触发缓存淘汰）
 //        int page3 = pageManager.allocatePage(SPACE_ID);
-//        PageManager.DataPage p3 = pageManager.getPage(SPACE_ID, page3);
+//        PageManager.Page p3 = pageManager.getPage(SPACE_ID, page3);
 //
 //        // 6. 验证页1已刷回
-//        PageManager.DataPage diskPage = pageManager.readPageFromDisk(SPACE_ID, page1);
+//        PageManager.Page diskPage = pageManager.readPageFromDisk(SPACE_ID, page1);
 //        assertEquals(1, diskPage.getHeader().getRecordCount(), "脏页应已刷回");
 //    }
 
@@ -463,7 +463,7 @@ class StorageSystemTest {
 
         // 3. 批量读取记录
         startTime = System.currentTimeMillis();
-        PageManager.DataPage page = pageManager.getPage(SPACE_ID, ROOT_PAGE);
+        PageManager.Page page = pageManager.getPage(SPACE_ID, ROOT_PAGE);
         for (int i = 0; i < recordCount; i++) {
             byte[] record = page.getRecord(i);
             assertNotNull(record, "记录" + i + "应存在");

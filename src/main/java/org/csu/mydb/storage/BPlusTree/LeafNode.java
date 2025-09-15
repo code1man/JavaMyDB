@@ -1,179 +1,159 @@
 package org.csu.mydb.storage.BPlusTree;
 
 import org.csu.mydb.storage.PageManager;
-import org.csu.mydb.util.TypeHandler.TypeHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.csu.mydb.storage.Table.Column.Column;
+import org.csu.mydb.storage.Table.Key;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
-import static org.csu.mydb.storage.PageManager.*;
+public class LeafNode extends BPlusNode<Key> {
+    // 每条记录是表列的值列表
+    public final List<List<Object>> records = new ArrayList<>();
 
-public class LeafNode<K extends Comparable<K>> extends BPlusNode<K> {
-    private final Logger logger = LoggerFactory.getLogger(LeafNode.class);
-
-    protected LeafNode<K> next;
-    protected LeafNode<K> prev;
-    protected InternalNode<K> parent;
-
-    private PageManager.Page page; // 直接使用 Page
-
-    public LeafNode(TypeHandler<K> keyHandler, int spaceId, int pageNo) throws IOException {
-        super();
-        this.keyHandler = keyHandler;
-        this.isLeaf = true;
-        this.gid = new GlobalPageId(spaceId, pageNo);
-
-        // 初始化或加载页
-        page = pageManager.readPageFromDisk(spaceId, pageNo);
-        if (page == null) {
-            // 第一次创建
-            page = new Page(pageNo);
-            page.header.pageType = 1; // 索引页
-            save(); // 写入磁盘
-        }
-
-        this.header = page.header;
-        this.keys = new ArrayList<>();
-        this.records = new ArrayList<>();
-        deserializeKeys(page.getPageData());
+    public LeafNode(PageManager.GlobalPageId gid,
+                    PageManager.PageHeader header,
+                    PageManager pageManager) {
+        super(gid, header, true, pageManager);
     }
 
-    @Override
-    protected void deserializeKeys(byte[] pageData) {
-        keys.clear();
-        records.clear();
+    /**
+     * 插入
+     * @param key 主键
+     * @param rowData 一行数据
+     * @param order 层数
+     */
+    public void insert(Key key, List<Object> rowData, List<Column> tableColumns, int order) {
+        int pos = findInsertPosition(key);
+        keys.add(pos, key);
+        records.add(pos, rowData);
 
-        int used = PageManager.PAGE_SIZE - header.freeSpace;
-        int offset = PageManager.PAGE_HEADER_SIZE;
+        // 写回磁盘
+        try {
+            pageManager.writeLeafNode(this, tableColumns);
+        } catch (IOException e) {
+            logger.error("写回磁盘失败");
+        }
 
-        while (offset < used) {
-            short keyLen = ByteBuffer.wrap(pageData, offset, 2).getShort();
-            offset += 2;
-
-            byte[] keyBytes = Arrays.copyOfRange(pageData, offset, offset + keyLen);
-            K key = keyHandler.deserialize(ByteBuffer.wrap(keyBytes));
-            offset += keyLen;
-
-            short valLen = ByteBuffer.wrap(pageData, offset, 2).getShort();
-            offset += 2;
-
-            byte[] valBytes = Arrays.copyOfRange(pageData, offset, offset + valLen);
-            offset += valLen;
-
-            keys.add(key);
-            records.add(valBytes);
+        if (keys.size() > order) {
+            try {
+                split(order, tableColumns);
+            } catch (IOException e) {
+                logger.error("Failed to split record", e);
+            }
         }
     }
 
-    @Override
-    protected byte[] serializeToPage() {
-        ByteBuffer buf = ByteBuffer.wrap(page.getPageData());
-        buf.order(ByteOrder.LITTLE_ENDIAN);
-
-        buf.position(PageManager.PAGE_HEADER_SIZE);
-        for (int i = 0; i < keys.size(); i++) {
-            byte[] keyBytes = keyHandler.serialize(keys.get(i));
-            byte[] valBytes = records.get(i);
-
-            buf.putShort((short) keyBytes.length);
-            buf.put(keyBytes);
-            buf.putShort((short) valBytes.length);
-            buf.put(valBytes);
+    private int findInsertPosition(Key key) {
+        int i = 0;
+        while (i < keys.size() && keys.get(i).compareTo(key) < 0) {
+            i++;
         }
-
-        int used = buf.position();
-        header.freeSpace = (short) (PageManager.PAGE_SIZE - used);
-        return page.getPageData();
+        return i;
     }
 
-    public GlobalPageId insert(K key, byte[] record, int order) {
-        int pos = Collections.binarySearch(keys, key);
-        if (pos < 0) pos = -pos - 1;
-        if (pos < keys.size() && keys.get(pos).compareTo(key) == 0) {
-            records.set(pos, record); // 覆盖
-        } else {
-            keys.add(pos, key);
-            records.add(pos, record);
-        }
-
-        if (isOverflow(order)) {
-            split(order);
-        } else {
-            save();
-        }
-        return gid;
-    }
-
-    public boolean isOverflow(int order) {
-        return keys.size() > order;
-    }
-
-    public void split(int order) {
+    /**
+     * 分裂
+     * @param order 层数
+     */
+    private void split(int order, List<Column> tableColumns) throws IOException {
         int mid = keys.size() / 2;
 
-        int newPageNo;
-        try {
-            newPageNo = pageManager.allocatePage(gid.spaceId);
-        } catch (IOException e) {
-            throw new RuntimeException("分裂失败：无法分配新页", e);
-        }
+        LeafNode newNode = new LeafNode(
+                new PageManager.GlobalPageId(gid.spaceId, pageManager.allocatePage(gid.spaceId)),
+                new PageManager.PageHeader(),
+                pageManager
+        );
 
-        LeafNode<K> newLeaf;
-        try {
-            newLeaf = new LeafNode<>(keyHandler, gid.spaceId, newPageNo);
-        } catch (IOException e) {
-            throw new RuntimeException("分裂失败：新页加载异常", e);
-        }
+        newNode.keys.addAll(keys.subList(mid, keys.size()));
+        newNode.records.addAll(records.subList(mid, records.size()));
 
-        newLeaf.keys.addAll(keys.subList(mid, keys.size()));
-        newLeaf.records.addAll(records.subList(mid, records.size()));
+        keys = new ArrayList<>(keys.subList(0, mid));
+        records.retainAll(records.subList(0, mid));
 
-        keys.subList(mid, keys.size()).clear();
-        records.subList(mid, records.size()).clear();
+        Key midKey = newNode.keys.get(0);
 
-        newLeaf.next = this.next;
-        newLeaf.prev = this;
-        this.next = newLeaf;
-        if (newLeaf.next != null) newLeaf.next.prev = newLeaf;
+        // 写磁盘
+        pageManager.writeLeafNode(this, tableColumns);
+        pageManager.writeLeafNode(newNode, tableColumns);
 
-        newLeaf.save();
-        this.save();
-
-        K splitKey = newLeaf.keys.get(0);
         if (parent == null) {
-            InternalNode<K> newRoot = new InternalNode<>(keyHandler);
-            newRoot.keys.add(splitKey);
-            newRoot.children.add(this.gid);
-            newRoot.children.add(newLeaf.gid);
-            parent = newRoot;
-            try {
-                newRoot.save();
-            } catch (IOException e) {
-                throw new RuntimeException("保存新根失败", e);
-            }
+            InternalNode newRoot = new InternalNode(
+                    new PageManager.GlobalPageId(gid.spaceId, 3), // root 固定 page3
+                    new PageManager.PageHeader(),
+                    pageManager
+            );
+            newRoot.header.pageNo = 3;
+            newRoot.keys.add(midKey);
+            newRoot.children.add(gid.pageNo);
+            newRoot.children.add(newNode.gid.pageNo);
+            this.parent = newRoot;
+            newNode.parent = newRoot;
+
+            pageManager.writeInternalNode(newRoot);
         } else {
-            try {
-                parent.insertKey(splitKey, newLeaf.gid, order);
-            } catch (IOException e) {
-                throw new RuntimeException("插入父节点失败", e);
-            }
+            parent.insertKey(midKey, newNode, order);
         }
     }
 
-    @Override
-    public void save() {
-        try {
-            serializeToPage();
-            pageManager.writePageToDisk(gid.spaceId, gid.pageNo, page);
-            header.isDirty = false;
-        } catch (IOException e) {
-            throw new RuntimeException("保存叶子节点失败", e);
+    /**
+     * 寻找节点
+     * @param key 主键
+     * @return 返回行
+     */
+    public List<Object> search(Key key) {
+        for (int i = 0; i < keys.size(); i++) {
+            if (keys.get(i).compareTo(key) == 0) {
+                return records.get(i);
+            }
         }
+        return null;
+    }
+
+    /**
+     * 更新节点信息
+     *
+     * @param key    主键
+     * @param newRow 新的一行数据
+     * @return 是否更新成功
+     */
+    public boolean update(Key key, List<Object> newRow, List<Column> tableColumns) {
+        for (int i = 0; i < keys.size(); i++) {
+            if (keys.get(i).compareTo(key) == 0) {
+                records.set(i, newRow);
+                try {
+                    pageManager.writeLeafNode(this, tableColumns);
+                } catch (IOException e) {
+                    logger.error("无法持久化");
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 删除节点
+     *
+     * @param key 主键
+     * @return 是否删除成功
+     */
+    public boolean delete(Key key, List<Column> tableColumns) {
+        for (int i = 0; i < keys.size(); i++) {
+            if (keys.get(i).compareTo(key) == 0) {
+                keys.remove(i);
+                records.remove(i);
+                try {
+                    pageManager.writeLeafNode(this, tableColumns);
+                } catch (IOException e) {
+                    logger.error("无法在磁盘执行该操作");
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }

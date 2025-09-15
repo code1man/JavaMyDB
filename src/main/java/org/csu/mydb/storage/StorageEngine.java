@@ -1,7 +1,7 @@
 package org.csu.mydb.storage;
 
 import org.csu.mydb.config.ConfigLoader;
-import org.csu.mydb.storage.BPlusTree.BPlusTree;
+import org.csu.mydb.storage.Table.Table;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,7 +14,8 @@ public class StorageEngine {
 
     public StorageEngine() {
         // 从 ConfigManager 获取配置
-        DBMS.BUFFER_POOL.setPoolSize(ConfigLoader.getInstance().getInt("storage", "buffer_pool_size", 100));
+        StorageSystem storageSystem = new StorageSystem();
+        storageSystem.getBufferPool().setPoolSize(ConfigLoader.getInstance().getInt("storage", "buffer_pool_size", 100));
         PageManager.PAGE_SIZE = ConfigLoader.getInstance().getInt("storage", "page_size", 4096);
 
         prePath = "";
@@ -23,7 +24,7 @@ public class StorageEngine {
 
         System.out.println("存储引擎初始化: pageSize="
                 + PageManager.PAGE_SIZE
-                + ", bufferPoolSize=" + DBMS.BUFFER_POOL.getPoolSize());
+                + ", bufferPoolSize=" + storageSystem.getBufferPool());
     }
 
     // 析构函数
@@ -59,9 +60,6 @@ public class StorageEngine {
 //            }
 //        }
 //        System.out.println("打开数据库成功: " + dbName);
-//        List<String> list = new ArrayList<>();
-//        BPlusTree<String> bPlusTree = new BPlusTree<>(1, 1);
-//        Table<String> table = new Table<>("jj", prePath, list, 1, bPlusTree, String.class);
     }
 
     /**

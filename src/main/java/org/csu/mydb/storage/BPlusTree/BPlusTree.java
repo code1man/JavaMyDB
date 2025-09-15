@@ -1,59 +1,133 @@
 package org.csu.mydb.storage.BPlusTree;
 
 import org.csu.mydb.storage.PageManager;
-import org.csu.mydb.storage.PageManager.*;
-import org.csu.mydb.util.TypeHandler.TypeHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.csu.mydb.storage.Table.Column.Column;
+import org.csu.mydb.storage.Table.Key;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class BPlusTree<K extends Comparable<K>> {
-    private final int order; // B+ 树的阶数（决定节点最大键数）
-    private final TypeHandler<K> keyHandler;
-    private final BPlusNode<K> root; // 根节点
+public class BPlusTree {
+    private BPlusNode<Key> root;
+    private final int order;
+    private final PageManager pageManager;
+    private final List<Column> tableColumns; // 主键列
 
-    private static final Logger logger = LoggerFactory.getLogger(BPlusTree.class);
-
-    public BPlusTree(int order, TypeHandler<K> keyHandler, int spaceId) throws IOException {
-        this.order = Math.max(3, order); // 最小阶数保护
-        this.keyHandler = keyHandler;
-        this.root = new LeafNode<>(keyHandler, 3); // 我想要的效果是根节点永远是page3，其他的可以改
-        // 初始化根节点的页号
-        root.gid = new GlobalPageId(spaceId, 3);
-        root.load(); // 加载页（此时页为空）
-        root.save(); // 保存初始空页
+    public BPlusTree(int order, int spaceId, PageManager pageManager, List<Column> tableColumns) throws IOException {
+        this.order = order;
+        this.pageManager = pageManager;
+        this.tableColumns = tableColumns;
+        // load root
+        root = pageManager.loadNode(new PageManager.GlobalPageId(spaceId, 3), null, tableColumns);
     }
 
-    // 查找键对应的数据页指针（叶子节点中的值）
-    public GlobalPageId search(K key) throws IOException {
-        LeafNode<K> leaf = findLeaf(key);
-        leaf.load(); // 加载页到缓存
-        int idx = Collections.binarySearch(leaf.keys, key);
-        return idx >= 0 ? leaf.gid : null;
+    public List<Column> getColumns() {
+        return tableColumns;
     }
 
-    // 查找键所在的叶子节点
-    private LeafNode<K> findLeaf(K key) throws IOException {
-        BPlusNode<K> node = root;
-        while (!node.isLeaf) { // 这里需要修正：root 可能是内部节点（当树高度>1时）
-            InternalNode<K> internal = null;
-            if (node instanceof InternalNode<K>) {
-                internal = (InternalNode<K>) node;
-            }
-            int idx = Collections.binarySearch(internal.keys, key);
-            int childIdx = idx >= 0 ? idx + 1 : -idx - 1;
-            PageManager pageManager = new PageManager();
-            GlobalPageId childId = internal.children.get(childIdx);
-            node.deserializeKeys(pageManager.readPageFromDisk(childId.spaceId, childId.pageNo).getPageData()); // 加载子节点页
+    // ======================== 查找 ========================
+    /**
+     * 根据主键查找
+     * @param key 主键
+     * @return 行
+     */
+    public List<Object> search(Key key) throws IOException {
+        return search(root, key);
+    }
+
+    private List<Object> search(BPlusNode<Key> node, Key key) throws IOException {
+        if (node.isLeaf) {
+            return ((LeafNode) node).search(key);
+        } else {
+            InternalNode in = (InternalNode) node;
+            int pos = 0;
+            while (pos < in.keys.size() && key.compareTo(in.keys.get(pos)) >= 0) pos++;
+
+            BPlusNode<Key> child = in.getChildAt(pos, tableColumns);
+            return search(child, key);
         }
-        return (LeafNode<K>) node;
     }
 
-    // 插入键值对（键 + 数据页指针）
-    public void insert(K key, byte[] records ,GlobalPageId value) throws IOException {
-        LeafNode<K> leaf = findLeaf(key);
-        leaf.insert(key, records, order); // 叶子节点插入
+    // ======================== 插入 ========================
+    /**
+     * 按照主键插入
+     * @param rowValues 行
+     */
+    public void insert(List<Object> rowValues) throws IOException {
+        // 生成 Key
+        Key key = new Key(
+                tableColumns.stream().map(col -> rowValues.get(tableColumns.indexOf(col))).collect(Collectors.toList()),
+                tableColumns
+        );
+        insert(root, key, rowValues);
+    }
+
+    private void insert(BPlusNode<Key> node, Key key, List<Object> rowValues) throws IOException {
+        if (node.isLeaf) {
+            LeafNode leaf = (LeafNode) node;
+            leaf.insert(key, rowValues, tableColumns, order); // 叶子节点内部已处理分裂
+
+            // 持久化叶子节点
+            pageManager.writeLeafNode(leaf, tableColumns);
+        } else {
+            InternalNode in = (InternalNode) node;
+            int pos = 0;
+            while (pos < in.keys.size() && key.compareTo(in.keys.get(pos)) >= 0) pos++;
+
+            BPlusNode<Key> child = in.getChildAt(pos, tableColumns);
+            insert(child, key, rowValues);
+
+            // 持久化内部节点
+            pageManager.writeInternalNode(in);
+        }
+    }
+
+    // ======================== 删除 ========================
+    public boolean delete(Key key) throws IOException {
+        return delete(root, key);
+    }
+
+    private boolean delete(BPlusNode<Key> node, Key key) throws IOException {
+        if (node.isLeaf) {
+            LeafNode leaf = (LeafNode) node;
+            boolean removed = leaf.delete(key, tableColumns);
+
+            if (removed) pageManager.writeLeafNode(leaf, tableColumns);
+            return removed;
+        } else {
+            InternalNode in = (InternalNode) node;
+            int pos = 0;
+            while (pos < in.keys.size() && key.compareTo(in.keys.get(pos)) >= 0) pos++;
+            BPlusNode<Key> child = in.getChildAt(pos, tableColumns);
+            boolean removed = delete(child, key);
+
+            if (removed) pageManager.writeInternalNode(in);
+            return removed;
+        }
+    }
+
+    // ======================== 更新 ========================
+    public boolean update(Key key, List<Object> newRow) throws IOException {
+        return update(root, key, newRow);
+    }
+
+    private boolean update(BPlusNode<Key> node, Key key, List<Object> newRow) throws IOException {
+        if (node.isLeaf) {
+            LeafNode leaf = (LeafNode) node;
+            boolean updated = leaf.update(key, newRow, tableColumns);
+
+            if (updated) pageManager.writeLeafNode(leaf, tableColumns);
+            return updated;
+        } else {
+            InternalNode in = (InternalNode) node;
+            int pos = 0;
+            while (pos < in.keys.size() && key.compareTo(in.keys.get(pos)) >= 0) pos++;
+            BPlusNode<Key> child = in.getChildAt(pos, tableColumns);
+            boolean updated = update(child, key, newRow);
+
+            if (updated) pageManager.writeInternalNode(in);
+            return updated;
+        }
     }
 }

@@ -1,4 +1,4 @@
-package org.csu.mydb.storage;
+package org.csu.mydb.storage.Table.Column;
 
 //数据库表格中的列
 public class Column {
