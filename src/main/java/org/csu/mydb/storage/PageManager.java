@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.zip.CRC32;
 
 //页管理系统
 public class PageManager {
@@ -49,6 +50,9 @@ public class PageManager {
      * 页头元数据（24字节）
      */
     public static class PageHeader {
+        public static final int PAGE_SIZE = 4096; // 4KB页大小
+        public static final int PAGE_HEADER_SIZE = 24; // 页头固定24字节
+
         public int pageNo;          // 4字节 - 页号
         public int prevPage;        // 4字节 - 上一页
         public int nextPage;        // 4字节 - 下一页
@@ -66,7 +70,7 @@ public class PageManager {
         /**
          * 序列化为字节数组
          */
-        byte[] toBytes() {
+        public byte[] toBytes() {
             ByteBuffer buffer = ByteBuffer.allocate(PAGE_HEADER_SIZE);
 
             // 写入整型字段
@@ -97,7 +101,7 @@ public class PageManager {
         /**
          * 从字节数组反序列化
          */
-        static PageHeader fromBytes(byte[] data) {
+        public static PageHeader fromBytes(byte[] data) {
             if (data.length < PAGE_HEADER_SIZE) {
                 throw new IllegalArgumentException("Invalid header data size");
             }
@@ -129,20 +133,45 @@ public class PageManager {
 
             return header;
         }
+
+        // 合并页头和节点数据
+        public static byte[] mergeHeaderAndData(PageHeader header, byte[] data) {
+            ByteBuffer buffer = ByteBuffer.allocate(PAGE_SIZE);
+            buffer.put(header.toBytes());
+            buffer.put(data);
+            return buffer.array();
+        }
+
+        public byte getPageType(){
+            return pageType;
+        }
+
+        // 验证页校验和（示例：使用CRC32）
+        public boolean validateChecksum(byte[] pageData) {
+            int calculatedChecksum = calculateChecksum(pageData);
+            return this.checksum == calculatedChecksum;
+        }
+
+        // 计算校验和（简化实现）
+        private int calculateChecksum(byte[] data) {
+            CRC32 crc32 = new CRC32();
+            crc32.update(data, 0, PAGE_HEADER_SIZE); // 仅校验页头
+            return (int) crc32.getValue();
+        }
     }
 
     /**
      * 槽位结构（6字节）
      */
     public static class Slot {
-        short offset;   // 2字节 - 记录在数据区的偏移量
-        short length;   // 2字节 - 记录长度
-        byte status;    // 1字节 - 状态 (0=空闲, 1=使用中, 2=已删除)
-        byte nextFree;  // 1字节 - 下一个空闲槽位索引（仅当status=0时有效）
+        public short offset;   // 2字节 - 记录在数据区的偏移量
+        public short length;   // 2字节 - 记录长度
+        public byte status;    // 1字节 - 状态 (0=空闲, 1=使用中, 2=已删除)
+        public byte nextFree;  // 1字节 - 下一个空闲槽位索引（仅当status=0时有效）
         // 总计: 6字节
 
         // 序列化为字节
-        byte[] toBytes() {
+        public byte[] toBytes() {
             ByteBuffer buffer = ByteBuffer.allocate(SLOT_SIZE);
             buffer.putShort(offset);
             buffer.putShort(length);
@@ -152,7 +181,7 @@ public class PageManager {
         }
 
         // 从字节反序列化
-        static Slot fromBytes(byte[] data) {
+        public static Slot fromBytes(byte[] data) {
             ByteBuffer buffer = ByteBuffer.wrap(data);
             Slot slot = new Slot();
             slot.offset = buffer.getShort();
@@ -333,11 +362,14 @@ public class PageManager {
     }
 
     // 随便写的
-    public static void writePage(DataPage page, int spaceId) throws IOException {
+    public static void writePage(byte[] page, int spaceId) throws IOException {
     }
 
-    public static DataPage readPage(GlobalPageId pageId) throws IOException {
-        DataPage page = new DataPage(pageId.pageNo);
-        return page;
+    public static byte[] readPage(GlobalPageId pageId) throws IOException {
+        byte[] pageData = new byte[PAGE_SIZE];
+        return pageData;
+    }
+    public static GlobalPageId allocateNewPageId() {
+        return null;
     }
 }

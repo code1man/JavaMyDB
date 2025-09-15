@@ -26,7 +26,7 @@ public class BPlusTreeTest {
 
         DBMS.BUFFER_POOL = new BufferPool(150) {
             @Override
-            public PageManager.DataPage getPage(PageManager.GlobalPageId globalPageId) throws IOException {
+            public byte[] getPage(PageManager.GlobalPageId globalPageId) throws IOException {
                 // 读锁优先检查缓存
                 lock.readLock().lock();
                 try {

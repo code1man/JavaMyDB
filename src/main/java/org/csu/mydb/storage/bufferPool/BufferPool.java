@@ -45,7 +45,7 @@ public class BufferPool {
     }
 
     /// 获取页（优先缓存，未命中读磁盘）
-    public PageManager.DataPage getPage(PageManager.GlobalPageId pageId) throws IOException {
+    public byte[] getPage(PageManager.GlobalPageId pageId) throws IOException {
         lock.readLock().lock();
         try {
             PageManager.DataPage page = pageCache.get(pageId);
