@@ -6,27 +6,27 @@ import java.nio.ByteBuffer;
 public class RecordHead {
 
     //1字节，是否删除标记（1代表已删除）
-    private boolean isDeleted;
+    private byte isDeleted;
 
     //1字节，记录类型（0代表普通数据，1的代表索引记录）
-    private boolean recordType;
+    private byte recordType;
 
     //2字节，下一个记录的偏移量
     private short nextRecord;
 
-    public boolean isDeleted() {
+    public byte isDeleted() {
         return isDeleted;
     }
 
-    public void setDeleted(boolean deleted) {
+    public void setDeleted(byte deleted) {
         isDeleted = deleted;
     }
 
-    public boolean isRecordType() {
+    public byte isRecordType() {
         return recordType;
     }
 
-    public void setRecordType(boolean recordType) {
+    public void setRecordType(byte recordType) {
         this.recordType = recordType;
     }
 
@@ -38,21 +38,19 @@ public class RecordHead {
         this.nextRecord = nextRecord;
     }
 
-    public RecordHead(boolean isDeleted, boolean recordType, short nextRecord) {
+    public RecordHead(byte isDeleted, byte recordType, short nextRecord) {
         this.isDeleted = isDeleted;
         this.recordType = recordType;
         this.nextRecord = nextRecord;
     }
 
-
     /**
-     * 序列化：将 RecordHead 转为 byte[]
+     * 序列化：将 RecordHead 转为 byte[]（固定4字节）
      */
     public byte[] toBytes() {
-        ByteBuffer buffer = ByteBuffer.allocate(4); // 1(bool) + 1(bool) + 2(short) = 4字节
-        // 注意：Java 的 boolean 在 ByteBuffer 中需手动转为 1/0
-        buffer.put((byte) (isDeleted ? 1 : 0));
-        buffer.put((byte) (recordType ? 1 : 0));
+        ByteBuffer buffer = ByteBuffer.allocate(4); // 1 + 1 + 2 = 4字节
+        buffer.put(isDeleted);    // 直接写入 byte（无需转换）
+        buffer.put(recordType);   // 直接写入 byte
         buffer.putShort(nextRecord);
         return buffer.array();
     }
@@ -61,13 +59,13 @@ public class RecordHead {
      * 反序列化：从 byte[] 解析出 RecordHead
      */
     public static RecordHead fromBytes(byte[] data) {
-        if (data == null || data.length < 4) {
-            throw new IllegalArgumentException("Invalid RecordHead data size");
+        if (data == null || data.length != 4) {
+            throw new IllegalArgumentException("Invalid RecordHead data size. Expected 4 bytes, got " + (data != null ? data.length : "null"));
         }
         ByteBuffer buffer = ByteBuffer.wrap(data);
-        boolean isDeleted = buffer.get() == 1;
-        boolean recordType = buffer.get() == 1;
-        short nextRecord = buffer.getShort();
+        byte isDeleted = buffer.get();      // 读取1字节
+        byte recordType = buffer.get();     // 读取1字节
+        short nextRecord = buffer.getShort(); // 读取2字节
         return new RecordHead(isDeleted, recordType, nextRecord);
     }
 
