@@ -57,7 +57,7 @@ public class BufferPool {
             PageManager.Page page = pageCache.get(pageId);
             if (page != null) return page;
 
-            page = diskAccessor.readPageFromDisk(pageId.spaceId, pageId.pageNo);
+            page = diskAccessor.readPage(pageId.spaceId, pageId.pageNo);
             if (page != null) {
                 pageCache.put(pageId, page);
             }
@@ -97,7 +97,7 @@ public class BufferPool {
                 PageManager.Page page = pageCache.get(pageId);
                 if (page != null) {
 //                    PageManager.writePage(page, pageId.spaceId);
-                    diskAccessor.writePageToDisk(pageId.spaceId, pageId.pageNo, page);
+                    diskAccessor.writePage(pageId.spaceId, pageId.pageNo, page);
                     page.getHeader().isDirty = false;
                 }
                 dirtyPages.remove(pageId);
@@ -120,7 +120,7 @@ public class BufferPool {
                 PageManager.Page page = pageCache.get(lruPageId);
                 if (page != null && dirtyPages.containsKey(lruPageId)) {
 //                    PageManager.writePage(page, lruPageId.spaceId);
-                    diskAccessor.writePageToDisk(lruPageId.spaceId, lruPageId.pageNo, page);
+                    diskAccessor.writePage(lruPageId.spaceId, lruPageId.pageNo, page);
                     dirtyPages.remove(lruPageId);
                     page.getHeader().isDirty = false;
                     dirtyCount--;
@@ -160,7 +160,7 @@ public class BufferPool {
             PageManager.Page page = pageCache.get(pageId);
             if (page != null) {
 //                PageManager.writePage(page, pageId.spaceId);
-                diskAccessor.writePageToDisk(pageId.spaceId, pageId.pageNo, page);
+                diskAccessor.writePage(pageId.spaceId, pageId.pageNo, page);
                 page.getHeader().isDirty = false;
             }
             dirtyPages.remove(pageId);

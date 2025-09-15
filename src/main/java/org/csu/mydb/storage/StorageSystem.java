@@ -1,10 +1,13 @@
 package org.csu.mydb.storage;
 
 import org.csu.mydb.storage.bufferPool.BufferPool;
+import org.csu.mydb.storage.storageFiles.page.record.DataRecord;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.util.List;
 
 //组合缓存和页管理（全局只能有一个的东西，比如缓存）
@@ -35,6 +38,8 @@ public class StorageSystem {
 
     //========================== 存储系统的静态方法（比存储引擎低一层的方法） ============================//
 
+
+
     /**
      * 创建数据库
      *暂时不需要考虑
@@ -45,36 +50,27 @@ public class StorageSystem {
 
     /**
      * 创建表格，初始化文件
-     * @param tableName 表名
+     * @param filePath 包括文件本身idb
      * @param columns   列的数据
      */
-    public static void createTable(String tableName, List<Column> columns){
+    public static int createTable(String filePath, List<Column> columns){
 
         //先分配spaceId
-        //找到sys_tables.idb文件
-        //先看换缓存有没有
-        RandomAccessFile raf = pageManager.getOpenFiles().get(SYS_TABLES_IDB_SPACE_ID);
-        //缓存没有的话
-        if(raf == null){
-            File file = new File(path + "sys_tables.idb");
-            try {
-                raf = new RandomAccessFile(file, "rw");
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+        //找到ibdata1文件//读第五页
+        PageManager.Page page ;
+        try {
+            page = pageManager.readPage(IBDATA1_SPACE_ID, 5);
+
+            //只存了一个数据
+            DataRecord dataRecord = DataRecord.fromBytes(ByteBuffer.wrap(page.getRecord(0)).array());
+            int maxSpaceId = ByteBuffer.wrap(dataRecord.getData()).getInt();
+
+            //新建文件 //初始化文件
+            pageManager.openFile(maxSpaceId + 1, filePath);
+            return maxSpaceId + 1;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        //从第四页开始读
-
-        //每个页找到spaceId字段
-
-        //拿到他的数据区
-
-        //新建文件
-        pageManager.openFile();
-
-        //初始化文件
-
-        //写入
     }
 
 }
