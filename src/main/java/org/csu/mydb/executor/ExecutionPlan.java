@@ -19,7 +19,8 @@ public class ExecutionPlan {
         INSERT,
         DELETE,
         UPDATE,
-        QUERY
+        QUERY,
+        EXIT
     }
 
     private OperationType operationType;
@@ -36,7 +37,6 @@ public class ExecutionPlan {
     public ExecutionPlan(OperationType operationType) {
         this.operationType = operationType;
     }
-
     // Getter和Setter方法
     public OperationType getOperationType() {
         return operationType;
