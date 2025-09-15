@@ -1,6 +1,7 @@
 package org.csu.mydb.cli;
 
 import org.csu.mydb.executor.Executor;
+import org.csu.mydb.executor.ExecutorException;
 import org.csu.mydb.parser.Parser;
 
 import java.util.Scanner;
@@ -26,7 +27,11 @@ public class CLI {
             }
             // 解析命令并执行
             ParsedCommand command = parser.parse(input.trim().toLowerCase());
-            shouldContinue = executor.execute(command);
+            try {
+                shouldContinue = executor.execute(command);
+            } catch (ExecutorException e) {
+                throw new RuntimeException(e);
+            }
         }
         scanner.close();
     }
