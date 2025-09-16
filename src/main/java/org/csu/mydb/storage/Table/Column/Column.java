@@ -33,6 +33,10 @@ public class Column {
         this.defaultValue = defaultValue;
     }
 
+    public Column() {
+
+    }
+
     public String getName() {
         return name;
     }
@@ -88,4 +92,6 @@ public class Column {
     public void setScale(int scale) {
         this.scale = scale;
     }
+
+    public void setPosition(int position) { this.position = position;}
 }

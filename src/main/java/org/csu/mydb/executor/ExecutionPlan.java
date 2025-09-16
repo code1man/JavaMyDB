@@ -30,7 +30,7 @@ public class ExecutionPlan {
     private String databaseName;
     private String tableName;
     private List<Column> columns;
-    private List<Column> insertColumns;
+    private List<String> insertColumns;
     private String condition;
     private String setColumn;
     private String newValue;
@@ -80,11 +80,11 @@ public class ExecutionPlan {
 
 
     // Getter & Setter
-    public List<Column> getInsertColumns() {
+    public List<String> getValues() {
         return insertColumns;
     }
 
-    public void setInsertColumns(List<Column> insertColumns) {
+    public void setValues(List<String> insertColumns) {
         this.insertColumns = insertColumns;
     }
 

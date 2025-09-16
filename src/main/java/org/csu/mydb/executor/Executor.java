@@ -84,7 +84,7 @@ public class Executor {
         return new ExecutionResult(true, "数据库删除成功: " + plan.getDatabaseName());
     }
 
-    private ExecutionResult executeOpenDatabase(ExecutionPlan plan) throws IOException {
+    private ExecutionResult executeOpenDatabase(ExecutionPlan plan) {
         if (plan.getDatabaseName() == null || plan.getDatabaseName().isEmpty()) {
             return new ExecutionResult(false, "数据库名不能为空");
         }
@@ -125,11 +125,11 @@ public class Executor {
             return new ExecutionResult(false, "表名不能为空");
         }
 
-        if (plan.getInsertColumns() == null || plan.getInsertColumns().isEmpty()) {
+        if (plan.getValues() == null || plan.getValues().isEmpty()) {
             return new ExecutionResult(false, "插入列不能为空");
         }
 
-        storageEngine.myInsert(plan.getTableName(), plan.getInsertColumns());
+        storageEngine.myInsert(plan.getTableName(), plan.getColumns(),plan.getValues());
         return new ExecutionResult(true, "数据插入成功", 1);
     }
 

@@ -65,7 +65,6 @@ public class StorageEngine {
 
     /**
      * 创建数据库（对应 C++ 的 myCreateDataBase）
-     *
      * @param dataBaseName 数据库名
      */
     public void myCreateDataBase(String dataBaseName) {
@@ -157,7 +156,7 @@ public class StorageEngine {
      * 插入数据（对应 C++ 的 myInsert）
      *
      * @param tableName 表名
-     * @param insertColumns   插入的值列表（如 ["1", "Alice"]）
+     * @param values   插入的值列表（如 ["1", "Alice"]）
      */
     public void myInsert(String tableName, List<Column> values) {
     }
