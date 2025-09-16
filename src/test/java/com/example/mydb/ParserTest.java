@@ -24,7 +24,7 @@ import java.util.List;
   * price not null
   * )
   * SELECT id from student where name = 'dd';
-  * select anything from student ;
+  * select EVERYTHING from student ;
   * select id from student where name = 'dd' AND id = 3;
   * insert into student values (1,'33');
   * insert into student (id , age) VALUES (1,4);

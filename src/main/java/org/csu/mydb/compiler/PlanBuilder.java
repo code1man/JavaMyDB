@@ -322,14 +322,52 @@ public class PlanBuilder {
             if (first != null && first.type == Lexer.KEYWORD && first.lexeme.equalsIgnoreCase("EVERYTHING")) {
                 consume();
                 p.setQueryColumns("*");
-            } else {
-                List<String> cols = parseColumnList();
+            }else {
+                List<String> cols = new ArrayList<>();
+                cols.add(parseQualifiedName()); // parse first qualified name
+                while (peek() != null && peek().type == Lexer.DELIMITER && peek().lexeme.equals(",")) {
+                    consume();
+                    cols.add(parseQualifiedName());
+                }
                 p.setQueryColumns(String.join(",", cols));
             }
+
+            // 2) FROM tableRef (with optional alias)
             expectKeyword("FROM");
-            Lexer.Token tbl = peek();
-            if (tbl == null || tbl.type != Lexer.IDENTIFIER) throw error("期望表名", tbl);
-            p.setTableName(tbl.lexeme); consume();
+            TableRef left = parseTableRef();
+            p.setTableName(left.name);
+            if (left.alias != null) p.setTableAlias(left.alias);
+
+            // 3) optional JOIN ... ON ...
+            if (peek() != null && peek().type == Lexer.KEYWORD && peek().lexeme.equalsIgnoreCase("JOIN")) {
+                consume(); // JOIN
+                TableRef right = parseTableRef();
+                p.setJoinTableName(right.name);
+                if (right.alias != null) p.setJoinTableAlias(right.alias);
+
+                // ON
+                expectKeyword("ON");
+                String leftQual = parseQualifiedName();  // e.g., A.col
+                // operator should be '='
+                Lexer.Token op = peek();
+                if (op == null || !( (op.type == Lexer.OPERATOR && op.lexeme.equals("=")) || (op.type==Lexer.DELIMITER && op.lexeme.equals("=")) )) {
+                    throw error("期望 '=' 在 JOIN ON", op);
+                }
+                consume();
+                String rightQual = parseQualifiedName();
+
+                // store join condition as string "A.col = B.col"
+                p.setJoinCondition(leftQual + " = " + rightQual);
+            }
+
+//            } else {
+//                List<String> cols = parseColumnList();
+//                p.setQueryColumns(String.join(",", cols));
+//            }
+//            expectKeyword("FROM");
+//            Lexer.Token tbl = peek();
+//            if (tbl == null || tbl.type != Lexer.IDENTIFIER) throw error("期望表名", tbl);
+//            p.setTableName(tbl.lexeme); consume();
 
             // optional WHERE
             if (peek() != null && peek().type == Lexer.KEYWORD && peek().lexeme.equalsIgnoreCase("WHERE")) {
@@ -344,10 +382,48 @@ public class PlanBuilder {
            // p.setOperationType();
             return p;
         }
+    // Helper small holder for table/alias
+    private static class TableRef {
+        String name;
+        String alias;
+        TableRef(String n, String a) { this.name = n; this.alias = a; }
+    }
 
+    // parse TableRef -> IDENTIFIER ( IDENTIFIER )?
+    private TableRef parseTableRef() throws SemanticException {
+        Lexer.Token t = peek();
+        if (t == null || t.type != Lexer.IDENTIFIER) throw error("期望表名", t);
+        String name = t.lexeme; consume();
+        String alias = null;
+        // optional alias: an IDENTIFIER immediately following (but not a keyword like JOIN/ON)
+        Lexer.Token next = peek();
+        if (next != null && next.type == Lexer.IDENTIFIER) {
+            // if it's an identifier and not a SQL keyword, treat as alias
+            alias = next.lexeme; consume();
+        }
+        return new TableRef(name, alias);
+    }
+
+    // parse QualifiedName -> IDENTIFIER ( '.' IDENTIFIER )?
+    private String parseQualifiedName() throws SemanticException {
+        Lexer.Token t = peek();
+        if (t == null || t.type != Lexer.IDENTIFIER) throw error("期望标识符/限定名", t);
+        String left = t.lexeme;
+        consume();
+        if (peek() != null && peek().type == Lexer.DELIMITER && peek().lexeme.equals(".")) {
+            consume(); // dot
+            Lexer.Token right = peek();
+            if (right == null || right.type != Lexer.IDENTIFIER) throw error("期望列名在 '.' 之后", right);
+            String col = right.lexeme;
+            consume();
+            return left + "." + col;
+        } else {
+            return left;
+        }
+    }
         // Condition -> ConditionTerm ( AND Condition )?
         // We'll reconstruct a textual condition like "a = 3 AND b = 'x'"
-        private String parseCondition() throws SemanticException {
+        private String parseCondition () throws SemanticException {
             StringBuilder sb = new StringBuilder();
             sb.append(parseConditionTerm());
             while (peek() != null && peek().type == Lexer.KEYWORD && peek().lexeme.equalsIgnoreCase("AND")) {
@@ -358,17 +434,19 @@ public class PlanBuilder {
             return sb.toString();
         }
 
-        private String parseConditionTerm() throws SemanticException {
+        private String parseConditionTerm () throws SemanticException {
             Lexer.Token col = peek();
             if (col == null || col.type != Lexer.IDENTIFIER) throw error("期望列名", col);
-            String left = col.lexeme; consume();
+            String left = col.lexeme;
+            consume();
 
             Lexer.Token op = peek();
             if (op == null || op.type != Lexer.OPERATOR && !(op.type == Lexer.DELIMITER && (op.lexeme.equals("=")))) {
                 // some Lexers classify '=' as OPERATOR; defensive check included
                 throw error("期望比较运算符", op);
             }
-            String oper = op.lexeme; consume();
+            String oper = op.lexeme;
+            consume();
 
             Lexer.Token val = peek();
             if (val == null) throw error("期望比较值", val);
@@ -376,17 +454,18 @@ public class PlanBuilder {
             String lex = val.lexeme;
             if (lex != null && lex.length() >= 2 && lex.charAt(0) == '\'' && lex.charAt(lex.length() - 1) == '\'') {
                 lex = lex.substring(1, lex.length() - 1);
-                String rval = lex;consume();
+                String rval = lex;
+                consume();
                 return left + " " + oper + " " + rval;
             }
             if (val.type == Lexer.IDENTIFIER || val.type == Lexer.CONSTANT) {
-                String rval = val.lexeme; consume();
+                String rval = val.lexeme;
+                consume();
                 return left + " " + oper + " " + rval;
             } else {
                 throw error("比较值应为 IDENTIFIER 或 CONSTANT", val);
             }
         }
-
         // ---------- UPDATE ----------
         private ExecutionPlan parseUpdate() throws SemanticException {
             expectKeyword("UPDATE");

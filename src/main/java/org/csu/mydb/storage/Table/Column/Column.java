@@ -11,6 +11,9 @@ public class Column {
     //小数位数
     private int scale;
 
+    //在表中是第几列
+    private int position;
+
     //是不是主键
     private boolean isPrimaryKey;
 

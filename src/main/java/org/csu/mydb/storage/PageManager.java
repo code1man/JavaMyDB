@@ -653,18 +653,20 @@ public class PageManager implements DiskAccessor {
                 //这里应该先放进去
                 openFiles.put(spaceId, raf);
 
-                //找到第0页
-                Page headerPage = getPage(spaceId,0);
-//                //缓存里面已经包含看磁盘了
-//
-//                freePageHeads.put(spaceId, headerPage.header.nextPage);
-                freePageHeads.put(spaceId, ByteBuffer.wrap(headerPage.getRecord(2)).getInt());
-                fragPageHeads.put(spaceId, ByteBuffer.wrap(headerPage.getRecord(3)).getInt());
+//                //找到第0页
+//                Page headerPage = getPage(spaceId,0);
+////                //缓存里面已经包含看磁盘了
+////
+////                freePageHeads.put(spaceId, headerPage.header.nextPage);
+//                freePageHeads.put(spaceId, ByteBuffer.wrap(headerPage.getRecord(2)).getInt());
+//                fragPageHeads.put(spaceId, ByteBuffer.wrap(headerPage.getRecord(3)).getInt());
 
             } else {
                 raf = new RandomAccessFile(file, "rw");
+                openFiles.put(spaceId, raf);
                 // 初始化文件
                 initializeFile(spaceId, raf);
+                //更新
                 openFiles.put(spaceId, raf);
             }
 
@@ -814,9 +816,19 @@ public class PageManager implements DiskAccessor {
     // ====================== 私有辅助方法 ======================
 
     /**
+     * 一般文件
      * 初始化文件
      */
     private void initializeFile(int spaceId, RandomAccessFile raf) throws IOException {
+
+        //防止报EOF错误
+        for (int i = 0; i < 4; i++) {
+            raf.seek(i * PAGE_SIZE);
+            // 创建并写入一个空页
+            PageManager.Page emptyPage = new DataPage(i);
+            raf.write(emptyPage.toBytes());
+        }
+
         // 创建文件头页
         Page headerPage = new DataPage(0);
         //写入数据
