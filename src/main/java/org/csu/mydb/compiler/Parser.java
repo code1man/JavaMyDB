@@ -11,7 +11,12 @@ public class Parser {
     private final Grammar grammar;
     private final Map<Grammar.NonTerminal, Map<Grammar.Terminal, Grammar.Production>> parseTable = new HashMap<>();
 
+
     // 构造函数
+    public Parser() {
+        grammar = new Grammar();
+        buildParseTable();
+    }
     public Parser(Grammar g) {
         this.grammar = g;
         buildParseTable();
@@ -132,7 +137,6 @@ public class Parser {
         if (tk.type == Lexer.CONSTANT) {
             return new Grammar.Terminal("CONSTANT");
         }
-        // 如果你后来添加了 STRING 类型，可以解开下面注释：
         // if (tk.type == Lexer.STRING) return new Grammar.Terminal("CONSTANT");
 
         // 2) 关键字 / 运算符 / 分隔符：直接用字面（大写）作为终结符名

@@ -5,6 +5,7 @@ import org.csu.mydb.executor.ExecutionResult;
 import org.csu.mydb.executor.Executor;
 import org.csu.mydb.executor.ExecutorException;
 import org.csu.mydb.storage.StorageEngine;
+import org.csu.mydb.storage.Table.Column.Column;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -103,7 +104,7 @@ public class ExecutorTest {
 
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.CREATE_TABLE);
         plan.setTableName("users");
-        plan.setColumns(Arrays.asList("id", "name", "email"));
+//        plan.setColumns(Arrays.asList("id", "name", "email"));
 
         ExecutionResult result = executor.execute(plan);
         assertTrue(result.isSuccess());
@@ -132,7 +133,7 @@ public class ExecutorTest {
 
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.INSERT);
         plan.setTableName("users");
-        plan.setValues(Arrays.asList("1", "John Doe", "john@example.com"));
+//        plan.setInsertColumns(Arrays.asList("1", "John Doe", "john@example.com"));
 
         ExecutionResult result = executor.execute(plan);
         assertTrue(result.isSuccess());
@@ -246,7 +247,7 @@ class StorageEngineMock extends StorageEngine {
     }
 
     @Override
-    public void myCreateTable(String tableName, List<String> columns) {
+    public void myCreateTable(String tableName, List<Column> columns) {
         createTableCalled = true;
         System.out.println("模拟创建表: " + tableName + ", 列: " + columns);
     }
@@ -258,9 +259,9 @@ class StorageEngineMock extends StorageEngine {
     }
 
     @Override
-    public void myInsert(String tableName, List<String> values) {
+    public void myInsert(String tableName, List<Column> insertColumns) {
         insertCalled = true;
-        System.out.println("模拟插入数据到表: " + tableName + ", 值: " + values);
+        System.out.println("模拟插入数据到表: " + tableName + ", 值: " + insertColumns);
     }
 
     @Override

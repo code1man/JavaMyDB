@@ -2,6 +2,8 @@ package org.csu.mydb.executor;
 
 
 
+import org.csu.mydb.storage.Table.Column.Column;
+
 import java.util.List;
 
 /**
@@ -27,8 +29,8 @@ public class ExecutionPlan {
     private OperationType operationType;
     private String databaseName;
     private String tableName;
-    private List<String> columns;
-    private List<String> values;
+    private List<Column> columns;
+    private List<Column> insertColumns;
     private String condition;
     private String setColumn;
     private String newValue;
@@ -66,20 +68,24 @@ public class ExecutionPlan {
         this.tableName = tableName;
     }
 
-    public List<String> getColumns() {
+    // 修改 getter 和 setter 方法
+    public List<Column> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<String> columns) {
+
+    public void setColumns(List<Column> columns) {
         this.columns = columns;
     }
 
-    public List<String> getValues() {
-        return values;
+
+    // Getter & Setter
+    public List<Column> getInsertColumns() {
+        return insertColumns;
     }
 
-    public void setValues(List<String> values) {
-        this.values = values;
+    public void setInsertColumns(List<Column> insertColumns) {
+        this.insertColumns = insertColumns;
     }
 
     public String getCondition() {
@@ -132,7 +138,7 @@ public class ExecutionPlan {
                 ", databaseName='" + databaseName + '\'' +
                 ", tableName='" + tableName + '\'' +
                 ", columns=" + columns +
-                ", values=" + values +
+                ", values=" + insertColumns +
                 ", condition='" + condition + '\'' +
                 ", setColumn='" + setColumn + '\'' +
                 ", newValue='" + newValue + '\'' +

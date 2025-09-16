@@ -31,19 +31,19 @@ public class CommandToPlanConverter {
                 break;
 
             case CREATE_TABLE:
-            case DROP_TABLE:
-                plan.setTableName(command.getTarget());
-                if (command.getType() == ParsedCommand.CommandType.CREATE_TABLE && command.getParams() != null) {
-                    plan.setColumns(Arrays.asList(command.getParams()));
-                }
-                break;
-
-            case INSERT:
-                plan.setTableName(command.getTarget());
-                if (command.getParams() != null) {
-                    plan.setValues(Arrays.asList(command.getParams()));
-                }
-                break;
+//            case DROP_TABLE:
+//                plan.setTableName(command.getTarget());
+//                if (command.getType() == ParsedCommand.CommandType.CREATE_TABLE && command.getParams() != null) {
+//                    plan.setColumns(Arrays.asList(command.getParams()));
+//                }
+//                break;
+//
+//            case INSERT:
+//                plan.setTableName(command.getTarget());
+//                if (command.getParams() != null) {
+//                    plan.setInsertColumns(Arrays.asList(command.getParams()));
+//                }
+//                break;
 
             case UPDATE:
                 plan.setTableName(command.getTarget());
