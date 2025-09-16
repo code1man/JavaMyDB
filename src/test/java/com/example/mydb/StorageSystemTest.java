@@ -2,12 +2,19 @@ package com.example.mydb;
 
 import org.csu.mydb.storage.PageManager;
 import org.csu.mydb.storage.StorageSystem;
+import org.csu.mydb.storage.Table.Column.Column;
 import org.csu.mydb.storage.bufferPool.BufferPool;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.io.TempDir;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class StorageSystemTest {
@@ -475,5 +482,29 @@ class StorageSystemTest {
         // 4. 验证性能可接受（可根据实际情况调整阈值）
         assertTrue(insertTime < 1000, "插入性能应在可接受范围内");
         assertTrue(readTime < 100, "读取性能应在可接受范围内");
+    }
+
+    @Test
+    void createTable_Success(@TempDir Path tempDir) {
+
+
+        // 1. 准备测试参数
+        String filePath = tempDir.resolve("test_table.ibd").toString();
+        List<Column> columns = createTestColumns();
+
+        // 2. 调用方法
+        int spaceId = StorageSystem.createTable(filePath, columns);
+
+        // 3. 简单验证
+        assertTrue(spaceId > 0, "返回的spaceId应该大于0");
+        assertTrue(new File(filePath).exists(), "表文件应该被创建");
+    }
+
+    private List<Column> createTestColumns() {
+        List<Column> columns = new ArrayList<>();
+        columns.add(new Column("id", "INT", 4, 0, true, false, null));
+        columns.add(new Column("name", "VARCHAR", 50, 0, false, true, null));
+        columns.add(new Column("email", "VARCHAR", 100, 0, false, true, null));
+        return columns;
     }
 }

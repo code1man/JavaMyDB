@@ -256,8 +256,8 @@ public class PageManager implements DiskAccessor {
         public PageHeader header;
 
         //每个记录的位置
-        List<Slot> slots = new ArrayList<>();
-        byte[] pageData; // 整个页的原始数据
+        public List<Slot> slots = new ArrayList<>();
+        public byte[] pageData; // 整个页的原始数据
 
         // 槽位数组起始位置
         int slotsStartOffset = PAGE_HEADER_SIZE;
@@ -843,7 +843,7 @@ public class PageManager implements DiskAccessor {
         Page page1 = new DataPage(1);
         Page page2 = new DataPage(2);
         //索引根页
-        Page page3 = new IndexPage(3);
+        Page page3 = new DataPage(3);
 
 //        raf.write(headerPage.toBytes());
         bufferPool.putPage(headerPage, spaceId);

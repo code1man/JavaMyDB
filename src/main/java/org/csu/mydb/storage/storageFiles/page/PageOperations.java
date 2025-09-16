@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PageOperations {
     // 读取页
-    byte[] readPage(String filePath, int spaceId, int pageNo);
+    PageManager.Page readPage(String filePath, int spaceId, int pageNo);
 
     // 写入页
     void writePage(String filePath, int spaceId, int pageNo, byte[] pageData, List<Column> columns);
