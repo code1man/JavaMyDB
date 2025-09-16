@@ -653,13 +653,13 @@ public class PageManager implements DiskAccessor {
                 //这里应该先放进去
                 openFiles.put(spaceId, raf);
 
-//                //找到第0页
-//                Page headerPage = getPage(spaceId,0);
+                //找到第0页,缓存空闲，碎片页链表
+                Page headerPage = getPage(spaceId,0);
 ////                //缓存里面已经包含看磁盘了
 ////
 ////                freePageHeads.put(spaceId, headerPage.header.nextPage);
-//                freePageHeads.put(spaceId, ByteBuffer.wrap(headerPage.getRecord(2)).getInt());
-//                fragPageHeads.put(spaceId, ByteBuffer.wrap(headerPage.getRecord(3)).getInt());
+                freePageHeads.put(spaceId, ByteBuffer.wrap(headerPage.getRecord(2)).getInt());
+                fragPageHeads.put(spaceId, ByteBuffer.wrap(headerPage.getRecord(3)).getInt());
 
             } else {
                 raf = new RandomAccessFile(file, "rw");
