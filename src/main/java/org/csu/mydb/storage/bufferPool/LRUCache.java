@@ -73,5 +73,14 @@ public class LRUCache<K, V> {
             lock.unlock();
         }
     }
+
+    public void remove(K key) {
+        lock.lock();
+        try {
+            lruMap.remove(key);
+        } finally {
+            lock.unlock();
+        }
+    }
 }
 

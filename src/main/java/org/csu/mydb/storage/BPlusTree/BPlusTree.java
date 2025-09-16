@@ -1,25 +1,28 @@
 package org.csu.mydb.storage.BPlusTree;
 
 import org.csu.mydb.storage.PageManager;
+import org.csu.mydb.storage.StorageSystem;
 import org.csu.mydb.storage.Table.Column.Column;
 import org.csu.mydb.storage.Table.Key;
+import org.csu.mydb.storage.storageFiles.page.PageType;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BPlusTree {
     private BPlusNode<Key> root;
     private final int order;
-    private final PageManager pageManager;
+    private final StorageSystem storageSystem;
     private final List<Column> tableColumns; // 主键列
+    public final static int ROOT_PAGE_NO = 3;
 
-    public BPlusTree(int order, int spaceId, PageManager pageManager, List<Column> tableColumns) throws IOException {
+    public BPlusTree(int order, int spaceId, StorageSystem storageSystem, List<Column> tableColumns) throws IOException {
         this.order = order;
-        this.pageManager = pageManager;
+        this.storageSystem = storageSystem;
         this.tableColumns = tableColumns;
         // load root
-        root = pageManager.loadNode(new PageManager.GlobalPageId(spaceId, 3), null, tableColumns);
+        root = storageSystem.loadNode(new PageManager.GlobalPageId(spaceId, 3), null, tableColumns);
     }
 
     public List<Column> getColumns() {
@@ -55,33 +58,86 @@ public class BPlusTree {
      * @param rowValues 行
      */
     public void insert(List<Object> rowValues) throws IOException {
-        // 生成 Key
-        Key key = new Key(
-                tableColumns.stream().map(col -> rowValues.get(tableColumns.indexOf(col))).collect(Collectors.toList()),
-                tableColumns
-        );
-        insert(root, key, rowValues);
+        // 根据主键列生成 Key，并加入 keys
+        List<Object> keyValues = new ArrayList<>();
+        List<Column> pkColumns = new ArrayList<>();
+        for (int j = 0; j < tableColumns.size(); j++) {
+            Column col = tableColumns.get(j);
+            if (col.isPrimaryKey()) {
+                keyValues.add(rowValues.get(j));
+                pkColumns.add(col);
+            }
+        }
+        Key key = new Key(keyValues, pkColumns);
+
+        BPlusNode<Key> maybeNewRoot = insertRecursive(root, key, rowValues);
+        if (maybeNewRoot != null) {
+            this.root = maybeNewRoot;
+        }
     }
 
-    private void insert(BPlusNode<Key> node, Key key, List<Object> rowValues) throws IOException {
+    private BPlusNode<Key> insertRecursive(BPlusNode<Key> node, Key key, List<Object> rowValues) throws IOException {
         if (node.isLeaf) {
             LeafNode leaf = (LeafNode) node;
-            leaf.insert(key, rowValues, tableColumns, order); // 叶子节点内部已处理分裂
 
-            // 持久化叶子节点
-            pageManager.writeLeafNode(leaf, tableColumns);
+            // 插入到叶子，可能返回新的 root
+            BPlusNode<Key> maybeNewRoot = leaf.insert(key, rowValues, tableColumns, order);
+            if (maybeNewRoot != null && maybeNewRoot.header.pageNo == ROOT_PAGE_NO)
+                return maybeNewRoot;
+            return null;
         } else {
             InternalNode in = (InternalNode) node;
+
+            // 1. 找到子节点索引
             int pos = 0;
             while (pos < in.keys.size() && key.compareTo(in.keys.get(pos)) >= 0) pos++;
 
-            BPlusNode<Key> child = in.getChildAt(pos, tableColumns);
-            insert(child, key, rowValues);
+            BPlusNode<Key> child;
+            // 2. 确保子节点存在
+            if (pos < in.children.size()) {
+                // 已有子节点，从磁盘加载
+                int childPageNo = in.children.get(pos);
+                child = storageSystem.loadNode(new PageManager.GlobalPageId(in.gid.spaceId, childPageNo), in, tableColumns);
+            } else {
+                // 子节点不存在 -> 新建叶子节点
+                int newChildPageNo = storageSystem.getPageManager().allocatePage(in.gid.spaceId);
+                PageManager.PageHeader header = new PageManager.PageHeader();
+                header.pageType = PageType.DATA_PAGE;
+                header.pageNo = newChildPageNo;
+                header.prevPage = in.children.isEmpty() ? -1 : in.children.get(in.children.size() - 1);
 
-            // 持久化内部节点
-            pageManager.writeInternalNode(in);
+                LeafNode newLeaf = new LeafNode(new PageManager.GlobalPageId(in.gid.spaceId, newChildPageNo), header, storageSystem);
+                in.children.add(newChildPageNo);
+                child = newLeaf;
+
+                // 写入缓存
+                storageSystem.writeLeafNode(newLeaf, tableColumns);
+            }
+
+            // 3. 递归插入
+            BPlusNode<Key> maybeNewRoot = insertRecursive(child, key, rowValues);
+
+            // 4. 写回当前 internal node
+            storageSystem.writeInternalNode(in, tableColumns);
+
+            // 5. 检查是否需要分裂 internal node
+            if (in.keys.size() > order) {
+                InternalNode splitRoot = in.split(order, tableColumns);
+                if (splitRoot.gid.pageNo == BPlusTree.ROOT_PAGE_NO) {
+                    return splitRoot;
+                }
+            }
+
+            if (maybeNewRoot != null) {
+                this.root = maybeNewRoot;
+            }
+
+            return maybeNewRoot; // 下层分裂生成的 root 或 null
         }
     }
+
+
+
 
     // ======================== 删除 ========================
     public boolean delete(Key key) throws IOException {
@@ -93,7 +149,7 @@ public class BPlusTree {
             LeafNode leaf = (LeafNode) node;
             boolean removed = leaf.delete(key, tableColumns);
 
-            if (removed) pageManager.writeLeafNode(leaf, tableColumns);
+            if (removed) storageSystem.writeLeafNode(leaf, tableColumns);
             return removed;
         } else {
             InternalNode in = (InternalNode) node;
@@ -102,7 +158,7 @@ public class BPlusTree {
             BPlusNode<Key> child = in.getChildAt(pos, tableColumns);
             boolean removed = delete(child, key);
 
-            if (removed) pageManager.writeInternalNode(in);
+            if (removed) storageSystem.writeInternalNode(in, tableColumns);
             return removed;
         }
     }
@@ -117,7 +173,7 @@ public class BPlusTree {
             LeafNode leaf = (LeafNode) node;
             boolean updated = leaf.update(key, newRow, tableColumns);
 
-            if (updated) pageManager.writeLeafNode(leaf, tableColumns);
+            if (updated) storageSystem.writeLeafNode(leaf, tableColumns);
             return updated;
         } else {
             InternalNode in = (InternalNode) node;
@@ -126,7 +182,7 @@ public class BPlusTree {
             BPlusNode<Key> child = in.getChildAt(pos, tableColumns);
             boolean updated = update(child, key, newRow);
 
-            if (updated) pageManager.writeInternalNode(in);
+            if (updated) storageSystem.writeInternalNode(in, tableColumns);
             return updated;
         }
     }

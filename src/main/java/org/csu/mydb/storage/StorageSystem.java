@@ -1,20 +1,23 @@
 package org.csu.mydb.storage;
 
+import org.csu.mydb.storage.BPlusTree.BPlusNode;
+import org.csu.mydb.storage.BPlusTree.InternalNode;
+import org.csu.mydb.storage.BPlusTree.LeafNode;
 import org.csu.mydb.storage.Table.Column.Column;
+import org.csu.mydb.storage.Table.Column.RecordSerializer;
+import org.csu.mydb.storage.Table.Key;
 import org.csu.mydb.storage.Table.Table;
 import org.csu.mydb.storage.bufferPool.BufferPool;
-import org.csu.mydb.storage.storageFiles.page.PageOperations;
-import org.csu.mydb.storage.storageFiles.page.PageSorter;
+import org.csu.mydb.storage.storageFiles.page.*;
 import org.csu.mydb.storage.storageFiles.page.record.DataRecord;
 import org.csu.mydb.storage.storageFiles.page.record.IndexRecord;
 import org.csu.mydb.storage.storageFiles.page.record.RecordHead;
+import org.csu.mydb.util.Pair.Pair;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.csu.mydb.storage.PageManager.PAGE_SIZE;
 
@@ -311,9 +314,161 @@ public class StorageSystem {
 //        return findColumnsByTableId(sysSpaceId, sysColumnsRoot, tableId);
 //    }
 
-    public List<Table> getTables(String filePath){
-        List<Table> tables = new ArrayList<Table>();
-        return tables;
+    // ----------- B+树节点读写方法 --------------
+    /**
+     * 根据 PageType 从磁盘加载 B+ 树节点
+     */
+    public BPlusNode<Key> loadNode(PageManager.GlobalPageId gid, InternalNode parent, List<Column> tableColumns) throws IOException {
+        // 从buffer读取 Page
+        PageManager.Page page = readPage("G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jb.idb", gid.spaceId, gid.pageNo);
+        if (page == null) throw new IOException("Page not found: " + gid.pageNo);
+
+        PageManager.PageHeader header = page.getHeader();
+        BPlusNode<Key> node;
+
+        switch (header.pageType) {
+            case PageType.DATA_PAGE:
+                LeafNode leaf = new LeafNode(gid, header, this);
+                leaf.parent = parent;
+
+                // 遍历每条记录，反序列化列数据
+                for (int i = 0; i < page.getRecordCount(); i++) {
+                    byte[] recordData = page.getRecord(i);
+                    if (recordData == null) {
+                        throw new IOException("Leaf page " + gid.pageNo + " record " + i + " is null!");
+                    }
+                    List<Object> rowColumns = RecordSerializer.deserializeDataRow(recordData, tableColumns);
+                    leaf.records.add(rowColumns);
+
+                    // 根据主键列生成 Key，并加入 keys
+                    List<Object> keyValues = new ArrayList<>();
+                    List<Column> pkColumns = new ArrayList<>();
+                    for (int j = 0; j < tableColumns.size(); j++) {
+                        Column col = tableColumns.get(j);
+                        if (col.isPrimaryKey()) {
+                            keyValues.add(rowColumns.get(j));
+                            pkColumns.add(col);
+                        }
+                    }
+                    Key key = new Key(keyValues, pkColumns);
+                    leaf.keys.add(key);
+
+                }
+                node = leaf;
+                break;
+
+            case PageType.INDEX_PAGE:
+                InternalNode internal = new InternalNode(gid, header, this);
+                internal.parent = parent;
+
+                for (int i = 0; i < page.getRecordCount(); i++) {
+                    byte[] keyData = page.getRecord(i);
+                    Pair<Key, Integer> pair = RecordSerializer.deserializeKeyPtr(keyData, getKeyColumn(tableColumns));
+
+//                    if (i == 0) {
+//                        // 第一条：只有 child
+//                        internal.children.add(pair.getSecond());
+//                    } else {
+                        // 后续：key + child
+                        internal.keys.add(pair.getFirst());
+                        internal.children.add(pair.getSecond());
+                    //}
+                }
+                node = internal;
+                break;
+
+
+            default:
+                throw new IOException("Unknown page type: " + header.pageType);
+        }
+
+        return node;
     }
 
+    /**
+     * 保存叶子节点
+     */
+    public void writeLeafNode(LeafNode node, List<Column> columns) {
+        final int spaceId = node.gid.spaceId;
+        final int pageNo = node.gid.pageNo;
+        final String filePath = "G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jb.idb";
+
+        PageManager.GlobalPageId pageId = new PageManager.GlobalPageId(spaceId, pageNo);
+
+        // 先删掉旧页
+        bufferPool.deletePage(pageId);
+
+        // 新建 DataPage
+        PageManager.Page page = new DataPage(pageNo);
+        page.getHeader().pageNo = pageNo;
+        page.getHeader().isDirty = true;
+        page.getHeader().nextPage = node.header.nextPage;
+        page.getHeader().prevPage = node.header.prevPage;
+        bufferPool.putPage(page, spaceId);
+
+        // 写入所有 records
+        for (List<Object> row : node.records) {
+            byte[] rowData = RecordSerializer.serializeDataRow(row, columns);
+            StorageSystem.writePage(filePath, spaceId, pageNo, rowData, columns);
+        }
+
+        node.header.isDirty = true;
+    }
+
+
+    /**
+     * 保存内部节点
+     */
+    public void writeInternalNode(InternalNode node, List<Column> tableColumns) {
+        final int spaceId = node.gid.spaceId;
+        final int pageNo = node.gid.pageNo;
+        final String filePath = "G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jb.idb";
+
+        PageManager.GlobalPageId pageId = new PageManager.GlobalPageId(spaceId, pageNo);
+
+        // 先删掉旧页
+        bufferPool.deletePage(pageId);
+
+        // 新建 IndexPage
+        PageManager.Page page = new IndexPage(pageNo);
+        page.getHeader().pageNo = pageNo;
+        page.getHeader().isDirty = true;
+        page.getHeader().nextPage = node.header.nextPage;
+        page.getHeader().prevPage = node.header.prevPage;
+        bufferPool.putPage(page, spaceId);
+
+        if (node.children == null || node.children.isEmpty()) {
+            node.header.isDirty = false;
+            return;
+        }
+
+        // 写最左 child
+        int leftChildPage = node.children.get(0);
+        byte[] leftOnly = RecordSerializer.serializeKeyPtr(
+                Collections.emptyList(), Collections.emptyList(), leftChildPage
+        );
+        StorageSystem.writePage(filePath, spaceId, pageNo, leftOnly, tableColumns);
+
+        // 写 key + right child
+        for (int i = 0; i < node.keys.size(); i++) {
+            Key key = node.keys.get(i);
+            int rightChildPage = node.children.get(i + 1);
+            byte[] keyPtrData = RecordSerializer.serializeKeyPtr(
+                    key.getValues(), key.getKeyColumns(), rightChildPage
+            );
+            StorageSystem.writePage(filePath, spaceId, pageNo, keyPtrData, tableColumns);
+        }
+
+        node.header.isDirty = true;
+    }
+
+    private List<Column> getKeyColumn(List<Column> columns) {
+        List<Column> keyColumns = new ArrayList<>();
+        for (Column column : columns) {
+            if (column.isPrimaryKey()) {
+                keyColumns.add(column);
+            }
+        }
+        return keyColumns;
+    }
 }
