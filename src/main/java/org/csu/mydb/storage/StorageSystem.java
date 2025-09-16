@@ -1,11 +1,13 @@
 package org.csu.mydb.storage;
 
 import org.csu.mydb.storage.Table.Column.Column;
+import org.csu.mydb.storage.Table.Table;
 import org.csu.mydb.storage.bufferPool.BufferPool;
 import org.csu.mydb.storage.storageFiles.page.record.DataRecord;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
 //组合缓存和页管理（全局只能有一个的东西，比如缓存）
@@ -69,6 +71,11 @@ public class StorageSystem {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Table> getTables(String filePath){
+        List<Table> tables = new ArrayList<Table>();
+        return tables;
     }
 
 }

@@ -5,6 +5,7 @@ package org.csu.mydb.executor;
 import org.csu.mydb.cli.ParsedCommand;
 import org.csu.mydb.storage.StorageEngine;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +83,7 @@ public class Executor {
         return new ExecutionResult(true, "数据库删除成功: " + plan.getDatabaseName());
     }
 
-    private ExecutionResult executeOpenDatabase(ExecutionPlan plan) {
+    private ExecutionResult executeOpenDatabase(ExecutionPlan plan) throws IOException {
         if (plan.getDatabaseName() == null || plan.getDatabaseName().isEmpty()) {
             return new ExecutionResult(false, "数据库名不能为空");
         }
@@ -96,7 +97,7 @@ public class Executor {
         return new ExecutionResult(true, "数据库关闭成功");
     }
 
-    private ExecutionResult executeCreateTable(ExecutionPlan plan) {
+    private ExecutionResult executeCreateTable(ExecutionPlan plan) throws IOException {
         if (plan.getTableName() == null || plan.getTableName().isEmpty()) {
             return new ExecutionResult(false, "表名不能为空");
         }
@@ -118,7 +119,7 @@ public class Executor {
         return new ExecutionResult(true, "表删除成功: " + plan.getTableName());
     }
 
-    private ExecutionResult executeInsert(ExecutionPlan plan) {
+    private ExecutionResult executeInsert(ExecutionPlan plan) throws IOException {
         if (plan.getTableName() == null || plan.getTableName().isEmpty()) {
             return new ExecutionResult(false, "表名不能为空");
         }
@@ -140,7 +141,7 @@ public class Executor {
             return new ExecutionResult(false, "删除条件不能为空");
         }
 
-        storageEngine.myDelete(plan.getTableName(), plan.getCondition());
+        //  storageEngine.myDelete(plan.getTableName(), plan.getCondition());
         return new ExecutionResult(true, "数据删除成功");
     }
 

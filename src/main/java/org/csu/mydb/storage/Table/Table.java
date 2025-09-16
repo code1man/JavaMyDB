@@ -3,6 +3,7 @@ package org.csu.mydb.storage.Table;
 import org.csu.mydb.storage.BPlusTree.BPlusTree;
 
 import java.util.List;
+import java.util.Stack;
 
 public class Table{
     private final String name;             // 表名
@@ -27,6 +28,10 @@ public class Table{
     public int getSpaceId() { return spaceId; }
     public List<String> getColumns() { return columns; }
     public BPlusTree getPrimaryIndex() { return primaryIndex; }
+
+    public BPlusTree getTree() {
+        return primaryIndex;
+    }
     // public int getPrimaryKeyIndex() { return primaryKeyIndex; }
 }
 

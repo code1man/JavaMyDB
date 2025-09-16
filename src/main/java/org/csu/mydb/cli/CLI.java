@@ -2,7 +2,7 @@ package org.csu.mydb.cli;
 
 import org.csu.mydb.executor.Executor;
 import org.csu.mydb.executor.ExecutorException;
-import org.csu.mydb.parser.Parser;
+import org.csu.mydb.compiler.Parser
 
 import java.util.Scanner;
 
@@ -25,13 +25,14 @@ public class CLI {
             if (input.trim().isEmpty()) {
                 continue;
             }
-            // 解析命令并执行
-            ParsedCommand command = parser.parse(input.trim().toLowerCase());
-            try {
-                shouldContinue = executor.execute(command);
-            } catch (ExecutorException e) {
-                throw new RuntimeException(e);
-            }
+            // TODO: 改成自己的编译器
+//            // 解析命令并执行
+//            ParsedCommand command = parser.parse(input.trim().toLowerCase());
+//            try {
+//                shouldContinue = executor.execute(command);
+//            } catch (ExecutorException e) {
+//                throw new RuntimeException(e);
+//            }
         }
         scanner.close();
     }
