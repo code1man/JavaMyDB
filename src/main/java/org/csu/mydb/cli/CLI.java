@@ -1,22 +1,43 @@
 package org.csu.mydb.cli;
 
+import org.csu.mydb.compiler.Grammar;
+import org.csu.mydb.compiler.Lexer;
+import org.csu.mydb.compiler.PlanBuilder;
+import org.csu.mydb.executor.ExecutionPlan;
+import org.csu.mydb.executor.ExecutionResult;
 import org.csu.mydb.executor.Executor;
 import org.csu.mydb.executor.ExecutorException;
-import org.csu.mydb.parser.Parser;
+import org.csu.mydb.compiler.Parser;
+import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Logger;
+
+import static org.csu.mydb.compiler.Lexer.tokenize;
 
 public class CLI {
     private final Parser parser;
     private final Executor executor;
     private final Scanner scanner = new Scanner(System.in);
-
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CLI.class);
     public CLI(Parser parser, Executor executor) {
         this.parser = parser;
         this.executor = executor;
     }
 
-    public void start() {
+    public void start() throws PlanBuilder.SemanticException, ExecutorException {
+        //在程序启动时将产生式全部生成 用于后续语义分析
+        Grammar g = new Grammar();
+        System.out.println("=== 产生式 ===");
+        for (Grammar.NonTerminal nt : g.nonTerminals) {
+            List<Grammar.Production> ps = g.getProductions(nt);
+            for (Grammar.Production p : ps) System.out.println(p);
+        }
+        g.computeFirstSets();
+        g.computeFollowSets();
+        g.printFirstSets();
+        g.printFollowSets();
         printWelcome();
         boolean shouldContinue = true;
         while (shouldContinue) {
@@ -25,12 +46,29 @@ public class CLI {
             if (input.trim().isEmpty()) {
                 continue;
             }
+
             // 解析命令并执行
-            ParsedCommand command = parser.parse(input.trim().toLowerCase());
-            try {
-                shouldContinue = executor.execute(command);
-            } catch (ExecutorException e) {
-                throw new RuntimeException(e);
+            List<Lexer.Token> tokens = tokenize(input);
+            // 词法分析 输出四元式到日志文件
+            logger.info("种别码\t词素\t行:列");
+            for (Lexer.Token tk : tokens) {
+                logger.info(tk.toString());
+            }
+
+            parser.printParseTable();
+            //检查是否通过语法分析
+            parser.parse(tokens);
+            //执行计划生成
+            // 2) 构建 plan
+            PlanBuilder pb = new PlanBuilder();
+            List<ExecutionPlan> plans = pb.buildAll(tokens);
+
+            // 3) 给 Executor 执行
+            Executor exec = new Executor();
+
+            for (ExecutionPlan plan : plans) {
+                ExecutionResult res = exec.execute(plan);
+                // 打印或处理结果
             }
         }
         scanner.close();

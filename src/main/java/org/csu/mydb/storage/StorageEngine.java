@@ -394,7 +394,10 @@ public class StorageEngine {
 //            }
 //        }
     }
-
+    //权限管理
+    public void  myGrant(String databaseName, String grantee, List<String> grants){
+        System.out.println(databaseName + grantee + grants);
+    }
     /**
      * 查询数据
      *

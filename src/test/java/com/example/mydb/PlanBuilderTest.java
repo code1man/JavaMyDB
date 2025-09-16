@@ -17,7 +17,7 @@ import java.util.List;
 public class PlanBuilderTest {
     // 1) 从 lexer 获取 tokens
     public static void main(String[] args) throws PlanBuilder.SemanticException, ExecutorException {
-        List<Lexer.Token> tokens = Lexer.tokenize("insert into student (id , age,grade) VALUES ( 1,3,'88k');");
+        List<Lexer.Token> tokens = Lexer.tokenize("GRANT SELECT,update ON testdb TO user1;");
 
         // 2) 构建 plan
         PlanBuilder pb = new PlanBuilder();
