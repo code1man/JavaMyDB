@@ -156,9 +156,10 @@ public class StorageEngine {
      * 插入数据（对应 C++ 的 myInsert）
      *
      * @param tableName 表名
+     * @param columns   插入的列表
      * @param values   插入的值列表（如 ["1", "Alice"]）
      */
-    public void myInsert(String tableName, List<Column> values) {
+    public void myInsert(String tableName, List<Column> columns, List<String> values) {
     }
 
     /**

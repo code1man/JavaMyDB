@@ -4,6 +4,7 @@ import org.csu.mydb.storage.PageManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public abstract class BPlusNode<Key extends Comparable<Key>> {
         this.header = header;
         this.isLeaf = b;
         this.pageManager = pageManager;
+        keys = Collections.synchronizedList(new ArrayList<Key>());
     }
 
     // 查找键对应的位置（二分查找）

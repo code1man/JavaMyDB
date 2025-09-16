@@ -259,7 +259,7 @@ class StorageEngineMock extends StorageEngine {
     }
 
     @Override
-    public void myInsert(String tableName, List<Column> insertColumns) {
+    public void myInsert(String tableName, List<Column> insertColumns, List<String> values) {
         insertCalled = true;
         System.out.println("模拟插入数据到表: " + tableName + ", 值: " + insertColumns);
     }

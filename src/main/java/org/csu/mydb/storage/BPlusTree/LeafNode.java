@@ -47,6 +47,8 @@ public class LeafNode extends BPlusNode<Key> {
 
     private int findInsertPosition(Key key) {
         int i = 0;
+        if (keys.isEmpty())
+            return i;
         while (i < keys.size() && keys.get(i).compareTo(key) < 0) {
             i++;
         }

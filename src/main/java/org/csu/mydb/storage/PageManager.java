@@ -915,7 +915,7 @@ public class PageManager implements DiskAccessor {
     /**
      * 根据 PageType 从磁盘加载 B+ 树节点
      */
-    public BPlusNode<Key> loadNode(GlobalPageId gid, InternalNode parent, List<Column> keyColumns) throws IOException {
+    public BPlusNode<Key> loadNode(GlobalPageId gid, InternalNode parent, List<Column> tableColumns) throws IOException {
         // 从磁盘读取 Page
         Page page = readPage(gid.spaceId, gid.pageNo);
         if (page == null) throw new IOException("Page not found: " + gid.pageNo);
@@ -931,15 +931,22 @@ public class PageManager implements DiskAccessor {
                 // 遍历每条记录，反序列化列数据
                 for (int i = 0; i < page.getRecordCount(); i++) {
                     byte[] recordData = page.getRecord(i);
-                    List<Object> rowColumns = RecordSerializer.deserializeRow(recordData, keyColumns);
+                    List<Object> rowColumns = RecordSerializer.deserializeRow(recordData, tableColumns);
                     leaf.records.add(rowColumns);
 
                     // 根据主键列生成 Key，并加入 keys
-                    Key key = new Key(
-                            keyColumns.stream().map(col -> rowColumns.get(rowColumns.indexOf(col))).collect(Collectors.toList()),
-                            keyColumns
-                    );
+                    List<Object> keyValues = new ArrayList<>();
+                    List<Column> pkColumns = new ArrayList<>();
+                    for (int j = 0; j < tableColumns.size(); j++) {
+                        Column col = tableColumns.get(j);
+                        if (col.isPrimaryKey()) {
+                            keyValues.add(rowColumns.get(j));
+                            pkColumns.add(col);
+                        }
+                    }
+                    Key key = new Key(keyValues, pkColumns);
                     leaf.keys.add(key);
+
                 }
                 node = leaf;
                 break;
@@ -950,7 +957,7 @@ public class PageManager implements DiskAccessor {
 
                 for (int i = 0; i < page.getRecordCount(); i++) {
                     byte[] keyData = page.getRecord(i);
-                    Pair<Key, Integer> pair = RecordSerializer.deserializeKeyPtr(keyData, keyColumns);
+                    Pair<Key, Integer> pair = RecordSerializer.deserializeKeyPtr(keyData, tableColumns);
                     internal.keys.add(pair.getFirst());
 
                     // 加载子节点指针

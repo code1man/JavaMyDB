@@ -26,14 +26,12 @@ public class BPlusTreeTest {
 
         // 定义表结构：一个主键 id(int)，一个 name(string)
         Column idCol = new Column("id", "INT", 4,0,true, true, null);   // true 表示是主键
-        Column nameCol = new Column("name", "STRING", 10, 0, false, false, null);
+        Column nameCol = new Column("name", "VARCHAR", 10, 0, false, false, null);
 
         List<Column> columns = Arrays.asList(idCol, nameCol);
         int spaceId = StorageSystem.createTable("G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jj.idb", columns);
-        // order = 3，空间号随便给 1
+        // order = 3
         tree = new BPlusTree(3, spaceId, storageSystem.getPageManager(), columns);
-
-        System.out.println(storageSystem.getPageManager().getOpenFiles().toString());
     }
 
     @Test
@@ -44,7 +42,7 @@ public class BPlusTreeTest {
         tree.insert(Arrays.asList(3, "Charlie"));
 
         // 查找
-        List<Object> row = tree.search(new Key(Arrays.asList(2), tree.getColumns()));
+        List<Object> row = tree.search(new Key(List.of(2), tree.getColumns()));
         assertNotNull(row);
         assertEquals("Bob", row.get(1));
     }
