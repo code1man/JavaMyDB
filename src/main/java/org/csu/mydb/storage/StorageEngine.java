@@ -498,6 +498,14 @@ public class StorageEngine {
 //        }
     }
 
+
+
+    // 带 JOIN 的多表查询,重构方法,和MyQuery是一样的,只是参数类型不一样
+    public void myQuery(String tableName, String joinTableName,
+                        String columns, String joinCondition, String condition) {
+
+    }
+
     /**
      * 递归删除目录（工具方法，对应 C++ 的 remove 目录逻辑）
      * @param directory 要删除的目录
