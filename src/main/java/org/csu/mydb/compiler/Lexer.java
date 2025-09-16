@@ -23,7 +23,8 @@ public class Lexer {
     private static final Set<String> KEYWORDS = new HashSet<>(Arrays.asList(
             "SELECT","FROM","WHERE","CREATE","TABLE","INSERT","INTO","VALUES",
             "UPDATE","SET","DELETE","DROP","DATABASE","USE",
-            "AND","NOT","PRIMARY","KEY","INT","VARCHAR","CHAR","EVERYTHING","NULL"
+            "AND","NOT","PRIMARY","KEY","INT","VARCHAR","CHAR","EVERYTHING","NULL",
+            "JOIN","ON"
     ));
 
     // 两字符运算符优先表
