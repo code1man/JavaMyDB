@@ -9,6 +9,6 @@ public class IndexPage extends PageManager.Page{
     public IndexPage(int pageNo) {
         super(pageNo);
         //设置成索引页
-        this.getHeader().pageType = 1;
+        this.getHeader().pageType = PageType.INDEX_PAGE;
     }
 }

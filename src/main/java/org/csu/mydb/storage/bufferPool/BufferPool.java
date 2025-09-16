@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class BufferPool {
-    protected final int poolSize;
+    protected int poolSize;
 
     protected final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     protected final LRUCache<PageManager.GlobalPageId, PageManager.Page> pageCache;
@@ -20,6 +20,13 @@ public class BufferPool {
     private final DiskAccessor diskAccessor;
 
     // 脏页链表
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        flush();
+    }
+
+    /// 脏页链表
     public static class DirtyPageNode {
         PageManager.GlobalPageId pageId;
         long lastModifiedTime;
@@ -42,7 +49,7 @@ public class BufferPool {
         dirtyTail.prev = dirtyHead;
     }
 
-    // 获取页（优先缓存，未命中读磁盘）
+    /// 获取页（优先缓存，未命中读磁盘）
     public PageManager.Page getPage(PageManager.GlobalPageId pageId) throws IOException {
         lock.readLock().lock();
         try {
@@ -87,7 +94,7 @@ public class BufferPool {
         }
     }
 
-    // 全量刷盘
+    /// 全量刷盘
     public void flush() throws IOException {
         lock.writeLock().lock();
         try {
@@ -111,7 +118,7 @@ public class BufferPool {
         }
     }
 
-    // 淘汰最久未使用的页
+    /// 淘汰最久未使用的页
     public void evictLRUPage() throws IOException {
         lock.writeLock().lock();
         try {
@@ -170,6 +177,16 @@ public class BufferPool {
             flushed++;
             cur = cur.next;
         }
+    }
+
+    // 设置缓冲池大小
+    public void setPoolSize(int poolSize) {
+        this.poolSize = poolSize;
+    }
+
+    // 获取缓冲池大小
+    public int getPoolSize() {
+        return poolSize;
     }
 }
 

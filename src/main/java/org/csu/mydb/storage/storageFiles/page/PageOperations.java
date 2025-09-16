@@ -1,7 +1,8 @@
 package org.csu.mydb.storage.storageFiles.page;
 
-import org.csu.mydb.storage.Column;
+
 import org.csu.mydb.storage.PageManager;
+import org.csu.mydb.storage.Table.Column.Column;
 
 import java.util.List;
 

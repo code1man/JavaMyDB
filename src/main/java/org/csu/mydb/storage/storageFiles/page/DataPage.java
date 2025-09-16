@@ -6,6 +6,6 @@ import org.csu.mydb.storage.PageManager;
 public class DataPage extends PageManager.Page {
     public DataPage(int pageNo) {
         super(pageNo);
-        this.getHeader().pageType = 1;
+        this.getHeader().pageType = PageType.DATA_PAGE;
     }
 }

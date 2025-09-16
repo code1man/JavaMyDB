@@ -37,7 +37,7 @@ public class CreatTableTest {
         assertTrue(file.exists(), "表空间文件应已创建");
 
         // 3. 验证文件头页已初始化
-        PageManager.DataPage headerPage = pageManager.readPageFromDisk(SPACE_ID, 0);
+        PageManager.Page headerPage = pageManager.readPage(SPACE_ID, 0);
         assertNotNull(headerPage, "文件头页应存在");
 
         // 4. 验证页头信息
