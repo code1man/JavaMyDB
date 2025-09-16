@@ -704,7 +704,7 @@ public class PageManager implements DiskAccessor {
             if (freePageHeads.containsKey(spaceId) && freePageHeads.get(spaceId) != -1) {
                 int pageNo = freePageHeads.get(spaceId);
                 Page page = getPage(spaceId, pageNo);
-                freePageHeads.put(spaceId, page.header.nextPage);
+                freePageHeads.put(spaceId, page.header.nextFreePage);
                 return pageNo;
             }
 
@@ -831,6 +831,7 @@ public class PageManager implements DiskAccessor {
 
         // 创建文件头页
         Page headerPage = new DataPage(0);
+        bufferPool.putPage(headerPage, spaceId);
         //写入数据
         FileHeader fileHeader = new FileHeader(spaceId, 4, 3, -1);
         List<byte[]> list = fileHeader.toBytesList();
@@ -846,7 +847,7 @@ public class PageManager implements DiskAccessor {
         Page page3 = new DataPage(3);
 
 //        raf.write(headerPage.toBytes());
-        bufferPool.putPage(headerPage, spaceId);
+
         bufferPool.putPage(page1, spaceId);
         bufferPool.putPage(page2, spaceId);
         bufferPool.putPage(page3, spaceId);

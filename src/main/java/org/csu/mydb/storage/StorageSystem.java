@@ -5,6 +5,7 @@ import org.csu.mydb.storage.Table.Table;
 import org.csu.mydb.storage.bufferPool.BufferPool;
 import org.csu.mydb.storage.storageFiles.page.PageOperations;
 import org.csu.mydb.storage.storageFiles.page.PageSorter;
+import org.csu.mydb.storage.storageFiles.page.SpaceManager;
 import org.csu.mydb.storage.storageFiles.page.record.DataRecord;
 import org.csu.mydb.storage.storageFiles.page.record.IndexRecord;
 import org.csu.mydb.storage.storageFiles.page.record.RecordHead;
@@ -130,6 +131,10 @@ public class StorageSystem {
             if(!result){
                 return false;
             }
+
+            //维护空闲链表
+            SpaceManager spaceManager = new SpaceManager(pageManager, bufferPool);
+            spaceManager.maintainSpaceChains(spaceId);
 
             //获取主键列表
             List<Column> primaryKeys = new ArrayList<>();
@@ -301,12 +306,12 @@ public class StorageSystem {
 
             // 确保文件已打开
             if (!pageManager.getOpenFiles().containsKey(SYS_TABLES_IDB_SPACE_ID)) {
-                pageManager.openFile(SYS_TABLES_IDB_SPACE_ID, "sys_tables.idb");
+                pageManager.openFile(SYS_TABLES_IDB_SPACE_ID, path + "sys_tables.idb");
             }
 
             // 确保文件已打开
             if (!pageManager.getOpenFiles().containsKey(SYS_COLUMNS_IDB_SPACE_ID)) {
-                pageManager.openFile(SYS_COLUMNS_IDB_SPACE_ID, "sys_columns.idb");
+                pageManager.openFile(SYS_COLUMNS_IDB_SPACE_ID, path + "sys_columns.idb");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
