@@ -19,8 +19,8 @@ public class Main {
                 });
 
         // 初始化模块
-        StorageEngine storageEngine = new StorageEngine(new StorageSystem().getPageManager());
-        Parser parser = new Parser(new Grammar());
+        StorageEngine storageEngine = new StorageEngine();
+        Parser parser = new Parser();
         Executor executor = new Executor(storageEngine);
         CLI cli = new CLI(parser, executor);
 

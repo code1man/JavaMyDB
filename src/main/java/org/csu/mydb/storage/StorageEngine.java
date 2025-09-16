@@ -1,5 +1,6 @@
 package org.csu.mydb.storage;
 
+import org.csu.mydb.config.ConfigLoader;
 import org.csu.mydb.storage.BPlusTree.BPlusTree;
 import org.csu.mydb.storage.Table.Table;
 import org.csu.mydb.storage.Table.Column.Column;
@@ -13,43 +14,46 @@ import java.util.*;
  * 存储引擎：负责数据库的创建、删除、打开、关闭，以及表的管理。
  */
 public class StorageEngine {
-    private String prePath = "";       // 当前数据库路径（如 "save/repos/db1/"）
+    private String prePath = "";       // 数据库路径前缀（如 "save/repos/"）
     private boolean isOpen = false;    // 是否已打开数据库
-    private final Map<String, Table> tables = new HashMap<>(); // 当前打开的所有表
-    private final PageManager pageManager;
+    private final List<Table> tables = new ArrayList<>();  // 当前打开的表列表
 
-    public StorageEngine(PageManager pageManager) {
-        this.pageManager = pageManager;
+    public StorageEngine() {
+        // 从 ConfigManager 获取配置
+        StorageSystem storageSystem = new StorageSystem();
+        storageSystem.getBufferPool().setPoolSize(ConfigLoader.getInstance().getInt("storage", "buffer_pool_size", 100));
+        PageManager.PAGE_SIZE = ConfigLoader.getInstance().getInt("storage", "page_size", 4096);
+
+        prePath = "";
+        isOpen = false;
+        tables.clear();
+
+        System.out.println("存储引擎初始化: pageSize="
+                + PageManager.PAGE_SIZE
+                + ", bufferPoolSize=" + storageSystem.getBufferPool());
+    }
+
+    // 析构函数
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            myCloseDataBase();  // 关闭所有资源
+        } finally {
+            super.finalize();
+        }
     }
 
     /**
      * 打开数据库
+     *
+     * @param dbName 数据库名
      */
-    public void myOpenDataBase(String dbName) throws IOException {
-        File dbDir = new File("save/repos/" + dbName);
-        if (!dbDir.exists() || !dbDir.isDirectory()) {
-            System.out.println("数据库不存在: " + dbName);
-            return;
-        }
-        prePath = dbDir.getPath() + "/";
-        isOpen = true;
+    public void myOpenDataBase(String dbName) {
 
-        tables.clear();
-        for (File file : Objects.requireNonNull(dbDir.listFiles())) {
-            if (file.getName().endsWith(".ibd")) {
-                String tableName = file.getName().replace(".ibd", "");
-                // TODO: 从系统表加载表的元信息（列定义、主键等）
-                List<Column> columns = new ArrayList<>();
-//                int spaceId = pageManager.getSpaceId(file.getPath());
-//                BPlusTree tree = new BPlusTree(3, spaceId, pageManager, columns);
-//                tables.put(tableName, new Table(tableName, file.getPath(), columns, tree));
-            }
-        }
-        System.out.println("打开数据库成功: " + dbName);
     }
 
     /**
-     * 关闭数据库
+     * 关闭数据库（对应 C++ 的 myCloseDataBase）
      */
     public void myCloseDataBase() {
         tables.clear();
@@ -59,7 +63,9 @@ public class StorageEngine {
     }
 
     /**
-     * 创建数据库
+     * 创建数据库（对应 C++ 的 myCreateDataBase）
+     *
+     * @param dataBaseName 数据库名
      */
     public void myCreateDataBase(String dataBaseName) {
         String path = "save/repos/" + dataBaseName;
@@ -68,15 +74,18 @@ public class StorageEngine {
             System.out.println("该数据库已存在");
             return;
         }
+        // 递归创建数据库目录（包括父目录）
         if (dbDir.mkdirs()) {
-            System.out.println("创建数据库成功: " + dataBaseName);
+            System.out.println("创建数据库成功");
         } else {
             System.out.println("创建数据库失败（权限不足或路径无效）");
         }
     }
 
     /**
-     * 删除数据库
+     * 删除数据库（对应 C++ 的 myDropDataBase）
+     *
+     * @param dataBaseName 数据库名
      */
     public void myDropDataBase(String dataBaseName) {
         String path = "save/repos/" + dataBaseName;
@@ -85,124 +94,107 @@ public class StorageEngine {
             System.out.println("该数据库不存在");
             return;
         }
+        // 递归删除数据库目录下的所有文件和子目录
         if (deleteDirectory(dbDir)) {
-            System.out.println("删除数据库成功: " + dataBaseName);
+            System.out.println("删除数据库成功");
         } else {
             System.out.println("删除数据库失败（存在无法删除的文件）");
         }
     }
 
     /**
-     * 创建表（新建 .ibd 文件 + 初始化 B+ 树）
+     * 创建表（对应 C++ 的 myCreateTable）
+     *
+     * @param tableName 表名
+     * @param columns   列名列表（如 ["id", "name"]）
      */
-    public void myCreateTable(String tableName, List<String> columns) throws IOException {
-        if (!isOpen) {
-            System.out.println("无选中数据库，请先打开数据库");
-            return;
-        }
-        String tablePath = prePath + tableName + ".ibd";
-        File tableFile = new File(tablePath);
-        if (tableFile.exists()) {
-            System.out.println("该表已经存在!");
-            return;
-        }
-        // 初始化一个表空间
-//        int spaceId = pageManager.createSpace(tablePath);
-//        BPlusTree tree = new BPlusTree(3, spaceId, pageManager, columns);
-//        tables.put(tableName, new Table(tableName, tablePath, columns, tree));
-        System.out.println("创建新表成功: " + tableName);
+    public void myCreateTable(String tableName, List<String> columns) {
     }
 
     /**
-     * 删除表
+     * 删除表（对应 C++ 的 myDropTable）
+     *
+     * @param tableName 表名
      */
     public void myDropTable(String tableName) {
         if (!isOpen) {
             System.out.println("无选中数据库，请先打开数据库");
             return;
         }
-        String tablePath = prePath + tableName + ".ibd";
+        String tablePath = prePath + tableName + ".txt";
         File tableFile = new File(tablePath);
-
-        if (!tables.containsKey(tableName)) {
+        // 从内存中移除表
+        boolean removed = tables.removeIf(table -> table.getName().equals(tableName));
+        if (!removed) {
             System.out.println("该表不存在!");
             return;
         }
-        tables.remove(tableName);
-
+        // 删除物理文件
         if (tableFile.delete()) {
-            System.out.println("删除表成功: " + tableName);
+            System.out.println("删除成功!");
         } else {
-            System.out.println("删除表失败（文件被占用或无权限）");
+            System.out.println("删除失败（文件被占用或无权限）");
         }
     }
 
     /**
-     * 插入数据
+     * 检查表是否存在（对应 C++ 的 posIsNos）
+     *
+     * @param tableName 表名
+     * @return 表在列表中的索引（-1 表示不存在）
      */
-    public void myInsert(String tableName, List<String> values) throws IOException {
-        Table table = tables.get(tableName);
-        if (table == null) {
-            System.out.println("该表不存在!");
-            return;
+    public int posIsNos(String tableName) {
+        for (int i = 0; i < tables.size(); i++) {
+            if (tables.get(i).getName().equals(tableName)) {
+                return i;  // 返回表索引
+            }
         }
-        table.getTree().insert(Collections.singletonList(values));
-        System.out.println("插入成功 -> 表: " + tableName + " 值: " + values);
+        return -1;  // 表不存在
     }
 
     /**
-     * 删除数据
+     * 插入数据（对应 C++ 的 myInsert）
+     *
+     * @param tableName 表名
+     * @param values    插入的值列表（如 ["1", "Alice"]）
      */
-    public void myDelete(String tableName, Key key) throws IOException {
-        Table table = tables.get(tableName);
-        if (table == null) {
-            System.out.println("该表不存在!");
-            return;
-        }
-        boolean removed = table.getTree().delete(key);
-        System.out.println(removed ? "删除成功!" : "删除失败!");
+    public void myInsert(String tableName, List<String> values) {
     }
 
     /**
-     * 更新数据
+     * 删除数据（对应 C++ 的 myDelete）
+     *
+     * @param tableName 表名
+     * @param condition 删除条件（如 "age = 18"）
      */
-    public void myUpdate(String tableName, Key key, List<Object> newRow) throws IOException {
-        Table table = tables.get(tableName);
-        if (table == null) {
-            System.out.println("该表不存在!");
-            return;
-        }
-        boolean updated = table.getTree().update(key, newRow);
-        System.out.println(updated ? "更新成功!" : "更新失败!");
+    public void myDelete(String tableName, String condition) {
+    }
+
+    /**
+     * 更新数据（对应 C++ 的 myUpdate）
+     *
+     * @param tableName 表名
+     * @param setCol    要更新的列名
+     * @param newValue  新值
+     * @param condition 更新条件（如 "age = 18"）
+     */
+    public void myUpdate(String tableName, String setCol, String newValue, String condition) {
     }
 
     /**
      * 查询数据
+     *
+     * @param tableName 表名
+     * @param columns   要查询的列名（如 ["id", "name"]，"all" 表示所有列）
+     * @param condition 查询条件（如 "age = 18"）
      */
-    public void myQuery(String tableName, String key, String condition) throws IOException {
-        Table table = tables.get(tableName);
-        if (table == null) {
-            System.out.println("该表不存在!");
-            return;
-        }
-        List<Object> row = null;
-        // table.getTree().search(key);
-        if (row == null) {
-            System.out.println("未找到数据");
-        } else {
-            System.out.println("查询结果: " + row);
-        }
+    public void myQuery(String tableName, String columns, String condition) {
     }
 
     /**
-     * 获取表
-     */
-    public Table getTable(String tableName) {
-        return tables.get(tableName); // O(1)
-    }
-
-    /**
-     * 删除整个目录（递归）
+     * 递归删除目录（工具方法，对应 C++ 的 remove 目录逻辑）
+     * @param directory 要删除的目录
+     * @return 是否成功删除
      */
     private boolean deleteDirectory(File directory) {
         if (directory.exists()) {
@@ -224,3 +216,4 @@ public class StorageEngine {
         return directory.delete();
     }
 }
+
