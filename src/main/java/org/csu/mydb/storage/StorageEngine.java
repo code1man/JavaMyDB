@@ -44,13 +44,20 @@ public class StorageEngine {
      * @param dbName 数据库名
      */
     public void myOpenDataBase(String dbName) {
-//        File dbDir = new File("save/repos/" + dbName);
-//        if (!dbDir.exists()) {
-//            System.out.println("数据库不存在");
-//            return;
-//        }
-//        prePath = dbDir.getPath() + "/";
-//        isOpen = true;
+
+        String path = "save/repos/" + dbName;
+        File dbDir = new File(path);
+        if (!dbDir.exists()) {
+            System.out.println("数据库不存在");
+            return;
+        }
+        prePath = path;
+        isOpen = true;
+
+        //可能要获取所有表信息
+
+
+
 //        // 加载表元信息
 //        for (File file : dbDir.listFiles()) {
 //            if (file.getName().endsWith(".ibd")) {
@@ -119,6 +126,12 @@ public class StorageEngine {
      * @param columns   列名列表（如 ["id", "name"]）
      */
     public void myCreateTable(String tableName, List<Column> columns) {
+
+
+        int spaceId = StorageSystem.createTable(prePath + "/" + tableName + ".idb", columns);
+
+
+
 //        if (!isOpen) {
 //            System.out.println("无选中数据库，请先打开数据库");
 //            return;
@@ -140,6 +153,7 @@ public class StorageEngine {
 //        } catch (IOException e) {
 //            System.out.println("创建表失败: " + e.getMessage());
 //        }
+
     }
 
     /**
@@ -152,7 +166,7 @@ public class StorageEngine {
             System.out.println("无选中数据库，请先打开数据库");
             return;
         }
-        String tablePath = prePath + tableName + ".txt";
+        String tablePath = prePath + tableName + ".idb";
         File tableFile = new File(tablePath);
         // 从内存中移除表
         boolean removed = tables.removeIf(table -> table.getName().equals(tableName));

@@ -500,6 +500,8 @@ class StorageSystemTest {
         assertTrue(new File(filePath).exists(), "表文件应该被创建");
     }
 
+
+
     private List<Column> createTestColumns() {
         List<Column> columns = new ArrayList<>();
         columns.add(new Column("id", "INT", 4, 0,0 , true, false, null));

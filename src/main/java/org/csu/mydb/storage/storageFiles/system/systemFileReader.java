@@ -118,7 +118,7 @@ public class systemFileReader {
         List<Column> columns = new ArrayList<>();
         int currentPage = sysColumnsFirstLeafPage;
 
-        PageManager.Page headPage = pageManager.getPage(StorageSystem.SYS_COLUMNS_IDB_SPACE_ID, 0);
+//        PageManager.Page headPage = pageManager.getPage(StorageSystem.SYS_COLUMNS_IDB_SPACE_ID, 0);
         boolean isFirst = true;
 //        while (currentPage != -1) {
         while(currentPage != sysColumnsFirstLeafPage || isFirst){

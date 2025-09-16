@@ -296,7 +296,32 @@ public class StorageSystem {
         }
     }
 
-    //缓存系统表
+    /**
+     * 分配页
+     * @param filePath
+     * @param spaceId
+     * @return
+     */
+    public static int allocatePage(String filePath, int spaceId){
+        try {
+            // 确保文件已打开
+            if (!pageManager.getOpenFiles().containsKey(spaceId)) {
+                pageManager.openFile(spaceId, filePath);
+            }
+            int result = pageManager.allocatePage(spaceId);
+
+            //维护空闲链表
+            SpaceManager spaceManager = new SpaceManager(pageManager, bufferPool);
+            spaceManager.maintainSpaceChains(spaceId);
+
+            return result;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+        //缓存系统表
     public static void loadSystemTable(){
         try{
             // 确保文件已打开
