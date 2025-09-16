@@ -2,7 +2,7 @@ package org.csu.mydb.cli;
 
 import org.csu.mydb.executor.Executor;
 import org.csu.mydb.executor.ExecutorException;
-import org.csu.mydb.compiler.Parser
+import org.csu.mydb.compiler.Parser;
 
 import java.util.Scanner;
 
