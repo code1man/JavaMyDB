@@ -4,11 +4,14 @@ import org.csu.mydb.storage.Table.Column.Column;
 import org.csu.mydb.storage.Table.Table;
 import org.csu.mydb.storage.bufferPool.BufferPool;
 import org.csu.mydb.storage.storageFiles.page.PageOperations;
+import org.csu.mydb.storage.storageFiles.page.PageSorter;
 import org.csu.mydb.storage.storageFiles.page.record.DataRecord;
+import org.csu.mydb.storage.storageFiles.page.record.IndexRecord;
 import org.csu.mydb.storage.storageFiles.page.record.RecordHead;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +19,7 @@ import java.util.List;
 import static org.csu.mydb.storage.PageManager.PAGE_SIZE;
 
 //组合缓存和页管理（全局只能有一个的东西，比如缓存）
-public class StorageSystem implements PageOperations {
+public class StorageSystem {
 
     //系统文件表空间的spaceId
     private static final int IBDATA1_SPACE_ID = 0;
@@ -43,8 +46,19 @@ public class StorageSystem implements PageOperations {
 
     //========================== 存储系统的静态方法（比存储引擎低一层的方法） ============================//
 
-    @Override
-    public byte[] readPage(String filePath, int spaceId, int pageNo) {
+
+    public static List<Table> loadAllTables(){
+        return null;
+    }
+
+    /**
+     * 获取页
+     * @param filePath
+     * @param spaceId
+     * @param pageNo
+     * @return Page
+     */
+    public static PageManager.Page readPage(String filePath, int spaceId, int pageNo) {
         try {
             // 确保文件已打开
             if (!pageManager.getOpenFiles().containsKey(spaceId)) {
@@ -53,14 +67,21 @@ public class StorageSystem implements PageOperations {
 
             // 从缓存或磁盘读取页
             PageManager.Page page = pageManager.getPage(spaceId, pageNo);
-            return page.toBytes();
+            return page;
         } catch (IOException e) {
             throw new RuntimeException("Failed to read page", e);
         }
     }
 
-    @Override
-    public void writePage(String filePath, int spaceId, int pageNo, byte[] data, List<Column> columns) {
+    /**
+     * //往页里面写入数据
+     * @param filePath
+     * @param spaceId
+     * @param pageNo
+     * @param data
+     * @param columns 当前表的所有列信息
+     */
+    public static void writePage(String filePath, int spaceId, int pageNo, byte[] data, List<Column> columns) {
         try {
             // 确保文件已打开
             if (!pageManager.getOpenFiles().containsKey(spaceId)) {
@@ -77,10 +98,26 @@ public class StorageSystem implements PageOperations {
                 //构造记录
                 RecordHead recordHead = new RecordHead((byte) 0, (byte) 0, (short)-1);
                 DataRecord dataRecord = new DataRecord(recordHead, 0, 0, data);
-
+                //往页里写入记录
+                page.addRecord(dataRecord.toBytes());
             }else {
-
+                //构造记录
+                RecordHead recordHead = new RecordHead((byte) 0, (byte) 1, (short)-1);
+                IndexRecord indexRecord = new IndexRecord(recordHead, data);
+                //往页里写入记录
+                page.addRecord(indexRecord.toBytes());
             }
+
+            //获取主键列表
+            List<Column> primaryKeys = new ArrayList<>();
+            for (Column column : columns){
+                if (column.isPrimaryKey()){
+                    primaryKeys.add(column);
+                }
+            }
+
+            //排序 + 维护记录链表
+            PageSorter.sortPageByPrimaryKey(page, columns, primaryKeys);
 
             // 写入缓存
             bufferPool.putPage(page, spaceId);
@@ -188,6 +225,7 @@ public class StorageSystem implements PageOperations {
      */
     public static int createTable(String filePath, List<Column> columns){
 
+        loadSystemTable();
         //先分配spaceId
         //找到ibdata1文件//读第五页
         PageManager.Page page ;
@@ -227,6 +265,29 @@ public class StorageSystem implements PageOperations {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    //缓存系统表
+    public static void loadSystemTable(){
+        try{
+            // 确保文件已打开
+            if (!pageManager.getOpenFiles().containsKey(IBDATA1_SPACE_ID)) {
+                pageManager.openFile(IBDATA1_SPACE_ID, path + "ibdata1");
+            }
+
+            // 确保文件已打开
+            if (!pageManager.getOpenFiles().containsKey(SYS_TABLES_IDB_SPACE_ID)) {
+                pageManager.openFile(SYS_TABLES_IDB_SPACE_ID, "sys_tables.idb");
+            }
+
+            // 确保文件已打开
+            if (!pageManager.getOpenFiles().containsKey(SYS_COLUMNS_IDB_SPACE_ID)) {
+                pageManager.openFile(SYS_COLUMNS_IDB_SPACE_ID, "sys_columns.idb");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     //这个按道理来说也应该使用b+树去找

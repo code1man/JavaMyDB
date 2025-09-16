@@ -97,8 +97,8 @@ public class Executor {
         storageEngine.myCloseDataBase();
         return new ExecutionResult(true, "数据库关闭成功");
     }
-
-    private ExecutionResult executeCreateTable(ExecutionPlan plan) throws IOException {
+//传递列属性的增加9/16
+    private ExecutionResult executeCreateTable(ExecutionPlan plan) {
         if (plan.getTableName() == null || plan.getTableName().isEmpty()) {
             return new ExecutionResult(false, "表名不能为空");
         }
@@ -120,18 +120,19 @@ public class Executor {
         return new ExecutionResult(true, "表删除成功: " + plan.getTableName());
     }
 
-    private ExecutionResult executeInsert(ExecutionPlan plan) throws IOException {
+    private ExecutionResult executeInsert(ExecutionPlan plan) {
         if (plan.getTableName() == null || plan.getTableName().isEmpty()) {
             return new ExecutionResult(false, "表名不能为空");
         }
 
-        if (plan.getValues() == null || plan.getValues().isEmpty()) {
-            return new ExecutionResult(false, "插入值不能为空");
+        if (plan.getInsertColumns() == null || plan.getInsertColumns().isEmpty()) {
+            return new ExecutionResult(false, "插入列不能为空");
         }
 
-        storageEngine.myInsert(plan.getTableName(), plan.getValues());
+        storageEngine.myInsert(plan.getTableName(), plan.getInsertColumns());
         return new ExecutionResult(true, "数据插入成功", 1);
     }
+
 
     private ExecutionResult executeDelete(ExecutionPlan plan) {
         if (plan.getTableName() == null || plan.getTableName().isEmpty()) {
@@ -142,7 +143,7 @@ public class Executor {
             return new ExecutionResult(false, "删除条件不能为空");
         }
 
-        //  storageEngine.myDelete(plan.getTableName(), plan.getCondition());
+        storageEngine.myDelete(plan.getTableName(), plan.getCondition());
         return new ExecutionResult(true, "数据删除成功");
     }
 

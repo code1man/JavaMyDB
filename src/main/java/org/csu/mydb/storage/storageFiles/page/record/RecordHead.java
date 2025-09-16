@@ -5,6 +5,8 @@ import java.nio.ByteBuffer;
 //记录头
 public class RecordHead {
 
+    public static int RECORD_HEADER_SIZE = 4;
+
     //1字节，是否删除标记（1代表已删除）
     private byte isDeleted;
 
