@@ -53,7 +53,9 @@ public class Executor {
                     return executeUpdate(plan);
                 case QUERY:
                     return executeQuery(plan);
-                    case EXIT:
+                case GRANT:
+                    return executeGrant(plan);
+                case EXIT:
                     return new ExecutionResult(true, "退出命令已执行");
                 default:
                     throw new ExecutorException("未知的操作类型: " + plan.getOperationType());
@@ -165,7 +167,14 @@ public class Executor {
                 plan.getNewValue(), plan.getCondition());
         return new ExecutionResult(true, "数据更新成功");
     }
-
+    private ExecutionResult executeGrant(ExecutionPlan plan) {
+        if (plan.getDatabaseName() == null || plan.getGrantee() == null || plan.getGrants() == null) {
+            return new ExecutionResult(false, "GRANT 语句参数不完整");
+        }
+        // StorageEngine 需要实现 myGrant(database, grantee, grants)
+        storageEngine.myGrant(plan.getDatabaseName(), plan.getGrantee(), plan.getGrants());
+        return new ExecutionResult(true, "权限授予成功");
+    }
     private ExecutionResult executeQuery(ExecutionPlan plan) {
         if (plan.getTableName() == null || plan.getTableName().isEmpty()) {
             return new ExecutionResult(false, "表名不能为空");
@@ -219,7 +228,6 @@ public class Executor {
             originalOut = System.out;
             System.setOut(customOut);
         }
-
         List<String> stopCapture() {
             System.setOut(originalOut);
             customOut.close();

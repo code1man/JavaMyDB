@@ -24,7 +24,8 @@ public class Lexer {
             "SELECT","FROM","WHERE","CREATE","TABLE","INSERT","INTO","VALUES",
             "UPDATE","SET","DELETE","DROP","DATABASE","USE",
             "AND","NOT","PRIMARY","KEY","INT","VARCHAR","CHAR","EVERYTHING","NULL",
-            "JOIN","ON"
+            "JOIN","ON",
+            "GRANT", "TO"
     ));
 
     // 两字符运算符优先表
