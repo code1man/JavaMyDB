@@ -1,6 +1,7 @@
 package org.csu.mydb.storage;
 
 import org.csu.mydb.config.ConfigLoader;
+import org.csu.mydb.storage.Table.Column.Column;
 import org.csu.mydb.storage.Table.Table;
 
 import java.io.*;
@@ -118,7 +119,7 @@ public class StorageEngine {
      * @param tableName 表名
      * @param columns   列名列表（如 ["id", "name"]）
      */
-    public void myCreateTable(String tableName, List<String> columns) {
+    public void myCreateTable(String tableName, List<Column> columns) {
 //        if (!isOpen) {
 //            System.out.println("无选中数据库，请先打开数据库");
 //            return;

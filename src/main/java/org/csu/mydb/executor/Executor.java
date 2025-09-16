@@ -95,7 +95,7 @@ public class Executor {
         storageEngine.myCloseDataBase();
         return new ExecutionResult(true, "数据库关闭成功");
     }
-
+//传递列属性的增加9/16
     private ExecutionResult executeCreateTable(ExecutionPlan plan) {
         if (plan.getTableName() == null || plan.getTableName().isEmpty()) {
             return new ExecutionResult(false, "表名不能为空");
