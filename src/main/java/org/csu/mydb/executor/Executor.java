@@ -5,7 +5,6 @@ package org.csu.mydb.executor;
 import org.csu.mydb.cli.ParsedCommand;
 import org.csu.mydb.storage.StorageEngine;
 
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,11 +122,11 @@ public class Executor {
             return new ExecutionResult(false, "表名不能为空");
         }
 
-        if (plan.getInsertColumns() == null || plan.getInsertColumns().isEmpty()) {
+        if (plan.getValues() == null || plan.getValues().isEmpty()) {
             return new ExecutionResult(false, "插入列不能为空");
         }
 
-        storageEngine.myInsert(plan.getTableName(), plan.getInsertColumns());
+        storageEngine.myInsert(plan.getTableName(), plan.getColumns(),plan.getValues());
         return new ExecutionResult(true, "数据插入成功", 1);
     }
 

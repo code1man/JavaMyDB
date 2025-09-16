@@ -75,7 +75,6 @@ public class StorageEngine {
 
     /**
      * 创建数据库（对应 C++ 的 myCreateDataBase）
-     *
      * @param dataBaseName 数据库名
      */
     public void myCreateDataBase(String dataBaseName) {
@@ -190,7 +189,7 @@ public class StorageEngine {
      * @param tableName 表名
      * @param insertColumns   插入的值列表（如 ["1", "Alice"]）
      */
-    public void myInsert(String tableName, List<Column> insertColumns) {
+    public void myInsert(String tableName, List<Column> insertColumns, List<String> values) {
 //        if (!isOpen) {
 //            System.out.println("无选中数据库!");
 //            return;
