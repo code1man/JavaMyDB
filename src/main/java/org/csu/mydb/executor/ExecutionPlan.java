@@ -23,6 +23,7 @@ public class ExecutionPlan {
         DELETE,
         UPDATE,
         QUERY,
+        JOIN,
         EXIT
     }
 

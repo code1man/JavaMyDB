@@ -25,8 +25,8 @@ public class BPlusTreeTest {
         StorageSystem storageSystem = new StorageSystem();
 
         // 定义表结构：一个主键 id(int)，一个 name(string)
-        Column idCol = new Column("id", "INT", 4,0,true, true, null);   // true 表示是主键
-        Column nameCol = new Column("name", "VARCHAR", 10, 0, false, false, null);
+        Column idCol = new Column("id", "INT", 4,0,0,true, true, null);   // true 表示是主键
+        Column nameCol = new Column("name", "VARCHAR", 10, 0,1, false, false, null);
 
         List<Column> columns = Arrays.asList(idCol, nameCol);
         int spaceId = StorageSystem.createTable("G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jb.idb", columns);
@@ -75,9 +75,9 @@ public class BPlusTreeTest {
 
     @Test
     public void testBulkInsert() throws IOException {
-//        for (int i = 1; i <= 50; i++) {
-//            tree.insert(Arrays.asList(i, "Name" + i));
-//        }
+        for (int i = 1; i <= 50; i++) {
+            tree.insert(Arrays.asList(i, "Name" + i));
+        }
 
         List<Object> row = tree.search(new Key(List.of(3), tree.getColumns()));
         assertNotNull(row);

@@ -6,9 +6,7 @@ import org.csu.mydb.storage.Table.Key;
 import org.csu.mydb.storage.storageFiles.page.record.RecordHead;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class PageSorter {
 
@@ -52,6 +50,11 @@ public class PageSorter {
         // 4. 重新链接记录链表
         relinkRecords(page, entries);
 
+        // 5. 重建空闲槽链表
+        rebuildFreeSlotList(page);
+
+        // 6. 标记页为脏页
+        page.header.isDirty = true;
     }
 
     /**
@@ -105,10 +108,22 @@ public class PageSorter {
         // 创建新的槽位列表（保持原始物理位置）
         List<PageManager.Slot> newSlots = new ArrayList<>(page.getSlots());
 
-        // 更新槽位指向的记录索引
+        // 标记哪些槽已被处理
+        boolean[] processed = new boolean[newSlots.size()];
+
+        // 1. 放置排序后的有效记录槽
         for (int i = 0; i < sortedEntries.size(); i++) {
             RecordEntry entry = sortedEntries.get(i);
             newSlots.set(i, entry.slot);
+            processed[entry.slotIndex] = true;
+        }
+
+        // 2. 放置未处理的槽（空闲和已删除）
+        int nextIndex = sortedEntries.size();
+        for (int i = 0; i < newSlots.size(); i++) {
+            if (!processed[i]) {
+                newSlots.set(nextIndex++, page.getSlots().get(i));
+            }
         }
 
         page.slots = newSlots;
@@ -153,5 +168,43 @@ public class PageSorter {
                 page.pageData, entry.slot.offset,
                 entry.recordData.length
         );
+    }
+
+    /**
+     * 重建空闲槽链表
+     */
+    private static void rebuildFreeSlotList(PageManager.Page page) {
+        // 1. 收集所有空闲槽
+        List<Integer> freeSlots = new ArrayList<>();
+        for (int i = 0; i < page.slots.size(); i++) {
+            PageManager.Slot slot = page.slots.get(i);
+            if (slot.status == 0) { // 空闲槽
+                freeSlots.add(i);
+            }
+        }
+
+        // 2. 重建链表
+        if (freeSlots.isEmpty()) {
+            page.header.firstFreeSlot = -1;
+            return;
+        }
+
+        // 按槽索引排序（可选）
+        Collections.sort(freeSlots);
+
+        // 设置链表头
+        page.header.firstFreeSlot = (short) freeSlots.get(0).intValue();
+
+        // 链接所有空闲槽
+        for (int i = 0; i < freeSlots.size(); i++) {
+            int slotIndex = freeSlots.get(i);
+            PageManager.Slot slot = page.slots.get(slotIndex);
+
+            if (i < freeSlots.size() - 1) {
+                slot.nextFree = (byte) freeSlots.get(i + 1).intValue();
+            } else {
+                slot.nextFree = -1; // 链表尾
+            }
+        }
     }
 }

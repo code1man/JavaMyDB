@@ -6,61 +6,57 @@ import org.csu.mydb.executor.Executor;
 import org.csu.mydb.executor.ExecutorException;
 import org.csu.mydb.storage.StorageEngine;
 import org.csu.mydb.storage.Table.Column.Column;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.jupiter.api.*;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.DisplayName;
-
 /**
- * Executor模块测试类
+ * Executor 模块测试类（已修正：不依赖 Column 的参数化构造函数）
  */
 public class ExecutorTest {
-    private static final Logger logger = LoggerFactory.getLogger(ExecutorTest.class);
     private Executor executor;
     private StorageEngineMock storageEngine;
 
     @BeforeEach
     public void setUp() {
-        logger.info("初始化测试环境");
         storageEngine = new StorageEngineMock();
         executor = new Executor(storageEngine);
     }
 
     @AfterEach
     public void tearDown() {
-        logger.info("清理测试环境");
+        storageEngine = null;
+        executor = null;
+    }
+
+    // 辅助方法：用无参 Column + setter 快速构造 Column 对象
+    private static Column makeColumn(String name, String type, int length, int scale) {
+        Column c = new Column();
+        c.setName(name);
+        c.setType(type);
+        c.setLength(length);
+        c.setScale(scale);
+        return c;
     }
 
     @Test
     @DisplayName("测试创建数据库")
-    public void testCreateDatabase() {
-        logger.info("测试创建数据库");
+    public void testCreateDatabase() throws ExecutorException {
+        ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.CREATE_DATABASE);
+        plan.setDatabaseName("test_db");
 
-        try {
-            ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.CREATE_DATABASE);
-            plan.setDatabaseName("test_db");
-
-            ExecutionResult result = executor.execute(plan);
-            assertTrue(result.isSuccess());
-            assertEquals("数据库创建成功: test_db", result.getMessage());
-            assertTrue(storageEngine.isCreateDatabaseCalled());
-        } catch (ExecutorException e) {
-            fail("执行计划失败: " + e.getMessage());
-        }
+        ExecutionResult result = executor.execute(plan);
+        assertTrue(result.isSuccess());
+        assertEquals("数据库创建成功: test_db", result.getMessage());
+        assertTrue(storageEngine.isCreateDatabaseCalled());
     }
+
     @Test
     @DisplayName("测试删除数据库")
     public void testDropDatabase() throws ExecutorException {
-        logger.info("测试删除数据库");
-
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.DROP_DATABASE);
         plan.setDatabaseName("test_db");
 
@@ -73,8 +69,6 @@ public class ExecutorTest {
     @Test
     @DisplayName("测试打开数据库")
     public void testOpenDatabase() throws ExecutorException {
-        logger.info("测试打开数据库");
-
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.OPEN_DATABASE);
         plan.setDatabaseName("test_db");
 
@@ -87,8 +81,6 @@ public class ExecutorTest {
     @Test
     @DisplayName("测试关闭数据库")
     public void testCloseDatabase() throws ExecutorException {
-        logger.info("测试关闭数据库");
-
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.CLOSE_DATABASE);
 
         ExecutionResult result = executor.execute(plan);
@@ -100,11 +92,13 @@ public class ExecutorTest {
     @Test
     @DisplayName("测试创建表")
     public void testCreateTable() throws ExecutorException {
-        logger.info("测试创建表");
-
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.CREATE_TABLE);
         plan.setTableName("users");
-//        plan.setColumns(Arrays.asList("id", "name", "email"));
+        plan.setColumns(Arrays.asList(
+                makeColumn("id", "INT", 11, 0),
+                makeColumn("name", "VARCHAR", 50, 0),
+                makeColumn("email", "VARCHAR", 100, 0)
+        ));
 
         ExecutionResult result = executor.execute(plan);
         assertTrue(result.isSuccess());
@@ -115,8 +109,6 @@ public class ExecutorTest {
     @Test
     @DisplayName("测试删除表")
     public void testDropTable() throws ExecutorException {
-        logger.info("测试删除表");
-
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.DROP_TABLE);
         plan.setTableName("users");
 
@@ -129,11 +121,14 @@ public class ExecutorTest {
     @Test
     @DisplayName("测试插入数据")
     public void testInsert() throws ExecutorException {
-        logger.info("测试插入数据");
-
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.INSERT);
         plan.setTableName("users");
-//        plan.setInsertColumns(Arrays.asList("1", "John Doe", "john@example.com"));
+        plan.setColumns(Arrays.asList(
+                makeColumn("id", "INT", 11, 0),
+                makeColumn("name", "VARCHAR", 50, 0),
+                makeColumn("email", "VARCHAR", 100, 0)
+        ));
+        plan.setValues(Arrays.asList("1", "John Doe", "john@example.com"));
 
         ExecutionResult result = executor.execute(plan);
         assertTrue(result.isSuccess());
@@ -145,8 +140,6 @@ public class ExecutorTest {
     @Test
     @DisplayName("测试删除数据")
     public void testDelete() throws ExecutorException {
-        logger.info("测试删除数据");
-
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.DELETE);
         plan.setTableName("users");
         plan.setCondition("id=1");
@@ -160,8 +153,6 @@ public class ExecutorTest {
     @Test
     @DisplayName("测试更新数据")
     public void testUpdate() throws ExecutorException {
-        logger.info("测试更新数据");
-
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.UPDATE);
         plan.setTableName("users");
         plan.setSetColumn("email");
@@ -175,10 +166,8 @@ public class ExecutorTest {
     }
 
     @Test
-    @DisplayName("测试查询数据")
-    public void testQuery() throws ExecutorException {
-        logger.info("测试查询数据");
-
+    @DisplayName("测试单表查询")
+    public void testQuerySingleTable() throws ExecutorException {
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.QUERY);
         plan.setTableName("users");
         plan.setQueryColumns("all");
@@ -191,14 +180,37 @@ public class ExecutorTest {
         assertTrue(storageEngine.isQueryCalled());
     }
 
+    @Test
+    @DisplayName("测试 JOIN 查询")
+    public void testQueryJoin() throws ExecutorException {
+        ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.QUERY);
+        plan.setTableName("users");
+        plan.setJoinTableName("orders");
+        plan.setJoinCondition("users.id = orders.user_id");
+        plan.setQueryColumns("all");
+
+        ExecutionResult result = executor.execute(plan);
+        assertTrue(result.isSuccess());
+        assertEquals("查询成功", result.getMessage());
+        assertNotNull(result.getData());
+        assertTrue(storageEngine.isJoinQueryCalled());
+    }
+
+    @Test
+    @DisplayName("测试 EXIT 命令")
+    public void testExitCommand() throws ExecutorException {
+        ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.EXIT);
+
+        ExecutionResult result = executor.execute(plan);
+        assertTrue(result.isSuccess());
+        assertEquals("退出命令已执行", result.getMessage());
+    }
 
     @Test
     @DisplayName("测试缺少必要参数")
     public void testMissingParameters() throws ExecutorException {
-        logger.info("测试缺少必要参数");
-
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.CREATE_DATABASE);
-        // 不设置databaseName
+        // 未设置 databaseName
 
         ExecutionResult result = executor.execute(plan);
         assertFalse(result.isSuccess());
@@ -206,9 +218,8 @@ public class ExecutorTest {
     }
 }
 
-
 /**
- * 存储引擎模拟类，用于测试
+ * 存储引擎模拟类（新版）
  */
 class StorageEngineMock extends StorageEngine {
     private boolean createDatabaseCalled = false;
@@ -221,6 +232,7 @@ class StorageEngineMock extends StorageEngine {
     private boolean deleteCalled = false;
     private boolean updateCalled = false;
     private boolean queryCalled = false;
+    private boolean joinQueryCalled = false;
 
     @Override
     public void myCreateDataBase(String dataBaseName) {
@@ -259,21 +271,21 @@ class StorageEngineMock extends StorageEngine {
     }
 
     @Override
-    public void myInsert(String tableName, List<Column> insertColumns, List<String> values) {
+    public void myInsert(String tableName, List<Column> columns, List<String> values) {
         insertCalled = true;
-        System.out.println("模拟插入数据到表: " + tableName + ", 值: " + insertColumns);
+        System.out.println("模拟插入数据到表: " + tableName + ", 列: " + columns + ", 值: " + values);
     }
 
     @Override
     public void myDelete(String tableName, String condition) {
         deleteCalled = true;
-        System.out.println("模拟从表删除数据: " + tableName + ", 条件: " + condition);
+        System.out.println("模拟删除数据: " + tableName + ", 条件: " + condition);
     }
 
     @Override
     public void myUpdate(String tableName, String setCol, String newValue, String condition) {
         updateCalled = true;
-        System.out.println("模拟更新表数据: " + tableName + ", 设置列: " + setCol +
+        System.out.println("模拟更新表: " + tableName + ", 设置列: " + setCol +
                 ", 新值: " + newValue + ", 条件: " + condition);
     }
 
@@ -281,50 +293,29 @@ class StorageEngineMock extends StorageEngine {
     public void myQuery(String tableName, String columns, String condition) {
         queryCalled = true;
         System.out.println("模拟查询表: " + tableName + ", 列: " + columns + ", 条件: " + condition);
-        // 模拟输出一些数据
         System.out.println("id name email");
         System.out.println("1 John john@example.com");
-        System.out.println("2 Jane jane@example.com");
     }
 
-    // 检查方法是否被调用的getter方法
-    public boolean isCreateDatabaseCalled() {
-        return createDatabaseCalled;
+    @Override
+    public void myQuery(String table1, String table2, String columns, String joinCondition, String condition) {
+        joinQueryCalled = true;
+        System.out.println("模拟 JOIN 查询: " + table1 + " JOIN " + table2 +
+                " ON " + joinCondition + ", 列: " + columns + ", 条件: " + condition);
+        System.out.println("id name order_id product");
+        System.out.println("1 John 101 Book");
     }
 
-    public boolean isDropDatabaseCalled() {
-        return dropDatabaseCalled;
-    }
-
-    public boolean isOpenDatabaseCalled() {
-        return openDatabaseCalled;
-    }
-
-    public boolean isCloseDatabaseCalled() {
-        return closeDatabaseCalled;
-    }
-
-    public boolean isCreateTableCalled() {
-        return createTableCalled;
-    }
-
-    public boolean isDropTableCalled() {
-        return dropTableCalled;
-    }
-
-    public boolean isInsertCalled() {
-        return insertCalled;
-    }
-
-    public boolean isDeleteCalled() {
-        return deleteCalled;
-    }
-
-    public boolean isUpdateCalled() {
-        return updateCalled;
-    }
-
-    public boolean isQueryCalled() {
-        return queryCalled;
-    }
+    // getter 方法
+    public boolean isCreateDatabaseCalled() { return createDatabaseCalled; }
+    public boolean isDropDatabaseCalled() { return dropDatabaseCalled; }
+    public boolean isOpenDatabaseCalled() { return openDatabaseCalled; }
+    public boolean isCloseDatabaseCalled() { return closeDatabaseCalled; }
+    public boolean isCreateTableCalled() { return createTableCalled; }
+    public boolean isDropTableCalled() { return dropTableCalled; }
+    public boolean isInsertCalled() { return insertCalled; }
+    public boolean isDeleteCalled() { return deleteCalled; }
+    public boolean isUpdateCalled() { return updateCalled; }
+    public boolean isQueryCalled() { return queryCalled; }
+    public boolean isJoinQueryCalled() { return joinQueryCalled; }
 }

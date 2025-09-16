@@ -13,11 +13,15 @@ import org.csu.mydb.storage.storageFiles.page.record.DataRecord;
 import org.csu.mydb.storage.storageFiles.page.record.IndexRecord;
 import org.csu.mydb.storage.storageFiles.page.record.RecordHead;
 import org.csu.mydb.util.Pair.Pair;
+import org.csu.mydb.storage.storageFiles.system.systemFileReader;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static org.csu.mydb.storage.PageManager.PAGE_SIZE;
 
@@ -25,10 +29,13 @@ import static org.csu.mydb.storage.PageManager.PAGE_SIZE;
 public class StorageSystem {
 
     //系统文件表空间的spaceId
-    private static final int IBDATA1_SPACE_ID = 0;
-    private static final int SYS_TABLES_IDB_SPACE_ID = 1;
-    private static final int SYS_COLUMNS_IDB_SPACE_ID = 2;
-    private static final String path = "save/repos/";
+    public static final int IBDATA1_SPACE_ID = 0;
+    public static final int SYS_TABLES_IDB_SPACE_ID = 1;
+    public static final int SYS_COLUMNS_IDB_SPACE_ID = 2;
+    public static final String path = "save/repos/";
+
+    //某张表里面的列信息缓存
+    public static Map<Integer, List<Column>> spaceIdToColumns;
     private static final PageManager pageManager = new PageManager();
     private static final BufferPool bufferPool = new BufferPool(150, pageManager);
 
@@ -50,8 +57,19 @@ public class StorageSystem {
     //========================== 存储系统的静态方法（比存储引擎低一层的方法） ============================//
 
 
-    public static List<Table> loadAllTables(){
-        return null;
+    /**
+     *
+     * @param dbName 数据库名称
+     * @param sysTablesFirstLeafPage sys_tables.idb 的最左叶子结点页号
+     * @param sysColumnsFirstLeafPage sys_columns.idb 的最左叶子结点页号
+     * @return 当前数据库下的Table列表
+     */
+    public static List<Table> loadAllTables(String dbName, int sysTablesFirstLeafPage, int sysColumnsFirstLeafPage){
+        try {
+            return new systemFileReader(pageManager).getDatabaseTables(dbName, sysTablesFirstLeafPage, sysColumnsFirstLeafPage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -82,10 +100,12 @@ public class StorageSystem {
      * @param spaceId
      * @param pageNo
      * @param data
-     * @param columns 当前表的所有列信息
+     * @return 是否插入成功，插入失败说明空间不够
      */
-    public static void writePage(String filePath, int spaceId, int pageNo, byte[] data, List<Column> columns) {
+    public static boolean writePage(String filePath, int spaceId, int pageNo, byte[] data) {
         try {
+            boolean result;
+
             // 确保文件已打开
             if (!pageManager.getOpenFiles().containsKey(spaceId)) {
                 pageManager.openFile(spaceId, filePath);
@@ -93,6 +113,8 @@ public class StorageSystem {
 
             //获得页
             PageManager.Page page = pageManager.getPage(spaceId, pageNo);
+
+            List<Column> columns = spaceIdToColumns.get(spaceId);
 
             //分类讨论
             int pageType = page.header.pageType;
@@ -102,13 +124,17 @@ public class StorageSystem {
                 RecordHead recordHead = new RecordHead((byte) 0, (byte) 0, (short)-1);
                 DataRecord dataRecord = new DataRecord(recordHead, 0, 0, data);
                 //往页里写入记录
-                page.addRecord(dataRecord.toBytes());
+                result = page.addRecord(dataRecord.toBytes());
             }else {
                 //构造记录
                 RecordHead recordHead = new RecordHead((byte) 0, (byte) 1, (short)-1);
                 IndexRecord indexRecord = new IndexRecord(recordHead, data);
                 //往页里写入记录
-                page.addRecord(indexRecord.toBytes());
+                result = page.addRecord(indexRecord.toBytes());
+            }
+
+            if(!result){
+                return false;
             }
 
             //获取主键列表
@@ -125,6 +151,7 @@ public class StorageSystem {
             // 写入缓存
             bufferPool.putPage(page, spaceId);
 
+            return true;
         } catch (IOException e) {
             throw new RuntimeException("Failed to write page", e);
         }
@@ -409,7 +436,7 @@ public class StorageSystem {
         // 写入所有 records
         for (List<Object> row : node.records) {
             byte[] rowData = RecordSerializer.serializeDataRow(row, columns);
-            StorageSystem.writePage(filePath, spaceId, pageNo, rowData, columns);
+            StorageSystem.writePage(filePath, spaceId, pageNo, rowData);
         }
 
         node.header.isDirty = true;
@@ -447,7 +474,7 @@ public class StorageSystem {
         byte[] leftOnly = RecordSerializer.serializeKeyPtr(
                 Collections.emptyList(), Collections.emptyList(), leftChildPage
         );
-        StorageSystem.writePage(filePath, spaceId, pageNo, leftOnly, tableColumns);
+        StorageSystem.writePage(filePath, spaceId, pageNo, leftOnly);
 
         // 写 key + right child
         for (int i = 0; i < node.keys.size(); i++) {
@@ -456,7 +483,7 @@ public class StorageSystem {
             byte[] keyPtrData = RecordSerializer.serializeKeyPtr(
                     key.getValues(), key.getKeyColumns(), rightChildPage
             );
-            StorageSystem.writePage(filePath, spaceId, pageNo, keyPtrData, tableColumns);
+            StorageSystem.writePage(filePath, spaceId, pageNo, keyPtrData);
         }
 
         node.header.isDirty = true;
