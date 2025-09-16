@@ -188,9 +188,9 @@ public class StorageEngine {
      * 插入数据（对应 C++ 的 myInsert）
      *
      * @param tableName 表名
-     * @param values    插入的值列表（如 ["1", "Alice"]）
+     * @param insertColumns   插入的值列表（如 ["1", "Alice"]）
      */
-    public void myInsert(String tableName, List<String> values) {
+    public void myInsert(String tableName, List<Column> insertColumns) {
 //        if (!isOpen) {
 //            System.out.println("无选中数据库!");
 //            return;

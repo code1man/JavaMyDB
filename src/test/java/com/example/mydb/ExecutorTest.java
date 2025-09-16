@@ -133,7 +133,7 @@ public class ExecutorTest {
 
         ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.INSERT);
         plan.setTableName("users");
-        plan.setValues(Arrays.asList("1", "John Doe", "john@example.com"));
+//        plan.setInsertColumns(Arrays.asList("1", "John Doe", "john@example.com"));
 
         ExecutionResult result = executor.execute(plan);
         assertTrue(result.isSuccess());
@@ -259,9 +259,9 @@ class StorageEngineMock extends StorageEngine {
     }
 
     @Override
-    public void myInsert(String tableName, List<String> values) {
+    public void myInsert(String tableName, List<Column> insertColumns) {
         insertCalled = true;
-        System.out.println("模拟插入数据到表: " + tableName + ", 值: " + values);
+        System.out.println("模拟插入数据到表: " + tableName + ", 值: " + insertColumns);
     }
 
     @Override
