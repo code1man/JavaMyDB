@@ -584,7 +584,6 @@ public class Grammar {
         // ValueListTail -> , Value ValueListTail | ε
         addProduction(ValueListTail, Arrays.asList(new Terminal(","), Value, ValueListTail));
         addProduction(ValueListTail, Arrays.asList(EPSILON));
-
         // Value -> IDENTIFIER | CONSTANT
         addProduction(Value, Arrays.asList(new Terminal("IDENTIFIER")));
         addProduction(Value, Arrays.asList(new Terminal("CONSTANT")));

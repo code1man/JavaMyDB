@@ -33,6 +33,10 @@ public class Column {
         this.defaultValue = defaultValue;
     }
 
+    public Column() {
+
+    }
+
     public String getName() {
         return name;
     }

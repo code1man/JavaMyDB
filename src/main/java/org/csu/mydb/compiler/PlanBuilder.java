@@ -1,6 +1,7 @@
 package org.csu.mydb.compiler;
 
 import org.csu.mydb.executor.ExecutionPlan;
+import org.csu.mydb.storage.Table.Column.Column;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -160,7 +161,8 @@ public class PlanBuilder {
 
                 ExecutionPlan p = new ExecutionPlan(ExecutionPlan.OperationType.CREATE_TABLE);
                 p.setTableName(tableName);
-                p.setColumns(cols);
+                // TODO: 分析字符串构造Columns
+                // p.setColumns(cols);
                 return p;
             } else {
                 throw error("CREATE 后面必须跟 DATABASE 或 TABLE", next);
@@ -242,6 +244,7 @@ public class PlanBuilder {
                 consume(); // VALUES
                 expectDelimiter("(");
                 List<String> vals = parseValueList();
+
                 expectDelimiter(")");
                 expectDelimiter(";"); // insert in our grammar uses ;
                 p.setValues(vals);
@@ -256,8 +259,10 @@ public class PlanBuilder {
                 List<String> vals = parseValueList();
                 expectDelimiter(")");
                 expectDelimiter(";");
-                p.setColumns(cols);
+
+                p.setColumns(generateColumns(vals, cols));
                 p.setValues(vals);
+
                 return p;
             } else {
                 throw error("INSERT 语法错误，期望 VALUES 或列列表", next);
@@ -270,12 +275,13 @@ public class PlanBuilder {
             if (v == null) throw error("期望值", v);
             // allow IDENTIFIER or CONSTANT
                 //因为没有判断字符串这种类型 导致需要自己手动设置type为constant 否则识别失败
-                String lex = v.lexeme;
-                if (lex != null && lex.length() >= 2 && lex.charAt(0) == '\'' && lex.charAt(lex.length() - 1) == '\'') {
-                    lex = lex.substring(1, lex.length() - 1);
-                    vals.add(lex); consume();
+            String lex = v.lexeme;
+
+            if (lex != null && lex.length() >= 2 && lex.charAt(0) == '\'' && lex.charAt(lex.length() - 1) == '\'') {
+                lex = lex.substring(1, lex.length() - 1);
+                vals.add("#" + lex); consume();
             }
-            if (v.type == Lexer.IDENTIFIER || v.type == Lexer.CONSTANT) {
+            else if (v.type == Lexer.IDENTIFIER || v.type == Lexer.CONSTANT) {
                 vals.add(v.lexeme); consume();
             } else {
                 throw error("值应为 IDENTIFIER 或 CONSTANT", v);
@@ -285,12 +291,11 @@ public class PlanBuilder {
                 Lexer.Token v2 = peek();
                 if (v2 == null) throw error("期望值", v2);
                 String lex1 = v2.lexeme;
-                if (lex1 != null && lex1.length() >= 2 && lex1.charAt(0) == '\'' && lex1.charAt(lex1.length() - 1) == '\'') {
+                 if (lex1 != null && lex1.length() >= 2 && lex1.charAt(0) == '\'' && lex1.charAt(lex1.length() - 1) == '\'') {
                     lex1 = lex1.substring(1, lex1.length() - 1);
-                    vals.add(lex1); consume();
-                    return vals;
+                    vals.add("#" + lex1); consume();
                 }
-                if (v2.type == Lexer.IDENTIFIER || v2.type == Lexer.CONSTANT) {
+               else if (v2.type == Lexer.IDENTIFIER || v2.type == Lexer.CONSTANT) {
                     vals.add(v2.lexeme); consume();
                 } else {
                     throw error("值应为 IDENTIFIER 或 CONSTANT", v2);
@@ -580,17 +585,22 @@ public class PlanBuilder {
             ExecutionPlan p = new ExecutionPlan(ExecutionPlan.OperationType.UPDATE);
             p.setTableName(tableName);
 
+            List<Column> columns = new ArrayList<>();
             if (action.lexeme.equalsIgnoreCase("ADD")) {
                 consume(); // ADD
                 String colDef = parseSingleColumnDef();
                 // 你可以把这个信息放到 columns 字段里做新增
-                p.setColumns(Collections.singletonList(colDef));
+
+                // TODO: column
+                // p.setColumns(colDef);
             } else if (action.lexeme.equalsIgnoreCase("DROP")) {
                 consume(); // DROP
                 expectKeyword("COLUMN");
                 Lexer.Token col = peek();
                 if (col == null || col.type != Lexer.IDENTIFIER) throw error("期望列名", col);
-                p.setColumns(Collections.singletonList(col.lexeme));
+
+                // TODO
+                // p.setColumns(col.lexeme);
                 consume();
             } else {
                 throw error("不支持的 ALTER 操作", action);
@@ -602,6 +612,32 @@ public class PlanBuilder {
         // ---------- Exception ----------
         public static class SemanticException extends Exception {
             public SemanticException(String msg) { super(msg); }
+        }
+
+        // ------------UTIL--------------
+        private List<Column> generateColumns(List<String> vals, List<String> cols){
+            List<Column> columns = new ArrayList<>();
+
+            // 构造Column
+            for (int i = 0; i < vals.size(); i++) {
+                Column column = new Column();
+
+                // TYPE
+                if (vals.get(i).charAt(0) == '#') {
+                    column.setType("VARCHAR");
+                } else {
+                    column.setType("INT");
+                }
+
+                // NAME
+                column.setName(cols.get(i));
+
+                // POS
+                column.setPosition(i);
+
+                columns.add(column);
+            }
+            return columns;
         }
     }
 

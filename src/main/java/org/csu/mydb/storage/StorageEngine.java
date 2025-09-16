@@ -75,7 +75,6 @@ public class StorageEngine {
 
     /**
      * 创建数据库（对应 C++ 的 myCreateDataBase）
-     *
      * @param dataBaseName 数据库名
      */
     public void myCreateDataBase(String dataBaseName) {
@@ -190,7 +189,7 @@ public class StorageEngine {
      * @param tableName 表名
      * @param insertColumns   插入的值列表（如 ["1", "Alice"]）
      */
-    public void myInsert(String tableName, List<Column> insertColumns) {
+    public void myInsert(String tableName, List<Column> insertColumns, List<String> values) {
 //        if (!isOpen) {
 //            System.out.println("无选中数据库!");
 //            return;
@@ -497,6 +496,14 @@ public class StorageEngine {
 //        } catch (IOException e) {
 //            System.out.println("查询失败: " + e.getMessage());
 //        }
+    }
+
+
+
+    // 带 JOIN 的多表查询,重构方法,和MyQuery是一样的,只是参数类型不一样
+    public void myQuery(String tableName, String joinTableName,
+                        String columns, String joinCondition, String condition) {
+
     }
 
     /**

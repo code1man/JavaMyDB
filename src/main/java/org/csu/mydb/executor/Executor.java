@@ -5,7 +5,6 @@ package org.csu.mydb.executor;
 import org.csu.mydb.cli.ParsedCommand;
 import org.csu.mydb.storage.StorageEngine;
 
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class Executor {
                     return executeUpdate(plan);
                 case QUERY:
                     return executeQuery(plan);
-                case EXIT:
+                    case EXIT:
                     return new ExecutionResult(true, "退出命令已执行");
                 default:
                     throw new ExecutorException("未知的操作类型: " + plan.getOperationType());
@@ -123,11 +122,11 @@ public class Executor {
             return new ExecutionResult(false, "表名不能为空");
         }
 
-        if (plan.getInsertColumns() == null || plan.getInsertColumns().isEmpty()) {
+        if (plan.getValues() == null || plan.getValues().isEmpty()) {
             return new ExecutionResult(false, "插入列不能为空");
         }
 
-        storageEngine.myInsert(plan.getTableName(), plan.getInsertColumns());
+        storageEngine.myInsert(plan.getTableName(), plan.getColumns(),plan.getValues());
         return new ExecutionResult(true, "数据插入成功", 1);
     }
 
@@ -182,17 +181,29 @@ public class Executor {
             condition = "";
         }
 
-        // 由于StorageEngine的myQuery方法直接输出到控制台，
-        // 我们需要重定向输出以捕获结果
-        // 这里我们创建一个自定义的输出捕获器
         QueryOutputCapturer capturer = new QueryOutputCapturer();
         capturer.startCapture();
 
-        storageEngine.myQuery(plan.getTableName(), columns, condition);
+        // 判断是否是 JOIN 查询
+        if (plan.getJoinTableName() != null && !plan.getJoinTableName().isEmpty()
+                && plan.getJoinCondition() != null && !plan.getJoinCondition().isEmpty()) {
+            // 走 JOIN 查询逻辑
+            storageEngine.myQuery(
+                    plan.getTableName(),
+                    plan.getJoinTableName(),
+                    columns,
+                    plan.getJoinCondition(),
+                    condition
+            );
+        } else {
+            // 普通单表查询
+            storageEngine.myQuery(plan.getTableName(), columns, condition);
+        }
 
         List<String> result = capturer.stopCapture();
         return new ExecutionResult(true, "查询成功", result);
     }
+
 
     /**
      * 内部类用于捕获查询输出
@@ -226,6 +237,8 @@ public class Executor {
             return result;
         }
     }
+
+
 
     // 获取存储引擎实例（用于测试或其他用途）
     public StorageEngine getStorageEngine() {
