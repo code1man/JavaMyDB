@@ -300,7 +300,10 @@ public class StorageEngine {
 
         row.set(updateIndex, parseValue(columns.get(updateIndex), newValue));
     }
-
+    //权限管理
+    public void  myGrant(String databaseName, String grantee, List<String> grants){
+        System.out.println(databaseName + grantee + grants);
+    }
     /**
      * 查询数据
      *
@@ -352,6 +355,14 @@ public class StorageEngine {
     // 带 JOIN 的多表查询,重构方法,和MyQuery是一样的,只是参数类型不一样
     public void myQuery(String tableName, String joinTableName,
                         String columns, String joinCondition, String condition) {
+    }
+
+
+
+    // 带 JOIN 的多表查询,重构方法,和MyQuery是一样的,只是参数类型不一样
+    public void myQuery(String tableName, String joinTableName,
+                        String columns, String joinCondition, String condition) {
+
     }
 
     /**

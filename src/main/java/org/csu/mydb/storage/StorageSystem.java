@@ -9,10 +9,14 @@ import org.csu.mydb.storage.Table.Key;
 import org.csu.mydb.storage.Table.Table;
 import org.csu.mydb.storage.bufferPool.BufferPool;
 import org.csu.mydb.storage.storageFiles.page.*;
+import org.csu.mydb.storage.storageFiles.page.PageOperations;
+import org.csu.mydb.storage.storageFiles.page.PageSorter;
+import org.csu.mydb.storage.storageFiles.page.SpaceManager;
 import org.csu.mydb.storage.storageFiles.page.record.DataRecord;
 import org.csu.mydb.storage.storageFiles.page.record.IndexRecord;
 import org.csu.mydb.storage.storageFiles.page.record.RecordHead;
 import org.csu.mydb.util.Pair.Pair;
+import org.csu.mydb.storage.storageFiles.system.systemFileReader;
 import org.csu.mydb.storage.storageFiles.system.systemFileReader;
 
 import java.io.IOException;
@@ -137,6 +141,10 @@ public class StorageSystem {
             if(!result){
                 return false;
             }
+
+            //维护空闲链表
+            SpaceManager spaceManager = new SpaceManager(pageManager, bufferPool);
+            spaceManager.maintainSpaceChains(spaceId);
 
             //获取主键列表
             List<Column> primaryKeys = new ArrayList<>();

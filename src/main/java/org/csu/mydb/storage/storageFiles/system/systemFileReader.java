@@ -59,7 +59,7 @@ public class systemFileReader {
                     columns,
                     table.getSpaceId(),
                     bPlusTree
-                    );
+            );
 
             tableList.add(returnTable);
         }
@@ -74,7 +74,11 @@ public class systemFileReader {
         List<sysTablesStructure> tables = new ArrayList<>();
         int currentPage = sysTablesFirstLeafPage;
 
-        while (currentPage != -1) {
+//        PageManager.Page headPage = pageManager.getPage(StorageSystem.SYS_TABLES_IDB_SPACE_ID, 0);
+        boolean isFirst = true;
+//        while (currentPage != -1) {
+//        for(int i = 0; i < ByteBuffer.wrap(headPage.getRecord(1)).getInt(); i++){
+        while(currentPage != sysTablesFirstLeafPage || isFirst){
             PageManager.Page page = pageManager.getPage(StorageSystem.SYS_TABLES_IDB_SPACE_ID, currentPage);
 
             for (int slot = 0; slot < page.header.slotCount; slot++) {
@@ -100,10 +104,11 @@ public class systemFileReader {
                     tables.add(record);
                 }
             }
-
+            isFirst = false;
             // 获取下一页
             currentPage = page.header.nextPage;
         }
+//        }
 
         return tables;
     }
@@ -115,7 +120,10 @@ public class systemFileReader {
         List<Column> columns = new ArrayList<>();
         int currentPage = sysColumnsFirstLeafPage;
 
-        while (currentPage != -1) {
+        PageManager.Page headPage = pageManager.getPage(StorageSystem.SYS_COLUMNS_IDB_SPACE_ID, 0);
+        boolean isFirst = true;
+//        while (currentPage != -1) {
+        while(currentPage != sysColumnsFirstLeafPage || isFirst){
             PageManager.Page page = pageManager.getPage(StorageSystem.SYS_COLUMNS_IDB_SPACE_ID, currentPage);
 
             for (int slot = 0; slot < page.header.slotCount; slot++) {
@@ -141,7 +149,7 @@ public class systemFileReader {
                     columns.add(convertToColumn(record));
                 }
             }
-
+            isFirst = false;
             // 获取下一页
             currentPage = page.header.nextPage;
         }

@@ -1,5 +1,8 @@
 package org.csu.mydb.compiler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 /**
@@ -71,13 +74,15 @@ public class Parser {
         return result;
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(Parser.class);
+
     // 打印预测分析表
     public void printParseTable() {
-        System.out.println("=== LL(1) 预测分析表 ===");
+        logger.info("=== LL(1) 预测分析表 ===");
         for (Grammar.NonTerminal nt : parseTable.keySet()) {
             Map<Grammar.Terminal, Grammar.Production> row = parseTable.get(nt);
             for (Grammar.Terminal t : row.keySet()) {
-                System.out.printf("M[%s,%s] = %s%n", nt, t, row.get(t));
+                logger.info("M[%s,%s] = %s%n", nt, t, row.get(t));
             }
         }
     }

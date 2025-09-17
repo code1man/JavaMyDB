@@ -270,7 +270,7 @@ class StorageEngineMock extends StorageEngine {
         System.out.println("模拟删除表: " + tableName);
     }
 
-    @Override
+ //   @Override
     public void myInsert(String tableName, List<Column> columns, List<String> values) {
         insertCalled = true;
         System.out.println("模拟插入数据到表: " + tableName + ", 列: " + columns + ", 值: " + values);

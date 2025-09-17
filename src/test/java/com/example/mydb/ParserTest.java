@@ -41,12 +41,34 @@ public class ParserTest {
         Grammar g = new Grammar();
         g.computeFirstSets();
         g.computeFollowSets();
-
         Parser parser = new Parser(g);
         parser.printParseTable();
 
         // 测试示例 SQL
-        String sql = "insert into student values (6,'ff');";
+        String sql = "CREATE DATABASE db;\n" +
+                "use db;\n" +
+                "create table student(\n" +
+                "id varchar(20)\n" +
+                ")\n" +
+                "create table teacher(\n" +
+                "age INT primary KEY,\n" +
+                "id VARCHAR(10)\n" +
+                ") \n" +
+                "create table game(\n" +
+                "price int not null\n" +
+                ")\n" +
+                "SELECT id from student where name = 'dd';\n" +
+                "select anything from student ;\n" +
+                "select id from student where name = 'dd' AND id = 3;\n" +
+                "insert into student values (1,'33');\n" +
+                "insert into student (id , age) VALUES (1,4);\n" +
+                "UPDATE student set id = 5 where age = 6;\n" +
+                "UPDATE student set id = 5 where age = 6 and grade = 'dd';\n" +
+                "delete from student where age = 5;\n" +
+                "delete from student where age = 6 AND id = 9;\n" +
+                "drop table student;\n" +
+                "DROP DATABASE db;" +
+                "GRANT SELECT ON testdb TO common_user;";
         List<Lexer.Token> tokens = Lexer.tokenize(sql);
 
         parser.parse(tokens);

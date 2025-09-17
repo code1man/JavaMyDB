@@ -23,6 +23,7 @@ public class ExecutionPlan {
         DELETE,
         UPDATE,
         QUERY,
+        GRANT,
         JOIN,
         EXIT
     }
@@ -40,6 +41,10 @@ public class ExecutionPlan {
     private String joinTableName;
     private String joinTableAlias;
     private String joinCondition;
+
+    // 新增：grants 与 grantee（用于 GRANT 操作）
+    private List<String> grants;
+    private String grantee;
     // 构造函数
     public ExecutionPlan(OperationType operationType) {
         this.operationType = operationType;
@@ -131,6 +136,12 @@ public class ExecutionPlan {
 
     public String getJoinCondition() { return joinCondition; }
     public void setJoinCondition(String c) { this.joinCondition = c; }
+
+    public List<String> getGrants() { return grants; }
+    public void setGrants(List<String> grants) { this.grants = grants; }
+
+    public String getGrantee() { return grantee; }
+    public void setGrantee(String grantee) { this.grantee = grantee; }
 
     @Override
     public String toString() {
