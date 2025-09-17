@@ -1,6 +1,1724 @@
-2025-09-10 16:06:57.488 [main] INFO  com.example.mydb.LogbackTest - Info级别日志（应输出到控制台和文件）
-2025-09-10 16:06:57.489 [main] WARN  com.example.mydb.LogbackTest - Warn级别日志（应输出到控制台和文件）
-2025-09-10 16:06:57.490 [main] ERROR com.example.mydb.LogbackTest - Error级别日志（应输出到控制台和文件）
-2025-09-10 16:08:32.685 [main] INFO  com.example.mydb.LogbackTest - Info级别日志（应输出到控制台和文件）
-2025-09-10 16:08:32.685 [main] WARN  com.example.mydb.LogbackTest - Warn级别日志（应输出到控制台和文件）
-2025-09-10 16:08:32.686 [main] ERROR com.example.mydb.LogbackTest - Error级别日志（应输出到控制台和文件）
+2025-09-17 10:13:14.753 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - === FIRST 集 ===
+2025-09-17 10:13:14.760 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Program: { 
+2025-09-17 10:13:14.760 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.761 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.761 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.761 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.761 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:13:14.761 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.762 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.762 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.762 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.762 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.762 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.762 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - StatementList: { 
+2025-09-17 10:13:14.762 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.764 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.764 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.764 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.764 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:13:14.764 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.764 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.764 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.764 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.764 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.764 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.764 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Statement: { 
+2025-09-17 10:13:14.764 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.764 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.765 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.765 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.765 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.765 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.765 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.765 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.765 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.766 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.766 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateStmt: { 
+2025-09-17 10:13:14.766 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.766 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.766 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTail: { 
+2025-09-17 10:13:14.766 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TABLE 
+2025-09-17 10:13:14.766 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DATABASE 
+2025-09-17 10:13:14.766 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.766 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateDBStmt: { 
+2025-09-17 10:13:14.766 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.766 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTableStmt: { 
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefList: { 
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefListTail: { 
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDef: { 
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TypeDef: { 
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - VARCHAR 
+2025-09-17 10:13:14.767 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CHAR 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INT 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnConstraint: { 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - NOT 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PRIMARY 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertStmt: { 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnList: { 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - EVERYTHING 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnListTail: { 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:13:14.768 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.769 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueList: { 
+2025-09-17 10:13:14.769 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CONSTANT 
+2025-09-17 10:13:14.769 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:13:14.769 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.769 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueListTail: { 
+2025-09-17 10:13:14.769 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:13:14.769 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:13:14.769 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Value: { 
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CONSTANT 
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SelectStmt: { 
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WhereClause: { 
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Condition: { 
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:13:14.770 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.771 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTerm: { 
+2025-09-17 10:13:14.771 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:13:14.771 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.771 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTail: { 
+2025-09-17 10:13:14.771 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:13:14.771 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:13:14.772 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.772 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Operator: { 
+2025-09-17 10:13:14.772 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - <= 
+2025-09-17 10:13:14.772 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - <> 
+2025-09-17 10:13:14.772 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - != 
+2025-09-17 10:13:14.772 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - < 
+2025-09-17 10:13:14.772 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - = 
+2025-09-17 10:13:14.772 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - > 
+2025-09-17 10:13:14.772 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - >= 
+2025-09-17 10:13:14.772 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.772 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - LogicOp: { 
+2025-09-17 10:13:14.772 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:13:14.772 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UpdateStmt: { 
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignList: { 
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Assign: { 
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DeleteStmt: { 
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropStmt: { 
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UseStmt: { 
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterStmt: { 
+2025-09-17 10:13:14.773 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.774 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.774 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterAction: { 
+2025-09-17 10:13:14.774 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ADD 
+2025-09-17 10:13:14.774 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.774 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.774 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertTail: { 
+2025-09-17 10:13:14.774 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ( 
+2025-09-17 10:13:14.774 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - VALUES 
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropTail: { 
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TABLE 
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DATABASE 
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignListTail: { 
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GrantStmt: { 
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionList: { 
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.775 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionListTail: { 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Permission: { 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - === FOLLOW 集 ===
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Program: { 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - StatementList: { 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Statement: { 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.776 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateStmt: { 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTail: { 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.777 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateDBStmt: { 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTableStmt: { 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefList: { 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefListTail: { 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDef: { 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:13:14.778 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TypeDef: { 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - NOT 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PRIMARY 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnConstraint: { 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertStmt: { 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.779 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnList: { 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - FROM 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnListTail: { 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - FROM 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueList: { 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueListTail: { 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Value: { 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SelectStmt: { 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.780 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WhereClause: { 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Condition: { 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTerm: { 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTail: { 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Operator: { 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CONSTANT 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - LogicOp: { 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UpdateStmt: { 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.781 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignList: { 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Assign: { 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DeleteStmt: { 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropStmt: { 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.782 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UseStmt: { 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterStmt: { 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterAction: { 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertTail: { 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.783 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.784 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.784 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.784 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.784 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.784 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.784 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.784 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.784 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.784 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.784 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropTail: { 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignListTail: { 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GrantStmt: { 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionList: { 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ON 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionListTail: { 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ON 
+2025-09-17 10:13:14.785 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:13:14.786 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Permission: { 
+2025-09-17 10:13:14.786 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:13:14.786 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ON 
+2025-09-17 10:13:14.786 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.401 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - === FIRST 集 ===
+2025-09-17 10:14:07.404 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Program: { 
+2025-09-17 10:14:07.404 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.404 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.404 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.404 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.404 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:07.404 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.404 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.405 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.405 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.405 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.405 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.405 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - StatementList: { 
+2025-09-17 10:14:07.405 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Statement: { 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.407 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateStmt: { 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTail: { 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TABLE 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DATABASE 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateDBStmt: { 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTableStmt: { 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefList: { 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefListTail: { 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:07.408 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDef: { 
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TypeDef: { 
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - VARCHAR 
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CHAR 
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INT 
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnConstraint: { 
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - NOT 
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PRIMARY 
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertStmt: { 
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.409 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnList: { 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - EVERYTHING 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnListTail: { 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueList: { 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CONSTANT 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueListTail: { 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Value: { 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CONSTANT 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SelectStmt: { 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WhereClause: { 
+2025-09-17 10:14:07.410 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Condition: { 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTerm: { 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTail: { 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Operator: { 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - <= 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - <> 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - != 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - < 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - = 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - > 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - >= 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - LogicOp: { 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.411 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UpdateStmt: { 
+2025-09-17 10:14:07.412 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.412 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.412 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignList: { 
+2025-09-17 10:14:07.412 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:07.412 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.412 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Assign: { 
+2025-09-17 10:14:07.412 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:07.412 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.412 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DeleteStmt: { 
+2025-09-17 10:14:07.412 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropStmt: { 
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UseStmt: { 
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterStmt: { 
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterAction: { 
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ADD 
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.413 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertTail: { 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ( 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - VALUES 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropTail: { 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TABLE 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DATABASE 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignListTail: { 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GrantStmt: { 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionList: { 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.414 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionListTail: { 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Permission: { 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - === FOLLOW 集 ===
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Program: { 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - StatementList: { 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Statement: { 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.415 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateStmt: { 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTail: { 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.416 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateDBStmt: { 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTableStmt: { 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefList: { 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefListTail: { 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDef: { 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TypeDef: { 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - NOT 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PRIMARY 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnConstraint: { 
+2025-09-17 10:14:07.417 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertStmt: { 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnList: { 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - FROM 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnListTail: { 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - FROM 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueList: { 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueListTail: { 
+2025-09-17 10:14:07.418 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Value: { 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SelectStmt: { 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WhereClause: { 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Condition: { 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTerm: { 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTail: { 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Operator: { 
+2025-09-17 10:14:07.419 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CONSTANT 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - LogicOp: { 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UpdateStmt: { 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignList: { 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Assign: { 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DeleteStmt: { 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropStmt: { 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.420 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UseStmt: { 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterStmt: { 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.421 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterAction: { 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertTail: { 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropTail: { 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignListTail: { 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GrantStmt: { 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionList: { 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ON 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionListTail: { 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ON 
+2025-09-17 10:14:07.422 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:07.423 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Permission: { 
+2025-09-17 10:14:07.423 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:07.423 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ON 
+2025-09-17 10:14:07.423 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.146 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - === FIRST 集 ===
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Program: { 
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - StatementList: { 
+2025-09-17 10:14:31.147 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.148 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.148 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.149 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.149 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:31.149 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.149 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.149 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.149 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.149 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.149 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.149 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Statement: { 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateStmt: { 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTail: { 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TABLE 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DATABASE 
+2025-09-17 10:14:31.150 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateDBStmt: { 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTableStmt: { 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefList: { 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefListTail: { 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDef: { 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TypeDef: { 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - VARCHAR 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CHAR 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INT 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnConstraint: { 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - NOT 
+2025-09-17 10:14:31.151 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PRIMARY 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertStmt: { 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnList: { 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - EVERYTHING 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnListTail: { 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueList: { 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CONSTANT 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueListTail: { 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.152 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Value: { 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CONSTANT 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SelectStmt: { 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WhereClause: { 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Condition: { 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTerm: { 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTail: { 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Operator: { 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - <= 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - <> 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - != 
+2025-09-17 10:14:31.153 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - < 
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - = 
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - > 
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - >= 
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - LogicOp: { 
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UpdateStmt: { 
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignList: { 
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Assign: { 
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:31.154 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.155 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DeleteStmt: { 
+2025-09-17 10:14:31.155 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.155 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.155 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropStmt: { 
+2025-09-17 10:14:31.155 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.155 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.155 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UseStmt: { 
+2025-09-17 10:14:31.155 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.155 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.155 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterStmt: { 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterAction: { 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ADD 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertTail: { 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ( 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - VALUES 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropTail: { 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TABLE 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DATABASE 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignListTail: { 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GrantStmt: { 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionList: { 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.156 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionListTail: { 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Permission: { 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - === FOLLOW 集 ===
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Program: { 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - StatementList: { 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Statement: { 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.157 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateStmt: { 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTail: { 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.158 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateDBStmt: { 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTableStmt: { 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefList: { 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefListTail: { 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDef: { 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TypeDef: { 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - NOT 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PRIMARY 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnConstraint: { 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertStmt: { 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.159 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnList: { 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - FROM 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnListTail: { 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - FROM 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueList: { 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueListTail: { 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Value: { 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SelectStmt: { 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.160 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.161 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.161 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WhereClause: { 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Condition: { 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTerm: { 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTail: { 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:31.162 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Operator: { 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CONSTANT 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - LogicOp: { 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UpdateStmt: { 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignList: { 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Assign: { 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DeleteStmt: { 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.163 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropStmt: { 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UseStmt: { 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.164 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterStmt: { 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterAction: { 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertTail: { 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropTail: { 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.165 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignListTail: { 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GrantStmt: { 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionList: { 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ON 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionListTail: { 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ON 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Permission: { 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ON 
+2025-09-17 10:14:31.166 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.051 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - === FIRST 集 ===
+2025-09-17 10:15:54.052 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Program: { 
+2025-09-17 10:15:54.052 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.052 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.053 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.053 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.053 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:15:54.053 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.053 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.053 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.053 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.053 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.053 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.053 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - StatementList: { 
+2025-09-17 10:15:54.053 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.054 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.055 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.055 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.055 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:15:54.055 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.055 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.055 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.055 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.055 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.055 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.055 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Statement: { 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateStmt: { 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTail: { 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TABLE 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DATABASE 
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.056 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateDBStmt: { 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTableStmt: { 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefList: { 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefListTail: { 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDef: { 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TypeDef: { 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - VARCHAR 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CHAR 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INT 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnConstraint: { 
+2025-09-17 10:15:54.057 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - NOT 
+2025-09-17 10:15:54.058 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:15:54.058 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PRIMARY 
+2025-09-17 10:15:54.058 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.058 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertStmt: { 
+2025-09-17 10:15:54.058 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.058 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.058 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnList: { 
+2025-09-17 10:15:54.058 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - EVERYTHING 
+2025-09-17 10:15:54.058 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:15:54.058 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.058 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnListTail: { 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueList: { 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CONSTANT 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueListTail: { 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Value: { 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CONSTANT 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SelectStmt: { 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WhereClause: { 
+2025-09-17 10:15:54.059 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Condition: { 
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTerm: { 
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTail: { 
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Operator: { 
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - <= 
+2025-09-17 10:15:54.060 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - <> 
+2025-09-17 10:15:54.061 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - != 
+2025-09-17 10:15:54.061 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - < 
+2025-09-17 10:15:54.061 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - = 
+2025-09-17 10:15:54.061 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - > 
+2025-09-17 10:15:54.061 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - >= 
+2025-09-17 10:15:54.061 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.061 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - LogicOp: { 
+2025-09-17 10:15:54.061 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:15:54.066 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.066 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UpdateStmt: { 
+2025-09-17 10:15:54.066 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.066 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.066 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignList: { 
+2025-09-17 10:15:54.066 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Assign: { 
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DeleteStmt: { 
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropStmt: { 
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UseStmt: { 
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterStmt: { 
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterAction: { 
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ADD 
+2025-09-17 10:15:54.067 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertTail: { 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ( 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - VALUES 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropTail: { 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TABLE 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DATABASE 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignListTail: { 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GrantStmt: { 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionList: { 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionListTail: { 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ε 
+2025-09-17 10:15:54.068 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Permission: { 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - === FOLLOW 集 ===
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Program: { 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - StatementList: { 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Statement: { 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.069 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateStmt: { 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTail: { 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.070 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateDBStmt: { 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CreateTableStmt: { 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefList: { 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDefListTail: { 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnDef: { 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - TypeDef: { 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - NOT 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PRIMARY 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnConstraint: { 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertStmt: { 
+2025-09-17 10:15:54.071 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnList: { 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - FROM 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ColumnListTail: { 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - FROM 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueList: { 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ValueListTail: { 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Value: { 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ) 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SelectStmt: { 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.072 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WhereClause: { 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Condition: { 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTerm: { 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AND 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ConditionTail: { 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Operator: { 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CONSTANT 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - IDENTIFIER 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - LogicOp: { 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UpdateStmt: { 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignList: { 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Assign: { 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DeleteStmt: { 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.073 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.074 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropStmt: { 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UseStmt: { 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.075 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterStmt: { 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AlterAction: { 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - InsertTail: { 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.076 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DropTail: { 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - AssignListTail: { 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ; 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - WHERE 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GrantStmt: { 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ALTER 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DELETE 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - GRANT 
+2025-09-17 10:15:54.077 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - CREATE 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - $ 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - USE 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - INSERT 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - UPDATE 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - SELECT 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - DROP 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionList: { 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ON 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - PermissionListTail: { 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ON 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - Permission: { 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - , 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - ON 
+2025-09-17 10:15:54.078 [ForkJoinPool.commonPool-worker-1] INFO  org.csu.mydb.compiler.Grammar - }

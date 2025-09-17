@@ -1,3 +1,0 @@
-表名:student
-id int
-name varchar

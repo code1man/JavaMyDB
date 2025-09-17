@@ -68,7 +68,7 @@ public class BPlusTree {
             int pos = 0;
             while (pos < in.keys.size() && key.compareTo(in.keys.get(pos)) >= 0) pos++;
 
-            BPlusNode<Key> child = in.getChildAt(pos, tableColumns);
+            BPlusNode<Key> child = in.getChildAt(filePath, pos, tableColumns);
             return search(child, key);
         }
     }
@@ -111,13 +111,11 @@ public class BPlusTree {
         }
     }
 
-
-
     private BPlusNode<Key> insertRecursive(String filePath,BPlusNode<Key> node, Key key, List<Object> rowValues) throws IOException {
         if (node.isLeaf) {
             LeafNode leaf = (LeafNode) node;
             BPlusNode<Key> newRoot = leaf.insert(filePath, key, rowValues, tableColumns, order);
-            return newRoot; // Leaf 插入不会生成 root，除非当前是 root 且分裂
+            return newRoot;
         } else {
             InternalNode in = (InternalNode) node;
 
@@ -132,7 +130,7 @@ public class BPlusTree {
 
             // 回溯：内部节点分裂
             if (in.keys.size() > order) {
-                InternalNode splitRoot = in.split(order, tableColumns);
+                InternalNode splitRoot = in.split(filePath, order, tableColumns);
                 if (splitRoot != null) {
                     // 更新 Page2
                     storageSystem.updateRootPageNo(filePath, splitRoot.gid.spaceId, splitRoot.gid.pageNo);
@@ -163,7 +161,7 @@ public class BPlusTree {
             InternalNode in = (InternalNode) node;
             int pos = 0;
             while (pos < in.keys.size() && key.compareTo(in.keys.get(pos)) >= 0) pos++;
-            BPlusNode<Key> child = in.getChildAt(pos, tableColumns);
+            BPlusNode<Key> child = in.getChildAt(filePath, pos, tableColumns);
             boolean removed = delete(child, key);
 
             if (removed) storageSystem.writeInternalNode(filePath, in, tableColumns);
@@ -187,7 +185,7 @@ public class BPlusTree {
             InternalNode in = (InternalNode) node;
             int pos = 0;
             while (pos < in.keys.size() && key.compareTo(in.keys.get(pos)) >= 0) pos++;
-            BPlusNode<Key> child = in.getChildAt(pos, tableColumns);
+            BPlusNode<Key> child = in.getChildAt(filePath, pos, tableColumns);
             boolean updated = update(child, key, newRow);
 
             if (updated) storageSystem.writeInternalNode(filePath, in, tableColumns);

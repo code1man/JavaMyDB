@@ -2,7 +2,7 @@
 <configuration scan="true" scanPeriod="30 seconds">
     <!-- 原有配置保持不变 -->
     <property name="LOG_PATH" value="logs/mydb.log" />
-    <property name="LOG_LEVEL" value="INFO" />
+    <property name="LOG_LEVEL" value="WARN" />
 
     <!-- 控制台输出 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">

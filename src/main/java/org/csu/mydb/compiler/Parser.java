@@ -18,6 +18,8 @@ public class Parser {
     // 构造函数
     public Parser() {
         grammar = new Grammar();
+        grammar.computeFirstSets();
+        grammar.computeFollowSets();
         buildParseTable();
     }
     public Parser(Grammar g) {

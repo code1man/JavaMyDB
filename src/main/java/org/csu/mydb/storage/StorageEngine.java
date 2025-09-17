@@ -4,8 +4,9 @@ import org.csu.mydb.config.ConfigLoader;
 import org.csu.mydb.storage.BPlusTree.BPlusTree;
 import org.csu.mydb.storage.Table.Column.Column;
 import org.csu.mydb.storage.Table.Table;
-import org.csu.mydb.storage.Table.Column.Column;
 import org.csu.mydb.storage.Table.Key;
+import org.csu.mydb.storage.storageFiles.system.sysColumnsStructure;
+import org.csu.mydb.storage.storageFiles.system.sysTablesStructure;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +18,9 @@ import java.util.*;
 public class StorageEngine {
     private String prePath = "";       // 数据库路径前缀（如 "save/repos/"）
     private boolean isOpen = false;    // 是否已打开数据库
-    private final List<Table> tables = new ArrayList<>();  // 当前打开的表列表
-    private final HashMap<String, Table> tableMap = new HashMap<>();
+    private static String dataBase = "";
+    private final static List<Table> tables = new ArrayList<>();  // 当前打开的表列表
+    private final static HashMap<String, Table> tableMap = new HashMap<>();
     private final StorageSystem storageSystem = new StorageSystem();
 
     public StorageEngine() {
@@ -29,10 +31,6 @@ public class StorageEngine {
         prePath = "";
         isOpen = false;
         tables.clear();
-
-        System.out.println("存储引擎初始化: pageSize="
-                + PageManager.PAGE_SIZE
-                + ", bufferPoolSize=" + storageSystem.getBufferPool());
     }
 
     // 析构函数
@@ -53,6 +51,7 @@ public class StorageEngine {
     public void myOpenDataBase(String dbName) {
         String path = "save/repos/" + dbName;
         File dbDir = new File(path);
+        File sysDir = new File("save/repos/");
 
         // 检查数据库是否存在
         if (!dbDir.exists() || !dbDir.isDirectory()) {
@@ -60,16 +59,22 @@ public class StorageEngine {
             return;
         }
 
-        // 检查系统表是否存在
-        File sysTablesFile = new File(dbDir, "sys_tables.dat");
-        File sysColumnsFile = new File(dbDir, "sys_columns.dat");
-        if (!sysTablesFile.exists() || !sysColumnsFile.exists()) {
-            System.out.println("错误：数据库元数据损坏（缺失系统表）");
-            return;
-        }
+//        // 检查系统表是否存在
+//        File sysTablesFile = new File(sysDir, "sys_tables.idb");
+//        File sysColumnsFile = new File(sysDir, "sys_columns.idb");
+//        if (!sysTablesFile.exists() || !sysColumnsFile.exists()) {
+//            System.out.println("错误：数据库元数据损坏（缺失系统表）");
+//            return;
+//        }
+
+        StorageSystem.loadSystemTable();
 
         prePath = path;
-        // storageSystem.loadAllTables(dbName, 3, 3).forEach(tables::add);
+        dataBase = dbName;
+        tables.addAll(StorageSystem.loadAllTables(dbName));
+        for (Table table : tables) {
+            tableMap.put(table.getName(), table);
+        }
     }
 
     /**
@@ -79,6 +84,7 @@ public class StorageEngine {
         tables.clear();
         prePath = "";
         isOpen = false;
+        dataBase = "";
         System.out.println("关闭数据库成功");
     }
 
@@ -128,12 +134,31 @@ public class StorageEngine {
      * @param columns   列名列表（如 ["id", "name"]）
      */
     public void myCreateTable(String tableName, List<Column> columns) {
-        int spaceId = storageSystem.createTable(prePath + tableName, columns);
+        int spaceId = StorageSystem.createTable(prePath + tableName, columns);
         try {
             BPlusTree tree = new BPlusTree(3, spaceId, storageSystem, columns, prePath + tableName);
             Table table = new Table(tableName, prePath + tableName, columns, spaceId, tree);
             tables.add(table);
             tableMap.put(tableName, table);
+            // TABLE
+            StorageSystem.insertIntoSysTable(new sysTablesStructure(spaceId, tableName, spaceId, 3, 100, dataBase));
+            // COLUMN
+            for (Column column : columns) {
+                sysColumnsStructure sysColumnsStructure = new sysColumnsStructure();
+                sysColumnsStructure.setColumnId(StorageSystem.allocateNewColumnId());
+                sysColumnsStructure.setTableId(spaceId);
+                sysColumnsStructure.setColumnName(column.getName());
+                sysColumnsStructure.setType(column.getType());
+                sysColumnsStructure.setPosition((short) column.getPosition());
+                sysColumnsStructure.setNullable(column.isNullable());
+                sysColumnsStructure.setPrimaryKey(column.isPrimaryKey());
+                sysColumnsStructure.setLength((short) column.getLength());
+                sysColumnsStructure.setScale((short) column.getScale());
+                sysColumnsStructure.setDefaultValue(column.getDefaultValue());
+
+                StorageSystem.insertIntoSysColumn(sysColumnsStructure);
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -191,6 +216,12 @@ public class StorageEngine {
     public void myInsert(String tableName, List<Column> columns, List<String> values) {
         Table table = tableMap.get(tableName);
         List<Object> valuesList = new ArrayList<>();
+        if (columns == null && values.size() == table.getColumns().size()) {
+            columns = table.getColumns();
+        } else if (values.size() != table.getColumns().size()) {
+            System.out.println("必须插入所有属性");
+        }
+
         for (int i = 0; i < columns.size(); i++) {
             if (Objects.equals(columns.get(i).getType(), "INT")) {
                 valuesList.add(Integer.parseInt(values.get(i)));
@@ -200,7 +231,11 @@ public class StorageEngine {
                 System.out.println("格式错误");
                 return;
             }
+            if (columns.get(i).getName().equals(table.getColumns().get(i).getName()) && table.getColumns().get(i).isPrimaryKey()) {
+                columns.get(i).setPrimaryKey(true);
+            }
         }
+
         try {
             table.getPrimaryIndex().insert(columns, valuesList);
             System.out.println("插入成功");
@@ -347,7 +382,8 @@ public class StorageEngine {
             // 条件为空，返回全部（此处简化，实际需遍历叶子节点链表）
             // 暂时不实现完整扫描
         }
-        System.out.println(results.toString());
+        System.out.println();
+        results.forEach(result -> result.forEach(System.out::print));
     }
 
 
@@ -355,8 +391,43 @@ public class StorageEngine {
     // 带 JOIN 的多表查询,重构方法,和MyQuery是一样的,只是参数类型不一样
     public void myQuery(String tableName, String joinTableName,
                         String columns, String joinCondition, String condition) {
-    }
+        List<Column> cols = tableMap.get(tableName).getColumns();
+        List<List<Object>> results = new ArrayList<>();
 
+        // 简单解析条件 "col = value"
+        String condCol = null;
+        String condValue = null;
+        if (condition != null && !condition.isEmpty() && condition.contains("=")) {
+            String[] parts = condition.split("=");
+            condCol = parts[0].trim();
+            condValue = parts[1].trim();
+        }
+
+        if (condCol != null) {
+            // 只支持主键查询
+            int pkIndex = -1;
+            for (int i = 0; i < cols.size(); i++) {
+                if (cols.get(i).getName().equalsIgnoreCase(condCol) && cols.get(i).isPrimaryKey()) {
+                    pkIndex = i;
+                    break;
+                }
+            }
+            if (pkIndex != -1) {
+                Key key = new Key(Arrays.asList(parseValue(cols.get(pkIndex), condValue)), cols);
+                List<Object> row = null;
+                try {
+                    row = tableMap.get(tableName).getTree().search(key);
+                } catch (IOException e) {
+                    System.out.println("更新失败");
+                }
+                if (row != null) results.add(row);
+            }
+        } else {
+            // 条件为空，返回全部（此处简化，实际需遍历叶子节点链表）
+            // 暂时不实现完整扫描
+        }
+        System.out.println(results);
+    }
 
     /**
      * 递归删除目录（工具方法，对应 C++ 的 remove 目录逻辑）

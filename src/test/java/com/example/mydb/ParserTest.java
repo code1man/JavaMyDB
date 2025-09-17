@@ -50,21 +50,21 @@ public class ParserTest {
                 "create table student(\n" +
                 "id varchar(20)\n" +
                 ")\n" +
-                "create table teacher(\n" +
+                "create table teacher(age INT primary KEY,id VARCHAR(10))\n" +
                 "age INT primary KEY,\n" +
                 "id VARCHAR(10)\n" +
                 ") \n" +
                 "create table game(\n" +
                 "price int not null\n" +
                 ")\n" +
-                "SELECT id from student where name = 'dd';\n" +
+                "SELECT id from teacher where age=1;\n" +
                 "select anything from student ;\n" +
                 "select id from student where name = 'dd' AND id = 3;\n" +
-                "insert into student values (1,'33');\n" +
-                "insert into student (id , age) VALUES (1,4);\n" +
-                "UPDATE student set id = 5 where age = 6;\n" +
+                "insert into teacher values (1,'33');\n" +
+                "insert into teacher (age, id) VALUES (2,'4');\n" +
+                "UPDATE teacher set id = '1111' where age = 1;\n" +
                 "UPDATE student set id = 5 where age = 6 and grade = 'dd';\n" +
-                "delete from student where age = 5;\n" +
+                "delete from teacher where age = 1;\n" +
                 "delete from student where age = 6 AND id = 9;\n" +
                 "drop table student;\n" +
                 "DROP DATABASE db;" +
