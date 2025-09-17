@@ -65,12 +65,22 @@ public class StorageSystem {
 
     //往sys_tables.idb插入数据
     public static boolean insertIntoSysTable(sysTablesStructure e){
-        return writePage("save/repos/sys_tables.idb", 1, 3, e.toBytes());
+//        return writePage("save/repos/sys_tables.idb", 1, 3, e.toBytes());
+        try {
+            return pageManager.addRecord(1, 3, e.toBytes());
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     //往sys_columns.idb插入数据
     public static boolean insertIntoSysColumn(sysColumnsStructure e){
-        return writePage("save/repos/sys_columns.idb", 2, 3, e.toBytes());
+//        return writePage("save/repos/sys_columns.idb", 2, 3, e.toBytes());
+        try {
+            return pageManager.addRecord(2, 3, e.toBytes());
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     //分配columnId

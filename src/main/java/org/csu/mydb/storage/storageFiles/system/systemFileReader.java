@@ -91,15 +91,16 @@ public class systemFileReader {
 
                 byte[] recordData = page.getRecord(slot);
 
-                ByteBuffer buffer = ByteBuffer.wrap(recordData);
-                // 跳到行数据
-                buffer.position(12);
+                sysTablesStructure record = sysTablesStructure.fromBytes(recordData);
+//                ByteBuffer buffer = ByteBuffer.wrap(recordData);
+//                // 跳到行数据
+//                buffer.position(12);
+//
+//                ByteBuffer slicedBuffer = buffer.slice(); // 从当前 position 截取剩余数据
+//                byte[] remainingData = new byte[slicedBuffer.remaining()];
+//                slicedBuffer.get(remainingData);
 
-                ByteBuffer slicedBuffer = buffer.slice(); // 从当前 position 截取剩余数据
-                byte[] remainingData = new byte[slicedBuffer.remaining()];
-                slicedBuffer.get(remainingData);
-
-                sysTablesStructure record = sysTablesStructure.fromBytes(remainingData);
+//                sysTablesStructure record = sysTablesStructure.fromBytes(remainingData);
 
                 if (databaseName.equals(record.getDatabaseName())) {
                     tables.add(record);
@@ -135,16 +136,16 @@ public class systemFileReader {
                 }
 
                 byte[] recordData = page.getRecord(slot);
-
-                ByteBuffer buffer = ByteBuffer.wrap(recordData);
-                // 跳到行数据
-                buffer.position(12);
-
-                ByteBuffer slicedBuffer = buffer.slice(); // 从当前 position 截取剩余数据
-                byte[] remainingData = new byte[slicedBuffer.remaining()];
-                slicedBuffer.get(remainingData);
-
-                sysColumnsStructure record = sysColumnsStructure.fromBytes(remainingData);
+                sysColumnsStructure record = sysColumnsStructure.fromBytes(recordData);
+//                ByteBuffer buffer = ByteBuffer.wrap(recordData);
+//                // 跳到行数据
+//                buffer.position(12);
+//
+//                ByteBuffer slicedBuffer = buffer.slice(); // 从当前 position 截取剩余数据
+//                byte[] remainingData = new byte[slicedBuffer.remaining()];
+//                slicedBuffer.get(remainingData);
+//
+//                sysColumnsStructure record = sysColumnsStructure.fromBytes(remainingData);
 
                 if (record.getTableId() == tableId) {
                     columns.add(convertToColumn(record));
