@@ -43,29 +43,29 @@ public class LeafNode extends BPlusNode<Key> {
         return i;
     }
 
-    public BPlusNode<Key> insert(Key key, List<Object> rowData, List<Column> tableColumns, int order) throws IOException {
+    public BPlusNode<Key> insert(String filePath, Key key, List<Object> rowData, List<Column> tableColumns, int order) throws IOException {
         int pos = 0;
         while (pos < keys.size() && key.compareTo(keys.get(pos)) > 0) pos++;
 
         // 覆盖已存在 key
         if (pos < keys.size() && keys.get(pos).compareTo(key) == 0) {
             records.set(pos, rowData);
-            storageSystem.writeLeafNode(this, tableColumns);
+            storageSystem.writeLeafNode(filePath, this, tableColumns);
             return null;
         }
 
         keys.add(pos, key);
         records.add(pos, rowData);
-        storageSystem.writeLeafNode(this, tableColumns);
+        storageSystem.writeLeafNode(filePath, this, tableColumns);
 
-        if (keys.size() > order) return split(order, tableColumns);
+        if (keys.size() > order) return split(filePath, order, tableColumns);
         return null;
     }
 
     /**
      * 叶子节点分裂
      */
-    public InternalNode split(int order, List<Column> tableColumns) throws IOException {
+    public InternalNode split(String filePath, int order, List<Column> tableColumns) throws IOException {
         // 1. 分裂位置
         int mid = keys.size() / 2;
 
@@ -96,8 +96,8 @@ public class LeafNode extends BPlusNode<Key> {
         this.header.nextPage = right.gid.pageNo;
 
         // 6. 持久化左右节点
-        storageSystem.writeLeafNode(this, tableColumns);
-        storageSystem.writeLeafNode(right, tableColumns);
+        storageSystem.writeLeafNode(filePath,this, tableColumns);
+        storageSystem.writeLeafNode(filePath, right, tableColumns);
 
         // 7. 返回要上提的 key（右兄弟的第一个 key）
         Key upKey = right.keys.get(0);
@@ -112,24 +112,24 @@ public class LeafNode extends BPlusNode<Key> {
         parent.children.add(this.gid.pageNo);
         parent.children.add(right.gid.pageNo);
 
-        storageSystem.writeInternalNode(parent, tableColumns);
+        storageSystem.writeInternalNode(filePath, parent, tableColumns);
 
         return parent;
     }
 
-    public SplitResult<Key> insertAndMaybeSplit(Key key, List<Object> rowValues, List<Column> tableColumns, int order) throws IOException {
+    public SplitResult<Key> insertAndMaybeSplit(String pathFile, Key key, List<Object> rowValues, List<Column> tableColumns, int order) throws IOException {
         int pos = 0;
         while (pos < keys.size() && key.compareTo(keys.get(pos)) > 0) pos++;
 
         if (pos < keys.size() && key.compareTo(keys.get(pos)) == 0) {
             records.set(pos, rowValues);
-            storageSystem.writeLeafNode(this, tableColumns);
+            storageSystem.writeLeafNode(pathFile, this, tableColumns);
             return null;
         }
 
         keys.add(pos, key);
         records.add(pos, rowValues);
-        storageSystem.writeLeafNode(this, tableColumns);
+        storageSystem.writeLeafNode(pathFile, this, tableColumns);
 
         if (keys.size() <= order) return null;
 
@@ -144,8 +144,8 @@ public class LeafNode extends BPlusNode<Key> {
         right.next = this.next;
         this.next = right;
 
-        storageSystem.writeLeafNode(this, tableColumns);
-        storageSystem.writeLeafNode(right, tableColumns);
+        storageSystem.writeLeafNode(pathFile, this, tableColumns);
+        storageSystem.writeLeafNode(pathFile, right, tableColumns);
 
         return new SplitResult<Key>(right.keys.get(0), right.gid.pageNo);
     }
@@ -174,11 +174,11 @@ public class LeafNode extends BPlusNode<Key> {
      * @param tableColumns 表列定义（用于持久化）
      * @return 更新是否成功
      */
-    public boolean update(Key key, List<Object> newRow, List<Column> tableColumns) {
+    public boolean update(String pathFile, Key key, List<Object> newRow, List<Column> tableColumns) {
         for (int i = 0; i < keys.size(); i++) {
             if (keys.get(i).compareTo(key) == 0) {
                 records.set(i, newRow);
-                storageSystem.writeLeafNode(this, tableColumns);
+                storageSystem.writeLeafNode(pathFile, this, tableColumns);
                 return true;
             }
         }
@@ -192,12 +192,12 @@ public class LeafNode extends BPlusNode<Key> {
      * @param tableColumns 表列定义（用于持久化）
      * @return 是否删除成功
      */
-    public boolean delete(Key key, List<Column> tableColumns) {
+    public boolean delete(String pathFile, Key key, List<Column> tableColumns) {
         for (int i = 0; i < keys.size(); i++) {
             if (keys.get(i).compareTo(key) == 0) {
                 keys.remove(i);
                 records.remove(i);
-                storageSystem.writeLeafNode(this, tableColumns);
+                storageSystem.writeLeafNode(pathFile,this, tableColumns);
                 return true;
             }
         }

@@ -36,7 +36,7 @@ public class BPlusTreeTest {
         List<Column> columns = Arrays.asList(idCol, nameCol);
         int spaceId = StorageSystem.createTable("G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jb.idb", columns);
         // order = 3
-        tree = new BPlusTree(3, spaceId, storageSystem, columns);
+        tree = new BPlusTree(100, spaceId, storageSystem, columns, "G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jb.idb");
     }
 
     @Test

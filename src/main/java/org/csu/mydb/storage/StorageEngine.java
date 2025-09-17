@@ -130,7 +130,7 @@ public class StorageEngine {
     public void myCreateTable(String tableName, List<Column> columns) {
         int spaceId = storageSystem.createTable(prePath + tableName, columns);
         try {
-            BPlusTree tree = new BPlusTree(3, spaceId, storageSystem, columns);
+            BPlusTree tree = new BPlusTree(3, spaceId, storageSystem, columns, prePath + tableName);
             Table table = new Table(tableName, prePath + tableName, columns, spaceId, tree);
             tables.add(table);
             tableMap.put(tableName, table);

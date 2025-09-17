@@ -45,7 +45,8 @@ public class systemFileReader {
             BPlusTree bPlusTree = new BPlusTree(table.getOrder(),
                     table.getSpaceId(),
                     new StorageSystem(),
-                    columns);
+                    columns,
+                    "save/repos/" + databaseName + "/" + table.getTableName());
 
             List<String> columnNames = new ArrayList<>();
             for(Column column : columns){
@@ -55,11 +56,12 @@ public class systemFileReader {
             Table returnTable = new Table(
                     table.getTableName(),
                     StorageSystem.path + table.getDatabaseName(),
-                    columnNames,
+                    columns,
                     table.getSpaceId(),
-                    bPlusTree,
-                    null
+                    bPlusTree
                     );
+
+            tableList.add(returnTable);
         }
 
         return tableList;

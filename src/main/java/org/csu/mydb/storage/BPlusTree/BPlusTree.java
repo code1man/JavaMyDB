@@ -102,7 +102,7 @@ public class BPlusTree {
         }
 
         // 2. 递归插入
-        BPlusNode<Key> newRoot = insertRecursive(root, key, rowValues);
+        BPlusNode<Key> newRoot = insertRecursive(filePath, root, key, rowValues);
 
         // 3. 如果返回了新的 root，更新树和系统 root 页号
         if (newRoot != null) {
@@ -113,10 +113,10 @@ public class BPlusTree {
 
 
 
-    private BPlusNode<Key> insertRecursive(BPlusNode<Key> node, Key key, List<Object> rowValues) throws IOException {
+    private BPlusNode<Key> insertRecursive(String filePath,BPlusNode<Key> node, Key key, List<Object> rowValues) throws IOException {
         if (node.isLeaf) {
             LeafNode leaf = (LeafNode) node;
-            BPlusNode<Key> newRoot = leaf.insert(key, rowValues, tableColumns, order);
+            BPlusNode<Key> newRoot = leaf.insert(filePath, key, rowValues, tableColumns, order);
             return newRoot; // Leaf 插入不会生成 root，除非当前是 root 且分裂
         } else {
             InternalNode in = (InternalNode) node;
@@ -128,7 +128,7 @@ public class BPlusTree {
                     new PageManager.GlobalPageId(in.gid.spaceId, in.children.get(pos)), in, tableColumns);
 
             // 递归插入
-            BPlusNode<Key> maybeNewRoot = insertRecursive(child, key, rowValues);
+            BPlusNode<Key> maybeNewRoot = insertRecursive(filePath, child, key, rowValues);
 
             // 回溯：内部节点分裂
             if (in.keys.size() > order) {
@@ -155,7 +155,7 @@ public class BPlusTree {
     private boolean delete(BPlusNode<Key> node, Key key) throws IOException {
         if (node.isLeaf) {
             LeafNode leaf = (LeafNode) node;
-            boolean removed = leaf.delete(key, tableColumns);
+            boolean removed = leaf.delete(filePath, key, tableColumns);
 
             if (removed) storageSystem.writeLeafNode(filePath, leaf, tableColumns);
             return removed;
@@ -179,7 +179,7 @@ public class BPlusTree {
     private boolean update(BPlusNode<Key> node, Key key, List<Object> newRow) throws IOException {
         if (node.isLeaf) {
             LeafNode leaf = (LeafNode) node;
-            boolean updated = leaf.update(key, newRow, tableColumns);
+            boolean updated = leaf.update(filePath, key, newRow, tableColumns);
 
             if (updated) storageSystem.writeLeafNode(filePath, leaf, tableColumns);
             return updated;
