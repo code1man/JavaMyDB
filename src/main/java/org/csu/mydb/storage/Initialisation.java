@@ -108,6 +108,7 @@ public class Initialisation {
 //            file.createNewFile(); // 再创建文件
 //        }
         storageSystem.getPageManager().openFile(2, "save/repos/sys_columns.idb");
+        storageSystem.getBufferPool().flush();
 //        // 创建文件头页
 //        PageManager.Page headerPage2 = new DataPage(0);
 //        //写入数据

@@ -23,7 +23,7 @@ public class Column {
     //默认值
     private byte[] defaultValue;
 
-    public Column(String name, String type, int length, int scale, boolean isPrimaryKey, boolean isNullable, byte[] defaultValue) {
+    public Column(String name, String type, int length, int scale, int position, boolean isPrimaryKey, boolean isNullable, byte[] defaultValue) {
         this.name = name;
         this.type = type;
         this.length = length;
@@ -93,5 +93,11 @@ public class Column {
         this.scale = scale;
     }
 
-    public void setPosition(int position) { this.position = position;}
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 }

@@ -87,19 +87,20 @@ public class KeyExtractor {
         // 提取主键值
         List<Object> keyValues = new ArrayList<>();
         for (Column col : primaryKeyColumns) {
-            byte flag = buffer.get(); // NULL标志
-            if (flag == 0) {
-                keyValues.add(null);
-                continue;
-            }
+//            byte flag = buffer.get(); // NULL标志
+//            if (flag == 0) {
+//                keyValues.add(null);
+//                continue;
+//            }
 
             switch (col.getType().toUpperCase()) {
                 case "INT":
                     keyValues.add(buffer.getInt());
                     break;
                 case "VARCHAR":
-                    short len = buffer.getShort();
-                    byte[] strBytes = new byte[len];
+//                    short len = buffer.getShort();
+                    int varcharLength = col.getLength(); // 获取 VARCHAR 列定义的长度
+                    byte[] strBytes = new byte[varcharLength];
                     buffer.get(strBytes);
                     keyValues.add(new String(strBytes, StandardCharsets.UTF_8));
                     break;

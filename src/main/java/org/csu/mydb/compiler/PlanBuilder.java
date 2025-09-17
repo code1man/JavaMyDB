@@ -121,6 +121,7 @@ public class PlanBuilder {
                     case "DROP":   return parseDrop();
                     case "USE":    return parseUse();
                     case "ALTER":  return parseAlter(); // 简单支持
+                    case "GRANT": return parseGrant();
                     default:
                         throw error("不支持的顶层关键字：" + kw, t);
                 }
@@ -570,6 +571,62 @@ public class PlanBuilder {
             p.setDatabaseName(db);
             return p;
         }
+    // 假设在 PlanBuilder/Parser 类内，返回 ExecutionPlan
+    private ExecutionPlan parseGrant() throws SemanticException {
+        // 入口：当前 token 是 GRANT
+        expectKeyword("GRANT");
+
+        // 1. 解析权限列表
+        List<String> perms = new ArrayList<>();
+        Lexer.Token tk = peek();
+        if (tk == null) throw error("期望权限名称", tk);
+
+        while (true) {
+            Lexer.Token p = peek();
+            if (p == null) throw error("期望权限 (SELECT/UPDATE/DELETE/INSERT)", p);
+            if (p.type != Lexer.KEYWORD) throw error("权限应为关键字 (SELECT/UPDATE/DELETE/INSERT)", p);
+            String up = p.lexeme.toUpperCase();
+            if (!("SELECT".equals(up) || "UPDATE".equals(up) || "DELETE".equals(up) || "INSERT".equals(up))) {
+                throw error("不支持的权限: " + up, p);
+            }
+            perms.add(up);
+            consume();
+
+            Lexer.Token next = peek();
+            if (next != null && next.type == Lexer.DELIMITER && ",".equals(next.lexeme)) {
+                consume(); // 吞掉逗号，继续
+                continue;
+            } else {
+                break;
+            }
+        }
+
+        // 2. ON db
+        expectKeyword("ON");
+        Lexer.Token dbToken = peek();
+        if (dbToken == null || dbToken.type != Lexer.IDENTIFIER) throw error("期望数据库名", dbToken);
+        String dbName = dbToken.lexeme;
+        consume();
+
+        // 3. TO username
+        expectKeyword("TO");
+        Lexer.Token userToken = peek();
+        if (userToken == null || userToken.type != Lexer.IDENTIFIER) throw error("期望用户名", userToken);
+        String userName = userToken.lexeme;
+        consume();
+
+        // 4. 结尾 ;
+        expectDelimiter(";");
+
+        // 构造执行计划
+        ExecutionPlan plan = new ExecutionPlan(ExecutionPlan.OperationType.GRANT);
+        plan.setOperationType(ExecutionPlan.OperationType.GRANT);
+        plan.setDatabaseName(dbName);
+        plan.setGrants(perms);
+        plan.setGrantee(userName);
+
+        return plan;
+    }
 
         // ---------- ALTER (简单版) ----------
         private ExecutionPlan parseAlter() throws SemanticException {
