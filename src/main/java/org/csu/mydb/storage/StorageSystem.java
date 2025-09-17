@@ -73,6 +73,17 @@ public class StorageSystem {
         return writePage("save/repos/sys_columns.idb", 2, 3, e.toBytes());
     }
 
+    //分配columnId
+    public static int allocateNewColumnId()  {
+        int currentMax = 0;
+        try {
+            currentMax = new systemFileReader(pageManager).getMaxColumnId(3);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return currentMax + 1;
+    }
+
     /**
      * 加载所有表
      * @param dbName 数据库名称

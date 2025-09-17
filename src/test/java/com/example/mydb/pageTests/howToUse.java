@@ -1,6 +1,8 @@
 package com.example.mydb.pageTests;
 
 import org.csu.mydb.storage.StorageSystem;
+import org.csu.mydb.storage.storageFiles.system.sysColumnsStructure;
+import org.csu.mydb.storage.storageFiles.system.sysTablesStructure;
 import org.junit.jupiter.api.Test;
 
 public class howToUse {
@@ -8,13 +10,16 @@ public class howToUse {
     //无需构造b+树
     @Test
     public void test1(){
-        String dbName = "数据库名字";
-        //获取所有表格（这里3指的是系统表存储数据的页号，只存在第三页）
-//        StorageSystem.loadAllTables(dbName, 3,3);
 
-        String filePath = "save/repos/sys_tables.idb";
-        //往系统表插入数据
-//        StorageSystem.writePage(filePath, 1, 3, )
+        StorageSystem.loadSystemTable();
+
+        sysTablesStructure e1 = new sysTablesStructure(4, "hh", 4, 3, 2, "mydb");
+        StorageSystem.insertIntoSysTable(e1);
+        byte[] bytes = new byte[];
+        sysColumnsStructure e2 = new sysColumnsStructure(StorageSystem.allocateNewColumnId(), 4, "nn", "INT", 20, (short) 0, 1, false, null
+                , true);
+        StorageSystem.insertIntoSysColumn(e2);
+
 
     }
 }

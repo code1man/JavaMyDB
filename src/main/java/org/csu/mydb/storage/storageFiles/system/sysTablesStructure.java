@@ -18,13 +18,14 @@ public class sysTablesStructure {
 //    //逻辑删除标记
 //    private boolean isDeleted;
 
-    public sysTablesStructure(int tableId, String tableName, int spaceId, int rootPage, int order) {
+
+    public sysTablesStructure(int tableId, String tableName, int spaceId, int rootPage, int order, String databaseName) {
         this.tableId = tableId;
         this.tableName = tableName;
         this.spaceId = spaceId;
         this.rootPage = rootPage;
         this.order = order;
-//        this.isDeleted = isDeleted;
+        this.databaseName = databaseName;
     }
 
     public int getTableId() {

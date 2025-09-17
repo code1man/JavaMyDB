@@ -161,6 +161,47 @@ public class systemFileReader {
     }
 
     /**
+     * 获取当前最大分配的 Column ID
+     * @param sysColumnsFirstLeafPage sys_columns 表所在的页号
+     * @return 当前最大 Column ID
+     */
+    public int getMaxColumnId(int sysColumnsFirstLeafPage) throws IOException {
+        int maxColumnId = 0;
+        PageManager.Page page = pageManager.getPage(StorageSystem.SYS_COLUMNS_IDB_SPACE_ID, sysColumnsFirstLeafPage);
+
+        for (int slot = 0; slot < page.header.slotCount; slot++) {
+            // 检查槽位是否有效
+            if (page.getSlots().get(slot).getStatus() != 1) {
+                continue;
+            }
+
+            byte[] recordData = page.getRecord(slot);
+            if (recordData == null) {
+                continue;
+            }
+
+            // 解析记录
+            ByteBuffer buffer = ByteBuffer.wrap(recordData);
+            buffer.position(12); // 跳过信息
+
+            // 读取记录数据
+            ByteBuffer slicedBuffer = buffer.slice();
+            byte[] remainingData = new byte[slicedBuffer.remaining()];
+            slicedBuffer.get(remainingData);
+
+            // 解析为 sysColumnsStructure 对象
+            sysColumnsStructure record = sysColumnsStructure.fromBytes(remainingData);
+
+            // 更新最大 columnId
+            if (record.getColumnId() > maxColumnId) {
+                maxColumnId = record.getColumnId();
+            }
+        }
+
+        return maxColumnId;
+    }
+
+    /**
      * 将sys_columns记录转换为Column对象
      */
     private Column convertToColumn(sysColumnsStructure record) {
