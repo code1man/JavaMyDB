@@ -42,6 +42,7 @@ public class StorageSystem {
     public StorageSystem() {
 //        this.pageManager = new PageManager();
 //        this.bufferPool = new BufferPool(150, pageManager);
+        spaceIdToColumns = new HashMap<>();
         pageManager.setBufferPool(bufferPool);
     }
 
@@ -268,6 +269,7 @@ public class StorageSystem {
 
             //新建文件 //初始化文件
             pageManager.openFile(maxSpaceId + 1, filePath);
+            updateRootPageNo(filePath,maxSpaceId + 1, 3);
 
             // 4. 将 newSpaceId 写回原始位置
             // 4.1 构造新的数据（假设原数据只有 maxSpaceId，现在更新它）
@@ -291,6 +293,8 @@ public class StorageSystem {
 
             bufferPool.putPage(page, 0);
 
+            spaceIdToColumns.put(maxSpaceId + 1, columns);
+
             return maxSpaceId + 1;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -307,12 +311,12 @@ public class StorageSystem {
 
             // 确保文件已打开
             if (!pageManager.getOpenFiles().containsKey(SYS_TABLES_IDB_SPACE_ID)) {
-                pageManager.openFile(SYS_TABLES_IDB_SPACE_ID, "sys_tables.idb");
+                pageManager.openFile(SYS_TABLES_IDB_SPACE_ID, path + "sys_tables.idb");
             }
 
             // 确保文件已打开
             if (!pageManager.getOpenFiles().containsKey(SYS_COLUMNS_IDB_SPACE_ID)) {
-                pageManager.openFile(SYS_COLUMNS_IDB_SPACE_ID, "sys_columns.idb");
+                pageManager.openFile(SYS_COLUMNS_IDB_SPACE_ID, path + "sys_columns.idb");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -345,9 +349,9 @@ public class StorageSystem {
     /**
      * 根据 PageType 从磁盘加载 B+ 树节点
      */
-    public BPlusNode<Key> loadNode(PageManager.GlobalPageId gid, InternalNode parent, List<Column> tableColumns) throws IOException {
+    public BPlusNode<Key> loadNode(String filePath, PageManager.GlobalPageId gid, InternalNode parent, List<Column> tableColumns) throws IOException {
         // 从buffer读取 Page
-        PageManager.Page page = readPage("G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jb.idb", gid.spaceId, gid.pageNo);
+        PageManager.Page page = readPage(filePath, gid.spaceId, gid.pageNo);
         if (page == null) throw new IOException("Page not found: " + gid.pageNo);
 
         PageManager.PageHeader header = page.getHeader();
@@ -415,10 +419,9 @@ public class StorageSystem {
     /**
      * 保存叶子节点
      */
-    public void writeLeafNode(LeafNode node, List<Column> columns) {
+    public void writeLeafNode(String filePath, LeafNode node, List<Column> columns) {
         final int spaceId = node.gid.spaceId;
         final int pageNo = node.gid.pageNo;
-        final String filePath = "G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jb.idb";
 
         PageManager.GlobalPageId pageId = new PageManager.GlobalPageId(spaceId, pageNo);
 
@@ -446,10 +449,9 @@ public class StorageSystem {
     /**
      * 保存内部节点
      */
-    public void writeInternalNode(InternalNode node, List<Column> tableColumns) {
+    public void writeInternalNode(String filePath, InternalNode node, List<Column> tableColumns) {
         final int spaceId = node.gid.spaceId;
         final int pageNo = node.gid.pageNo;
-        final String filePath = "G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jb.idb";
 
         PageManager.GlobalPageId pageId = new PageManager.GlobalPageId(spaceId, pageNo);
 
@@ -498,4 +500,51 @@ public class StorageSystem {
         }
         return keyColumns;
     }
+
+    /**
+     * 更新指定 space 的 root pageNo，写入 Page2
+     * @param spaceId 表空间ID
+     * @param rootPageNo 新的 root 页号
+     */
+    public static void updateRootPageNo(String filePath, int spaceId, int rootPageNo) throws IOException {
+        final int ROOT_META_PAGE_NO = 2; // Page2 保存 root 页号
+
+        // 1. 读取 Page2
+        PageManager.Page metaPage = pageManager.getPage(spaceId, ROOT_META_PAGE_NO);
+        if (metaPage == null) {
+            // 如果缓存中没有，尝试从文件加载
+            metaPage = readPage(filePath, spaceId, ROOT_META_PAGE_NO);
+        }
+
+        // 2. 更新前 4 字节为 rootPageNo
+        ByteBuffer buffer = ByteBuffer.wrap(metaPage.pageData);
+        buffer.putInt(0, rootPageNo);
+
+        // 3. 标记页为脏并写回 bufferPool
+        metaPage.header.isDirty = true;
+        bufferPool.putPage(metaPage, spaceId);
+    }
+
+    public int getRootPageNo(int spaceId) {
+        try {
+            // 读取 Page2
+            PageManager.Page page2 = pageManager.getPage(spaceId, 2);
+            if (page2 == null) {
+                // 如果 Page2 不存在，说明还没有 root
+                return -1;
+            }
+
+            byte[] data = page2.pageData;
+            if (data == null || data.length < 4) {
+                return -1;
+            }
+
+            // 前 4 字节存 rootPageNo (大端)
+            ByteBuffer buffer = ByteBuffer.wrap(data, 0, 4);
+            return buffer.getInt();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read root page from Page2", e);
+        }
+    }
+
 }

@@ -10,6 +10,7 @@ import org.csu.mydb.util.Pair.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,81 +35,64 @@ public class InternalNode extends BPlusNode<Key> {
     }
 
     /**
-     * 分裂内部节点
-     * - 普通分裂：parent != null -> 分裂成两个 internal 节点，把中间 key 提升给 parent
-     * - root-special-case：parent == null && gid.pageNo == ROOT_PAGE_NO -> 新建 root 覆写 page3
-     * @param order B+树阶
-     * @param tableColumns 表列定义
-     * @return 如果产生新的 root，则返回 new root，否则返回 null
-     * @throws IOException
+     * 插入 key + child (child 为 BPlusNode)
+     * 返回值：
+     *   - 如果向上冒泡并产生新的 root（root-special-case）会返回 new root (InternalNode)
+     *   - 否则返回 null
      */
-    public InternalNode split(int order, List<Column> tableColumns) throws IOException {
-        int midIndex = keys.size() / 2;
-        Key midKey = keys.get(midIndex);
+    public BPlusNode<Key> insertKey(Key key, BPlusNode<Key> child, int order, List<Column> tableColumns) throws IOException {
+        // 找到 key 插入位置
+        int pos = findInsertPosition(key);
+        keys.add(pos, key);
+        children.add(pos + 1, child.gid.pageNo);
+        child.parent = this;
 
-        // 左右分割 keys 和 children
-        List<Key> leftKeys = new ArrayList<>(keys.subList(0, midIndex));
-        List<Integer> leftChildren = new ArrayList<>(children.subList(0, midIndex + 1));
+        // 持久化当前 internal node
+        storageSystem.writeInternalNode(this, tableColumns);
 
-        List<Key> rightKeys = new ArrayList<>(keys.subList(midIndex + 1, keys.size()));
-        List<Integer> rightChildren = new ArrayList<>(children.subList(midIndex + 1, children.size()));
-
-        if (gid.pageNo == BPlusTree.ROOT_PAGE_NO) {
-            // root-special-case：Page3 升级为 InternalNode
-
-            // 创建右节点
-            int rightPageNo = storageSystem.getPageManager().allocatePage(gid.spaceId);
-            PageManager.PageHeader rightHeader = new PageManager.PageHeader();
-            rightHeader.pageType = PageType.INDEX_PAGE;
-            rightHeader.pageNo = rightPageNo;
-
-            InternalNode rightNode = new InternalNode(
-                    new PageManager.GlobalPageId(gid.spaceId, rightPageNo),
-                    rightHeader,
-                    storageSystem
-            );
-            rightNode.keys = rightKeys;
-            rightNode.children = rightChildren;
-
-            // 更新 Page3 为左节点
-            this.keys = new ArrayList<>();
-            this.keys.add(midKey);   // root keys = [中间 key]
-            this.children = new ArrayList<>();
-            this.children.add(leftChildren.get(0));   // 左子树页号
-            this.children.add(rightPageNo);           // 右子树页号
-
-            // 写回缓存
-            storageSystem.writeInternalNode(this, tableColumns);
-            storageSystem.writeInternalNode(rightNode, tableColumns);
-
-            return this; // BPlusTree.root 永远指向 Page3
-        } else {
-            // 普通分裂：返回右节点给 parent 插入中间 key
-            this.keys = leftKeys;
-            this.children = leftChildren;
-
-            int rightPageNo = storageSystem.getPageManager().allocatePage(gid.spaceId);
-            PageManager.PageHeader rightHeader = new PageManager.PageHeader();
-            rightHeader.pageType = PageType.INDEX_PAGE;
-            rightHeader.pageNo = rightPageNo;
-
-            InternalNode rightNode = new InternalNode(
-                    new PageManager.GlobalPageId(gid.spaceId, rightPageNo),
-                    rightHeader,
-                    storageSystem
-            );
-            rightNode.keys = rightKeys;
-            rightNode.children = rightChildren;
-
-            // 写回缓存
-            storageSystem.writeInternalNode(this, tableColumns);
-            storageSystem.writeInternalNode(rightNode, tableColumns);
-
-            // parent 在 insertRecursive 中处理 midKey
-            return null;
+        // 超过阶数 -> split
+        if (keys.size() > order) {
+            return split(order, tableColumns);
         }
+
+        return null;
     }
 
+    /**
+     * 内部节点分裂
+     */
+    public InternalNode split(int order, List<Column> tableColumns) throws IOException {
+        int mid = keys.size() / 2;
+        Key promoteKey = keys.get(mid);
+
+        int space = gid.spaceId;
+        int newPageNo = storageSystem.getPageManager().allocatePage(space);
+
+        PageManager.PageHeader header = new PageManager.PageHeader();
+        header.pageType = PageType.INDEX_PAGE;
+        header.pageNo = newPageNo;
+
+        InternalNode rightNode = new InternalNode(
+                new PageManager.GlobalPageId(space, newPageNo),
+                header,
+                storageSystem
+        );
+
+        // 左边保留 [0, mid)
+        // 右边保留 [mid+1, end)
+        rightNode.keys.addAll(keys.subList(mid + 1, keys.size()));
+        rightNode.children.addAll(children.subList(mid + 1, children.size()));
+
+        // 截断左边
+        keys = new ArrayList<>(keys.subList(0, mid));
+        children = new ArrayList<>(children.subList(0, mid + 1));
+
+        // 写磁盘
+        storageSystem.writeInternalNode(this, tableColumns);
+        storageSystem.writeInternalNode(rightNode, tableColumns);
+
+        return rightNode;  // 保证 rightNode 有 key
+    }
 
     /**
      * 根据主键找到子节点页号（用于直接查找的场景）
@@ -182,4 +166,10 @@ public class InternalNode extends BPlusNode<Key> {
         }
     }
 
+    private Key checkKey(Key key) {
+        if (key.getValues().size() != key.getKeyColumns().size()) {
+            throw new IllegalStateException("Malformed Key at page=" + gid.pageNo);
+        }
+        return key;
+    }
 }

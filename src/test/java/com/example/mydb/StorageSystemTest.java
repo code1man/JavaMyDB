@@ -502,9 +502,9 @@ class StorageSystemTest {
 
     private List<Column> createTestColumns() {
         List<Column> columns = new ArrayList<>();
-        columns.add(new Column("id", "INT", 4, 0, , true, false, null));
-        columns.add(new Column("name", "VARCHAR", 50, 0, , false, true, null));
-        columns.add(new Column("email", "VARCHAR", 100, 0, , false, true, null));
+        columns.add(new Column("id", "INT", 4, 0, 0, true, false, null));
+        columns.add(new Column("name", "VARCHAR", 50, 0, 1, false, true, null));
+        columns.add(new Column("email", "VARCHAR", 100, 0, 2, false, true, null));
         return columns;
     }
 }

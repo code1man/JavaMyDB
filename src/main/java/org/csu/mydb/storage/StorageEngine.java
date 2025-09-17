@@ -18,10 +18,11 @@ public class StorageEngine {
     private String prePath = "";       // 数据库路径前缀（如 "save/repos/"）
     private boolean isOpen = false;    // 是否已打开数据库
     private final List<Table> tables = new ArrayList<>();  // 当前打开的表列表
+    private final HashMap<String, Table> tableMap = new HashMap<>();
+    private final StorageSystem storageSystem = new StorageSystem();
 
     public StorageEngine() {
         // 从 ConfigManager 获取配置
-        StorageSystem storageSystem = new StorageSystem();
         storageSystem.getBufferPool().setPoolSize(ConfigLoader.getInstance().getInt("storage", "buffer_pool_size", 100));
         PageManager.PAGE_SIZE = ConfigLoader.getInstance().getInt("storage", "page_size", 4096);
 
@@ -50,7 +51,25 @@ public class StorageEngine {
      * @param dbName 数据库名
      */
     public void myOpenDataBase(String dbName) {
+        String path = "save/repos/" + dbName;
+        File dbDir = new File(path);
 
+        // 检查数据库是否存在
+        if (!dbDir.exists() || !dbDir.isDirectory()) {
+            System.out.println("错误：数据库 '" + dbName + "' 不存在");
+            return;
+        }
+
+        // 检查系统表是否存在
+        File sysTablesFile = new File(dbDir, "sys_tables.dat");
+        File sysColumnsFile = new File(dbDir, "sys_columns.dat");
+        if (!sysTablesFile.exists() || !sysColumnsFile.exists()) {
+            System.out.println("错误：数据库元数据损坏（缺失系统表）");
+            return;
+        }
+
+        prePath = path;
+        // storageSystem.loadAllTables(dbName, 3, 3).forEach(tables::add);
     }
 
     /**
@@ -109,6 +128,15 @@ public class StorageEngine {
      * @param columns   列名列表（如 ["id", "name"]）
      */
     public void myCreateTable(String tableName, List<Column> columns) {
+        int spaceId = storageSystem.createTable(prePath + tableName, columns);
+        try {
+            BPlusTree tree = new BPlusTree(3, spaceId, storageSystem, columns);
+            Table table = new Table(tableName, prePath + tableName, columns, spaceId, tree);
+            tables.add(table);
+            tableMap.put(tableName, table);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -125,6 +153,7 @@ public class StorageEngine {
         File tableFile = new File(tablePath);
         // 从内存中移除表
         boolean removed = tables.removeIf(table -> table.getName().equals(tableName));
+        tableMap.remove(tableName);
         if (!removed) {
             System.out.println("该表不存在!");
             return;
@@ -160,6 +189,24 @@ public class StorageEngine {
      * @param values   插入的值列表（如 ["1", "Alice"]）
      */
     public void myInsert(String tableName, List<Column> columns, List<String> values) {
+        Table table = tableMap.get(tableName);
+        List<Object> valuesList = new ArrayList<>();
+        for (int i = 0; i < columns.size(); i++) {
+            if (Objects.equals(columns.get(i).getType(), "INT")) {
+                valuesList.add(Integer.parseInt(values.get(i)));
+            } else if (Objects.equals(columns.get(i).getType(), "VARCHAR")) {
+                valuesList.add(values.get(i));
+            } else {
+                System.out.println("格式错误");
+                return;
+            }
+        }
+        try {
+            table.getPrimaryIndex().insert(columns, valuesList);
+            System.out.println("插入成功");
+        } catch (IOException e) {
+            System.out.println("插入失败");
+        }
     }
 
     /**
@@ -169,6 +216,32 @@ public class StorageEngine {
      * @param condition 删除条件（如 "age = 18"）
      */
     public void myDelete(String tableName, String condition) {
+        List<Column> columns = tableMap.get(tableName).getColumns();
+        String condCol = null;
+        String condVal = null;
+        if (condition != null && condition.contains("=")) {
+            String[] parts = condition.split("=");
+            condCol = parts[0].trim();
+            condVal = parts[1].trim();
+        }
+        if (condCol == null) System.out.println("删除失败");;
+
+        int pkIndex = -1;
+        for (int i = 0; i < columns.size(); i++) {
+            if (columns.get(i).getName().equalsIgnoreCase(condCol) && columns.get(i).isPrimaryKey()) {
+                pkIndex = i;
+                break;
+            }
+        }
+        if (pkIndex == -1)
+            System.out.println("删除失败");
+
+        Key key = new Key(Arrays.asList(parseValue(columns.get(pkIndex), condVal)), columns);
+        try {
+            tableMap.get(tableName).getTree().delete(key);
+        } catch (IOException e) {
+            System.out.println("删除失败");
+        }
     }
 
     /**
@@ -180,6 +253,52 @@ public class StorageEngine {
      * @param condition 更新条件（如 "age = 18"）
      */
     public void myUpdate(String tableName, String setCol, String newValue, String condition) {
+        List<Column> columns = tableMap.get(tableName).getColumns();
+        // 解析条件
+        String condCol = null;
+        String condVal = null;
+        if (condition != null && condition.contains("=")) {
+            String[] parts = condition.split("=");
+            condCol = parts[0].trim();
+            condVal = parts[1].trim();
+        }
+
+        if (condCol == null)
+            System.out.println("更新失败");;
+
+        // 找主键索引
+        int pkIndex = -1;
+        for (int i = 0; i < columns.size(); i++) {
+            if (columns.get(i).getName().equalsIgnoreCase(condCol) && columns.get(i).isPrimaryKey()) {
+                pkIndex = i;
+                break;
+            }
+        }
+        if (pkIndex == -1)
+            System.out.println("更新失败");
+
+        Key key = new Key(Arrays.asList(parseValue(columns.get(pkIndex), condVal)), columns);
+        List<Object> row = null;
+        try {
+            row = tableMap.get(tableName).getTree().search(key);
+        } catch (IOException e) {
+            System.out.println("更新失败");
+        }
+        if (row == null)
+            System.out.println("更新失败");
+
+        // 更新列
+        int updateIndex = -1;
+        for (int i = 0; i < columns.size(); i++) {
+            if (columns.get(i).getName().equalsIgnoreCase(setCol)) {
+                updateIndex = i;
+                break;
+            }
+        }
+        if (updateIndex == -1)
+            System.out.println("更新失败");
+
+        row.set(updateIndex, parseValue(columns.get(updateIndex), newValue));
     }
 
     /**
@@ -190,6 +309,42 @@ public class StorageEngine {
      * @param condition 查询条件（如 "age = 18"）
      */
     public void myQuery(String tableName, String columns, String condition) {
+        List<Column> cols = tableMap.get(tableName).getColumns();
+        List<List<Object>> results = new ArrayList<>();
+
+        // 简单解析条件 "col = value"
+        String condCol = null;
+        String condValue = null;
+        if (condition != null && !condition.isEmpty() && condition.contains("=")) {
+            String[] parts = condition.split("=");
+            condCol = parts[0].trim();
+            condValue = parts[1].trim();
+        }
+
+        if (condCol != null) {
+            // 只支持主键查询
+            int pkIndex = -1;
+            for (int i = 0; i < cols.size(); i++) {
+                if (cols.get(i).getName().equalsIgnoreCase(condCol) && cols.get(i).isPrimaryKey()) {
+                    pkIndex = i;
+                    break;
+                }
+            }
+            if (pkIndex != -1) {
+                Key key = new Key(Arrays.asList(parseValue(cols.get(pkIndex), condValue)), cols);
+                List<Object> row = null;
+                try {
+                    row = tableMap.get(tableName).getTree().search(key);
+                } catch (IOException e) {
+                    System.out.println("更新失败");
+                }
+                if (row != null) results.add(row);
+            }
+        } else {
+            // 条件为空，返回全部（此处简化，实际需遍历叶子节点链表）
+            // 暂时不实现完整扫描
+        }
+        System.out.println(results.toString());
     }
 
 
@@ -197,7 +352,6 @@ public class StorageEngine {
     // 带 JOIN 的多表查询,重构方法,和MyQuery是一样的,只是参数类型不一样
     public void myQuery(String tableName, String joinTableName,
                         String columns, String joinCondition, String condition) {
-
     }
 
     /**
@@ -223,6 +377,15 @@ public class StorageEngine {
             }
         }
         return directory.delete();
+    }
+
+    // ===================== 工具 =====================
+    private Object parseValue(Column col, String val) {
+        switch (col.getType()) {
+            case "INT": return Integer.parseInt(val);
+            case "VARCHAR": return val;
+            default: return val;
+        }
     }
 }
 

@@ -44,7 +44,7 @@ public class PageManager implements DiskAccessor {
      */
     public static class GlobalPageId {
         public final int spaceId; // 表空间ID
-        public final int pageNo; // 页号
+        public int pageNo; // 页号
 
         public GlobalPageId(int spaceId, int pageNo) {
             this.spaceId = spaceId;
@@ -92,6 +92,17 @@ public class PageManager implements DiskAccessor {
         public int rightPointer;   // 4字节 - 用于索引页，即b+树的最右侧指针
         public int nextFreePage;   // 4字节 - 用于空闲页，指向下一个空闲页
         public int nextFragPage;   // 4字节 - 用于碎片页，指向下一个碎片页
+
+        public PageHeader() {
+            prevPage = -1;
+            nextPage = -1;
+            recordCount = 0;
+        }
+
+        public PageHeader(int i, byte indexPage) {
+            this.pageType = indexPage;
+            this.pageNo = i;
+        }
 
         /**
          * 序列化为字节数组
@@ -658,9 +669,9 @@ public class PageManager implements DiskAccessor {
 ////                //缓存里面已经包含看磁盘了
 ////
 ////                freePageHeads.put(spaceId, headerPage.header.nextPage);
+
                 freePageHeads.put(spaceId, ByteBuffer.wrap(headerPage.getRecord(2)).getInt());
                 fragPageHeads.put(spaceId, ByteBuffer.wrap(headerPage.getRecord(3)).getInt());
-
             } else {
                 raf = new RandomAccessFile(file, "rw");
                 openFiles.put(spaceId, raf);
@@ -765,6 +776,7 @@ public class PageManager implements DiskAccessor {
         boolean success = page.addRecord(record);
 
         //放到缓存里面--------------------------------------------------------
+        bufferPool.deletePage(new GlobalPageId(spaceId, pageNo));
         bufferPool.putPage(page, spaceId);
 
         return success;
@@ -839,6 +851,9 @@ public class PageManager implements DiskAccessor {
             addRecord(spaceId, 0, data);
         }
 
+        headerPage = bufferPool.getPage(new GlobalPageId(spaceId, 0));
+        bufferPool.deletePage(new GlobalPageId(spaceId, 0));
+
         //暂时不用
         Page page1 = new DataPage(1);
         Page page2 = new DataPage(2);
@@ -846,14 +861,18 @@ public class PageManager implements DiskAccessor {
         Page page3 = new DataPage(3);
 
 //        raf.write(headerPage.toBytes());
-        bufferPool.putPage(headerPage, spaceId);
+//        bufferPool.putPage(headerPage, spaceId);
         bufferPool.putPage(page1, spaceId);
         bufferPool.putPage(page2, spaceId);
         bufferPool.putPage(page3, spaceId);
 
+        writePage(spaceId, 0, headerPage);
+
         // 设置空闲页链表头
         freePageHeads.put(spaceId, 3);
         fragPageHeads.put(spaceId, -1);
+
+        bufferPool.flush();
     }
 
     /**
@@ -881,7 +900,6 @@ public class PageManager implements DiskAccessor {
 
             Page page = Page.fromBytes(pageData);
 
-            //读完磁盘后记得要放入缓存
             return page;
         } finally {
             fileLock.readLock().unlock();
