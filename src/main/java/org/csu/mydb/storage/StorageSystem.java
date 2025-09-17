@@ -15,6 +15,8 @@ import org.csu.mydb.storage.storageFiles.page.SpaceManager;
 import org.csu.mydb.storage.storageFiles.page.record.DataRecord;
 import org.csu.mydb.storage.storageFiles.page.record.IndexRecord;
 import org.csu.mydb.storage.storageFiles.page.record.RecordHead;
+import org.csu.mydb.storage.storageFiles.system.sysColumnsStructure;
+import org.csu.mydb.storage.storageFiles.system.sysTablesStructure;
 import org.csu.mydb.util.Pair.Pair;
 import org.csu.mydb.storage.storageFiles.system.systemFileReader;
 import org.csu.mydb.storage.storageFiles.system.systemFileReader;
@@ -62,13 +64,13 @@ public class StorageSystem {
     //========================== 存储系统的静态方法（比存储引擎低一层的方法） ============================//
 
     //往sys_tables.idb插入数据
-    public static boolean insertIntoSysTable(byte[] data){
-        return writePage("save/repos/sys_tables.idb", 1, 3,data);
+    public static boolean insertIntoSysTable(sysTablesStructure e){
+        return writePage("save/repos/sys_tables.idb", 1, 3, e.toBytes());
     }
 
     //往sys_columns.idb插入数据
-    public static boolean insertIntoSysColumn(byte[] data){
-        return writePage("save/repos/sys_columns.idb", 2, 3,data);
+    public static boolean insertIntoSysColumn(sysColumnsStructure e){
+        return writePage("save/repos/sys_columns.idb", 2, 3, e.toBytes());
     }
 
     /**
