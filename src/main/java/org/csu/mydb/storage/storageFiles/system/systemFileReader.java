@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//目前假设系统表只存在一个文件的第3页中，（没看成B+树）
 public class systemFileReader {
     private final PageManager pageManager;
 
@@ -78,7 +79,7 @@ public class systemFileReader {
         boolean isFirst = true;
 //        while (currentPage != -1) {
 //        for(int i = 0; i < ByteBuffer.wrap(headPage.getRecord(1)).getInt(); i++){
-        while(currentPage != sysTablesFirstLeafPage || isFirst){
+//        while(currentPage != sysTablesFirstLeafPage || isFirst){
             PageManager.Page page = pageManager.getPage(StorageSystem.SYS_TABLES_IDB_SPACE_ID, currentPage);
 
             for (int slot = 0; slot < page.header.slotCount; slot++) {
@@ -107,7 +108,7 @@ public class systemFileReader {
             isFirst = false;
             // 获取下一页
             currentPage = page.header.nextPage;
-        }
+//        }
 //        }
 
         return tables;
@@ -120,10 +121,10 @@ public class systemFileReader {
         List<Column> columns = new ArrayList<>();
         int currentPage = sysColumnsFirstLeafPage;
 
-        PageManager.Page headPage = pageManager.getPage(StorageSystem.SYS_COLUMNS_IDB_SPACE_ID, 0);
+//        PageManager.Page headPage = pageManager.getPage(StorageSystem.SYS_COLUMNS_IDB_SPACE_ID, 0);
         boolean isFirst = true;
 //        while (currentPage != -1) {
-        while(currentPage != sysColumnsFirstLeafPage || isFirst){
+//        while(currentPage != sysColumnsFirstLeafPage || isFirst){
             PageManager.Page page = pageManager.getPage(StorageSystem.SYS_COLUMNS_IDB_SPACE_ID, currentPage);
 
             for (int slot = 0; slot < page.header.slotCount; slot++) {
@@ -152,11 +153,52 @@ public class systemFileReader {
             isFirst = false;
             // 获取下一页
             currentPage = page.header.nextPage;
-        }
+//        }
 
         // 按位置排序
         columns.sort(Comparator.comparingInt(Column::getPosition));
         return columns;
+    }
+
+    /**
+     * 获取当前最大分配的 Column ID
+     * @param sysColumnsFirstLeafPage sys_columns 表所在的页号
+     * @return 当前最大 Column ID
+     */
+    public int getMaxColumnId(int sysColumnsFirstLeafPage) throws IOException {
+        int maxColumnId = 0;
+        PageManager.Page page = pageManager.getPage(StorageSystem.SYS_COLUMNS_IDB_SPACE_ID, sysColumnsFirstLeafPage);
+
+        for (int slot = 0; slot < page.header.slotCount; slot++) {
+            // 检查槽位是否有效
+            if (page.getSlots().get(slot).getStatus() != 1) {
+                continue;
+            }
+
+            byte[] recordData = page.getRecord(slot);
+            if (recordData == null) {
+                continue;
+            }
+
+            // 解析记录
+            ByteBuffer buffer = ByteBuffer.wrap(recordData);
+            buffer.position(12); // 跳过信息
+
+            // 读取记录数据
+            ByteBuffer slicedBuffer = buffer.slice();
+            byte[] remainingData = new byte[slicedBuffer.remaining()];
+            slicedBuffer.get(remainingData);
+
+            // 解析为 sysColumnsStructure 对象
+            sysColumnsStructure record = sysColumnsStructure.fromBytes(remainingData);
+
+            // 更新最大 columnId
+            if (record.getColumnId() > maxColumnId) {
+                maxColumnId = record.getColumnId();
+            }
+        }
+
+        return maxColumnId;
     }
 
     /**

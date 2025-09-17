@@ -15,6 +15,8 @@ import org.csu.mydb.storage.storageFiles.page.SpaceManager;
 import org.csu.mydb.storage.storageFiles.page.record.DataRecord;
 import org.csu.mydb.storage.storageFiles.page.record.IndexRecord;
 import org.csu.mydb.storage.storageFiles.page.record.RecordHead;
+import org.csu.mydb.storage.storageFiles.system.sysColumnsStructure;
+import org.csu.mydb.storage.storageFiles.system.sysTablesStructure;
 import org.csu.mydb.util.Pair.Pair;
 import org.csu.mydb.storage.storageFiles.system.systemFileReader;
 import org.csu.mydb.storage.storageFiles.system.systemFileReader;
@@ -61,17 +63,50 @@ public class StorageSystem {
 
     //========================== 存储系统的静态方法（比存储引擎低一层的方法） ============================//
 
+    //往sys_tables.idb插入数据
+    public static boolean insertIntoSysTable(sysTablesStructure e){
+        return writePage("save/repos/sys_tables.idb", 1, 3, e.toBytes());
+    }
+
+    //往sys_columns.idb插入数据
+    public static boolean insertIntoSysColumn(sysColumnsStructure e){
+        return writePage("save/repos/sys_columns.idb", 2, 3, e.toBytes());
+    }
+
+    //分配columnId
+    public static int allocateNewColumnId()  {
+        int currentMax = 0;
+        try {
+            currentMax = new systemFileReader(pageManager).getMaxColumnId(3);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return currentMax + 1;
+    }
 
     /**
-     *
+     * 加载所有表
      * @param dbName 数据库名称
      * @param sysTablesFirstLeafPage sys_tables.idb 的最左叶子结点页号
      * @param sysColumnsFirstLeafPage sys_columns.idb 的最左叶子结点页号
      * @return 当前数据库下的Table列表
      */
-    public static List<Table> loadAllTables(String dbName, int sysTablesFirstLeafPage, int sysColumnsFirstLeafPage){
+    public static List<Table> loadAllTables1(String dbName, int sysTablesFirstLeafPage, int sysColumnsFirstLeafPage){
         try {
             return new systemFileReader(pageManager).getDatabaseTables(dbName, sysTablesFirstLeafPage, sysColumnsFirstLeafPage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 加载所有表
+     * @param dbName 数据库名称
+     * @return 当前数据库下的Table列表
+     */
+    public static List<Table> loadAllTables(String dbName){
+        try {
+            return new systemFileReader(pageManager).getDatabaseTables(dbName, 3, 3);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -309,7 +344,32 @@ public class StorageSystem {
         }
     }
 
-    //缓存系统表
+    /**
+     * 分配页
+     * @param filePath
+     * @param spaceId
+     * @return
+     */
+    public static int allocatePage(String filePath, int spaceId){
+        try {
+            // 确保文件已打开
+            if (!pageManager.getOpenFiles().containsKey(spaceId)) {
+                pageManager.openFile(spaceId, filePath);
+            }
+            int result = pageManager.allocatePage(spaceId);
+
+            //维护空闲链表
+            SpaceManager spaceManager = new SpaceManager(pageManager, bufferPool);
+            spaceManager.maintainSpaceChains(spaceId);
+
+            return result;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+        //缓存系统表
     public static void loadSystemTable(){
         try{
             // 确保文件已打开
