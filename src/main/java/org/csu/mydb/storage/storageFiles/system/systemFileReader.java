@@ -80,34 +80,28 @@ public class systemFileReader {
 //        while (currentPage != -1) {
 //        for(int i = 0; i < ByteBuffer.wrap(headPage.getRecord(1)).getInt(); i++){
 //        while(currentPage != sysTablesFirstLeafPage || isFirst){
-            PageManager.Page page = pageManager.getPage(StorageSystem.SYS_TABLES_IDB_SPACE_ID, currentPage);
+        PageManager.Page page = pageManager.getPage(StorageSystem.SYS_TABLES_IDB_SPACE_ID, currentPage);
 
-            for (int slot = 0; slot < page.header.slotCount; slot++) {
-
-                //判断槽位是否有效
-                if(page.getSlots().get(slot).getStatus() != 1){
-                    continue;
-                }
-
-                byte[] recordData = page.getRecord(slot);
-
-                ByteBuffer buffer = ByteBuffer.wrap(recordData);
-                // 跳到行数据
-                buffer.position(12);
-
-                ByteBuffer slicedBuffer = buffer.slice(); // 从当前 position 截取剩余数据
-                byte[] remainingData = new byte[slicedBuffer.remaining()];
-                slicedBuffer.get(remainingData);
-
-                sysTablesStructure record = sysTablesStructure.fromBytes(remainingData);
-
-                if (databaseName.equals(record.getDatabaseName())) {
-                    tables.add(record);
-                }
+        for (int slot = 0; slot < page.header.slotCount; slot++) {
+            //判断槽位是否有效
+            if(page.getSlots().get(slot).getStatus() != 1){
+                continue;
             }
-            isFirst = false;
-            // 获取下一页
-            currentPage = page.header.nextPage;
+            byte[] recordData = page.getRecord(slot);
+            ByteBuffer buffer = ByteBuffer.wrap(recordData);
+            // 跳到行数据
+            buffer.position(12);
+            ByteBuffer slicedBuffer = buffer.slice(); // 从当前 position 截取剩余数据
+            byte[] remainingData = new byte[slicedBuffer.remaining()];
+            slicedBuffer.get(remainingData);
+            sysTablesStructure record = sysTablesStructure.fromBytes(remainingData);
+            if (databaseName.equals(record.getDatabaseName())) {
+                tables.add(record);
+            }
+        }
+        isFirst = false;
+        // 获取下一页
+        currentPage = page.header.nextPage;
 //        }
 //        }
 

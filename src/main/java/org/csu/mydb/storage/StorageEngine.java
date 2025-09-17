@@ -5,6 +5,8 @@ import org.csu.mydb.storage.BPlusTree.BPlusTree;
 import org.csu.mydb.storage.Table.Column.Column;
 import org.csu.mydb.storage.Table.Table;
 import org.csu.mydb.storage.Table.Key;
+import org.csu.mydb.storage.storageFiles.system.sysColumnsStructure;
+import org.csu.mydb.storage.storageFiles.system.sysTablesStructure;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +18,7 @@ import java.util.*;
 public class StorageEngine {
     private String prePath = "";       // 数据库路径前缀（如 "save/repos/"）
     private boolean isOpen = false;    // 是否已打开数据库
+    private static String dataBase = "";
     private final static List<Table> tables = new ArrayList<>();  // 当前打开的表列表
     private final static HashMap<String, Table> tableMap = new HashMap<>();
     private final StorageSystem storageSystem = new StorageSystem();
@@ -28,10 +31,6 @@ public class StorageEngine {
         prePath = "";
         isOpen = false;
         tables.clear();
-
-        System.out.println("存储引擎初始化: pageSize="
-                + PageManager.PAGE_SIZE
-                + ", bufferPoolSize=" + storageSystem.getBufferPool());
     }
 
     // 析构函数
@@ -52,6 +51,7 @@ public class StorageEngine {
     public void myOpenDataBase(String dbName) {
         String path = "save/repos/" + dbName;
         File dbDir = new File(path);
+        File sysDir = new File("save/repos/");
 
         // 检查数据库是否存在
         if (!dbDir.exists() || !dbDir.isDirectory()) {
@@ -59,16 +59,22 @@ public class StorageEngine {
             return;
         }
 
-        // 检查系统表是否存在
-        File sysTablesFile = new File(dbDir, "sys_tables.dat");
-        File sysColumnsFile = new File(dbDir, "sys_columns.dat");
-        if (!sysTablesFile.exists() || !sysColumnsFile.exists()) {
-            System.out.println("错误：数据库元数据损坏（缺失系统表）");
-            return;
-        }
+//        // 检查系统表是否存在
+//        File sysTablesFile = new File(sysDir, "sys_tables.idb");
+//        File sysColumnsFile = new File(sysDir, "sys_columns.idb");
+//        if (!sysTablesFile.exists() || !sysColumnsFile.exists()) {
+//            System.out.println("错误：数据库元数据损坏（缺失系统表）");
+//            return;
+//        }
+
+        StorageSystem.loadSystemTable();
 
         prePath = path;
-        // storageSystem.loadAllTables(dbName, 3, 3).forEach(tables::add);
+        dataBase = dbName;
+        tables.addAll(StorageSystem.loadAllTables(dbName));
+        for (Table table : tables) {
+            tableMap.put(table.getName(), table);
+        }
     }
 
     /**
@@ -78,6 +84,7 @@ public class StorageEngine {
         tables.clear();
         prePath = "";
         isOpen = false;
+        dataBase = "";
         System.out.println("关闭数据库成功");
     }
 
@@ -127,12 +134,31 @@ public class StorageEngine {
      * @param columns   列名列表（如 ["id", "name"]）
      */
     public void myCreateTable(String tableName, List<Column> columns) {
-        int spaceId = storageSystem.createTable(prePath + tableName, columns);
+        int spaceId = StorageSystem.createTable(prePath + tableName, columns);
         try {
             BPlusTree tree = new BPlusTree(3, spaceId, storageSystem, columns, prePath + tableName);
             Table table = new Table(tableName, prePath + tableName, columns, spaceId, tree);
             tables.add(table);
             tableMap.put(tableName, table);
+            // TABLE
+            StorageSystem.insertIntoSysTable(new sysTablesStructure(spaceId, tableName, spaceId, 3, 100, dataBase));
+            // COLUMN
+            for (Column column : columns) {
+                sysColumnsStructure sysColumnsStructure = new sysColumnsStructure();
+                sysColumnsStructure.setColumnId(StorageSystem.allocateNewColumnId());
+                sysColumnsStructure.setTableId(spaceId);
+                sysColumnsStructure.setColumnName(column.getName());
+                sysColumnsStructure.setType(column.getType());
+                sysColumnsStructure.setPosition((short) column.getPosition());
+                sysColumnsStructure.setNullable(column.isNullable());
+                sysColumnsStructure.setPrimaryKey(column.isPrimaryKey());
+                sysColumnsStructure.setLength((short) column.getLength());
+                sysColumnsStructure.setScale((short) column.getScale());
+                sysColumnsStructure.setDefaultValue(column.getDefaultValue());
+
+                StorageSystem.insertIntoSysColumn(sysColumnsStructure);
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

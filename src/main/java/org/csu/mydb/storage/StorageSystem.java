@@ -9,7 +9,6 @@ import org.csu.mydb.storage.Table.Key;
 import org.csu.mydb.storage.Table.Table;
 import org.csu.mydb.storage.bufferPool.BufferPool;
 import org.csu.mydb.storage.storageFiles.page.*;
-import org.csu.mydb.storage.storageFiles.page.PageOperations;
 import org.csu.mydb.storage.storageFiles.page.PageSorter;
 import org.csu.mydb.storage.storageFiles.page.SpaceManager;
 import org.csu.mydb.storage.storageFiles.page.record.DataRecord;
@@ -19,17 +18,14 @@ import org.csu.mydb.storage.storageFiles.system.sysColumnsStructure;
 import org.csu.mydb.storage.storageFiles.system.sysTablesStructure;
 import org.csu.mydb.util.Pair.Pair;
 import org.csu.mydb.storage.storageFiles.system.systemFileReader;
-import org.csu.mydb.storage.storageFiles.system.systemFileReader;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static org.csu.mydb.storage.PageManager.PAGE_SIZE;
 
 //组合缓存和页管理（全局只能有一个的东西，比如缓存）
 public class StorageSystem {
@@ -142,7 +138,7 @@ public class StorageSystem {
      * @param data
      * @return 是否插入成功，插入失败说明空间不够
      */
-    public static boolean writePage(String filePath, int spaceId, int pageNo, byte[] data, List<Column> columns) {
+    public static boolean writePage(String filePath, int spaceId, int pageNo, byte[] data) {
         try {
             boolean result;
 
@@ -154,7 +150,7 @@ public class StorageSystem {
             //获得页
             PageManager.Page page = pageManager.getPage(spaceId, pageNo);
 
-            // List<Column> columns = spaceIdToColumns.get(spaceId);
+            List<Column> columns = spaceIdToColumns.get(spaceId);
 
             //分类讨论
             int pageType = page.header.pageType;
@@ -507,7 +503,7 @@ public class StorageSystem {
         // 写入所有 records
         for (List<Object> row : node.records) {
             byte[] rowData = RecordSerializer.serializeDataRow(row, columns);
-            StorageSystem.writePage(filePath, spaceId, pageNo, rowData, columns);
+            StorageSystem.writePage(filePath, spaceId, pageNo, rowData);
         }
 
         node.header.isDirty = true;
@@ -544,7 +540,7 @@ public class StorageSystem {
         byte[] leftOnly = RecordSerializer.serializeKeyPtr(
                 Collections.emptyList(), Collections.emptyList(), leftChildPage
         );
-        StorageSystem.writePage(filePath, spaceId, pageNo, leftOnly, tableColumns);
+        StorageSystem.writePage(filePath, spaceId, pageNo, leftOnly);
 
         // 写 key + right child
         for (int i = 0; i < node.keys.size(); i++) {
@@ -553,7 +549,7 @@ public class StorageSystem {
             byte[] keyPtrData = RecordSerializer.serializeKeyPtr(
                     key.getValues(), key.getKeyColumns(), rightChildPage
             );
-            StorageSystem.writePage(filePath, spaceId, pageNo, keyPtrData, tableColumns);
+            StorageSystem.writePage(filePath, spaceId, pageNo, keyPtrData);
         }
 
         node.header.isDirty = true;
