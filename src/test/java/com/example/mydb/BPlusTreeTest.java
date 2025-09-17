@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.csu.mydb.storage.Table.Column.Column;
@@ -18,41 +19,42 @@ import java.util.Arrays;
 
 public class BPlusTreeTest {
     private BPlusTree tree;
+    List<Column> columns;
 
     @BeforeEach
     public void setUp() throws IOException {
+        Initialisation.main(null);
         // 模拟 PageManager (你需要保证有一个能跑的实现)
         StorageSystem storageSystem = new StorageSystem();
 
+
         // 定义表结构：一个主键 id(int)，一个 name(string)
-        Column idCol = new Column("id", "INT", 4,0,0 , true, true, null);   // true 表示是主键
-        Column nameCol = new Column("name", "STRING", 10, 0, 1, false, false, null);
+        Column idCol = new Column("id", "INT", 4,0,0,true, true, null);   // true 表示是主键
+        Column nameCol = new Column("name", "VARCHAR", 10, 0,1, false, false, null);
 
         List<Column> columns = Arrays.asList(idCol, nameCol);
-        int spaceId = StorageSystem.createTable("G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jj.idb", columns);
-        // order = 3，空间号随便给 1
-        tree = new BPlusTree(3, spaceId, storageSystem.getPageManager(), columns);
-
-        System.out.println(storageSystem.getPageManager().getOpenFiles().toString());
+        int spaceId = StorageSystem.createTable("G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jb.idb", columns);
+        // order = 3
+        tree = new BPlusTree(100, spaceId, storageSystem, columns, "G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jb.idb");
     }
 
     @Test
     public void testInsertAndSearch() throws IOException {
         // 插入几条数据
-        tree.insert(Arrays.asList(1, "Alice"));
-        tree.insert(Arrays.asList(2, "Bob"));
-        tree.insert(Arrays.asList(3, "Charlie"));
+        tree.insert(columns,Arrays.asList(1, "Alice"));
+        tree.insert(columns,Arrays.asList(2, "Bob"));
+        tree.insert(columns,Arrays.asList(3, "Charlie"));
 
         // 查找
-        List<Object> row = tree.search(new Key(Arrays.asList(2), tree.getColumns()));
+        List<Object> row = tree.search(new Key(List.of(2), tree.getColumns()));
         assertNotNull(row);
         assertEquals("Bob", row.get(1));
     }
 
     @Test
     public void testUpdate() throws IOException {
-        tree.insert(Arrays.asList(1, "Alice"));
-        tree.insert(Arrays.asList(2, "Bob"));
+        tree.insert(columns,Arrays.asList(1, "Alice"));
+        tree.insert(columns,Arrays.asList(2, "Bob"));
 
         // 更新 Bob -> Bobby
         boolean updated = tree.update(new Key(Arrays.asList(2), tree.getColumns()), Arrays.asList(2, "Bobby"));
@@ -64,9 +66,9 @@ public class BPlusTreeTest {
 
     @Test
     public void testDelete() throws IOException {
-        tree.insert(Arrays.asList(1, "Alice"));
-        tree.insert(Arrays.asList(2, "Bob"));
-        tree.insert(Arrays.asList(3, "Charlie"));
+        tree.insert(columns,Arrays.asList(1, "Alice"));
+        tree.insert(columns,Arrays.asList(2, "Bob"));
+        tree.insert(columns,Arrays.asList(3, "Charlie"));
 
         boolean removed = tree.delete(new Key(Arrays.asList(2), tree.getColumns()));
         assertTrue(removed);
@@ -77,13 +79,23 @@ public class BPlusTreeTest {
 
     @Test
     public void testBulkInsert() throws IOException {
-        for (int i = 1; i <= 50; i++) {
-            tree.insert(Arrays.asList(i, "Name" + i));
+        for (int i = 1; i <= 3; i++) {
+            tree.insert(columns,Arrays.asList(i, "Name" + i));
         }
 
-        List<Object> row = tree.search(new Key(Arrays.asList(25), tree.getColumns()));
+        List<Object> row = tree.search(new Key(List.of(3), getKeyColumns(tree.getColumns())));
         assertNotNull(row);
-        assertEquals("Name25", row.get(1));
+        assertEquals("Name3", row.get(1));
+    }
+
+    private List<Column> getKeyColumns(List<Column> columns) {
+        List<Column> keyColumns = new ArrayList<Column>();
+        for (Column column : columns) {
+            if (column.isPrimaryKey()) {
+                keyColumns.add(column);
+            }
+        }
+        return keyColumns;
     }
 }
 

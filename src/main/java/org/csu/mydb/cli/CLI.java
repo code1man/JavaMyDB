@@ -8,6 +8,7 @@ import org.csu.mydb.executor.ExecutionResult;
 import org.csu.mydb.executor.Executor;
 import org.csu.mydb.executor.ExecutorException;
 import org.csu.mydb.compiler.Parser;
+import org.csu.mydb.compiler.Parser;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;

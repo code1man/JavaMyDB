@@ -1,21 +1,28 @@
 package org.csu.mydb.storage;
 
 import org.csu.mydb.config.ConfigLoader;
+import org.csu.mydb.storage.BPlusTree.BPlusTree;
 import org.csu.mydb.storage.Table.Column.Column;
 import org.csu.mydb.storage.Table.Table;
+import org.csu.mydb.storage.Table.Column.Column;
+import org.csu.mydb.storage.Table.Key;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
+/**
+ * 存储引擎：负责数据库的创建、删除、打开、关闭，以及表的管理。
+ */
 public class StorageEngine {
     private String prePath = "";       // 数据库路径前缀（如 "save/repos/"）
     private boolean isOpen = false;    // 是否已打开数据库
     private final List<Table> tables = new ArrayList<>();  // 当前打开的表列表
+    private final HashMap<String, Table> tableMap = new HashMap<>();
+    private final StorageSystem storageSystem = new StorageSystem();
 
     public StorageEngine() {
         // 从 ConfigManager 获取配置
-        StorageSystem storageSystem = new StorageSystem();
         storageSystem.getBufferPool().setPoolSize(ConfigLoader.getInstance().getInt("storage", "buffer_pool_size", 100));
         PageManager.PAGE_SIZE = ConfigLoader.getInstance().getInt("storage", "page_size", 4096);
 
@@ -44,30 +51,25 @@ public class StorageEngine {
      * @param dbName 数据库名
      */
     public void myOpenDataBase(String dbName) {
-
         String path = "save/repos/" + dbName;
         File dbDir = new File(path);
-        if (!dbDir.exists()) {
-            System.out.println("数据库不存在");
+
+        // 检查数据库是否存在
+        if (!dbDir.exists() || !dbDir.isDirectory()) {
+            System.out.println("错误：数据库 '" + dbName + "' 不存在");
             return;
         }
+
+        // 检查系统表是否存在
+        File sysTablesFile = new File(dbDir, "sys_tables.dat");
+        File sysColumnsFile = new File(dbDir, "sys_columns.dat");
+        if (!sysTablesFile.exists() || !sysColumnsFile.exists()) {
+            System.out.println("错误：数据库元数据损坏（缺失系统表）");
+            return;
+        }
+
         prePath = path;
-        isOpen = true;
-
-        //可能要获取所有表信息
-
-
-
-//        // 加载表元信息
-//        for (File file : dbDir.listFiles()) {
-//            if (file.getName().endsWith(".ibd")) {
-//                String tableName = file.getName().replace(".ibd", "");
-//                int spaceId = SpaceManager.allocateSpace();
-//                BPlusTree<Integer> primaryIndex = new BPlusTree<>();
-//                tables.add(new Table(tableName, file.getPath(), new ArrayList<>(), spaceId, primaryIndex));
-//            }
-//        }
-//        System.out.println("打开数据库成功: " + dbName);
+        // storageSystem.loadAllTables(dbName, 3, 3).forEach(tables::add);
     }
 
     /**
@@ -126,34 +128,15 @@ public class StorageEngine {
      * @param columns   列名列表（如 ["id", "name"]）
      */
     public void myCreateTable(String tableName, List<Column> columns) {
-
-
-        int spaceId = StorageSystem.createTable(prePath + "/" + tableName + ".idb", columns);
-
-
-
-//        if (!isOpen) {
-//            System.out.println("无选中数据库，请先打开数据库");
-//            return;
-//        }
-//        String tablePath = prePath + tableName + ".txt";
-//        File tableFile = new File(tablePath);
-//        if (tableFile.exists()) {
-//            System.out.println("该表已经存在!");
-//            return;
-//        }
-//        try (FileWriter writer = new FileWriter(tableFile)) {
-//            writer.write("表名:" + tableName + "\n");
-//            for (String col : columns) {
-//                writer.write(col + "\n");
-//            }
-//            writer.write("\n"); // 空行分隔元数据和数据
-//            tables.add(new Table(tableName, tablePath, columns));
-//            System.out.println("创建新表成功!");
-//        } catch (IOException e) {
-//            System.out.println("创建表失败: " + e.getMessage());
-//        }
-
+        int spaceId = storageSystem.createTable(prePath + tableName, columns);
+        try {
+            BPlusTree tree = new BPlusTree(3, spaceId, storageSystem, columns, prePath + tableName);
+            Table table = new Table(tableName, prePath + tableName, columns, spaceId, tree);
+            tables.add(table);
+            tableMap.put(tableName, table);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -166,10 +149,11 @@ public class StorageEngine {
             System.out.println("无选中数据库，请先打开数据库");
             return;
         }
-        String tablePath = prePath + tableName + ".idb";
+        String tablePath = prePath + tableName + ".txt";
         File tableFile = new File(tablePath);
         // 从内存中移除表
         boolean removed = tables.removeIf(table -> table.getName().equals(tableName));
+        tableMap.remove(tableName);
         if (!removed) {
             System.out.println("该表不存在!");
             return;
@@ -201,42 +185,28 @@ public class StorageEngine {
      * 插入数据（对应 C++ 的 myInsert）
      *
      * @param tableName 表名
-     * @param insertColumns   插入的值列表（如 ["1", "Alice"]）
+     * @param columns   插入的列表
+     * @param values   插入的值列表（如 ["1", "Alice"]）
      */
-    public void myInsert(String tableName, List<Column> insertColumns, List<String> values) {
-//        if (!isOpen) {
-//            System.out.println("无选中数据库!");
-//            return;
-//        }
-//        int tableIndex = posIsNos(tableName);
-//        if (tableIndex == -1) {
-//            System.out.println("该表不存在!");
-//            return;
-//        }
-//        Table table = tables.get(tableIndex);
-//        String tablePath = table.getPath();
-//
-//        // 检查值的数量是否与列数匹配
-//        if (values.size() != table.getColumns().size()) {
-//            System.out.println("插入失败：列数与值数量不匹配");
-//            return;
-//        }
-//
-//        // 追加写入数据到表文件（格式：值1 值2 ...）
-//        try (FileWriter writer = new FileWriter(tablePath, true)) {  // true 表示追加模式
-//            StringBuilder sb = new StringBuilder();
-//            for (int i = 0; i < values.size(); i++) {
-//                sb.append(values.get(i));
-//                if (i != values.size() - 1) {
-//                    sb.append(" ");  // 用空格分隔值（与 C++ 逻辑一致）
-//                }
-//            }
-//            sb.append("\n");  // 换行分隔记录
-//            writer.write(sb.toString());
-//            System.out.println("插入成功!");
-//        } catch (IOException e) {
-//            System.out.println("插入失败: " + e.getMessage());
-//        }
+    public void myInsert(String tableName, List<Column> columns, List<String> values) {
+        Table table = tableMap.get(tableName);
+        List<Object> valuesList = new ArrayList<>();
+        for (int i = 0; i < columns.size(); i++) {
+            if (Objects.equals(columns.get(i).getType(), "INT")) {
+                valuesList.add(Integer.parseInt(values.get(i)));
+            } else if (Objects.equals(columns.get(i).getType(), "VARCHAR")) {
+                valuesList.add(values.get(i));
+            } else {
+                System.out.println("格式错误");
+                return;
+            }
+        }
+        try {
+            table.getPrimaryIndex().insert(columns, valuesList);
+            System.out.println("插入成功");
+        } catch (IOException e) {
+            System.out.println("插入失败");
+        }
     }
 
     /**
@@ -246,79 +216,32 @@ public class StorageEngine {
      * @param condition 删除条件（如 "age = 18"）
      */
     public void myDelete(String tableName, String condition) {
-//        if (!isOpen) {
-//            System.out.println("无选中数据库!");
-//            return;
-//        }
-//        int tableIndex = posIsNos(tableName);
-//        if (tableIndex == -1) {
-//            System.out.println("该表不存在!");
-//            return;
-//        }
-//        Table table = tables.get(tableIndex);
-//        String tablePath = table.getPath();
-//        String tempPath = "save/repos/tmp.txt";  // 临时文件路径
-//
-//        try (BufferedReader reader = new BufferedReader(new FileReader(tablePath));
-//             BufferedWriter writer = new BufferedWriter(new FileWriter(tempPath))) {
-//
-//            String line;
-//            String[] conditionParts = condition.split("=");
-//            if (conditionParts.length != 2) {
-//                System.out.println("删除条件格式错误（示例：age = 18）");
-//                return;
-//            }
-//            String targetCol = conditionParts[0].trim();
-//            String targetValue = conditionParts[1].trim();
-//
-//            // 查找目标列的索引
-//            int targetColIndex = -1;
-//            List<String> columns = table.getColumns();
-//            for (int i = 0; i < columns.size(); i++) {
-//                if (columns.get(i).equals(targetCol)) {
-//                    targetColIndex = i;
-//                    break;
-//                }
-//            }
-//            if (targetColIndex == -1) {
-//                System.out.println("删除失败：列名不存在");
-//                return;
-//            }
-//
-//            // 复制符合条件的行到临时文件
-//            boolean isHeader = true;  // 标记是否为表头
-//            while ((line = reader.readLine()) != null) {
-//                if (isHeader) {
-//                    writer.write(line + "\n");  // 保留表头
-//                    isHeader = false;
-//                    continue;
-//                }
-//                String[] values = line.trim().split(" ");
-//                if (values.length != columns.size()) {
-//                    continue;  // 跳过格式错误的行
-//                }
-//                if (values[targetColIndex].equals(targetValue)) {
-//                    continue;  // 跳过符合条件的行（不复制）
-//                }
-//                writer.write(line + "\n");  // 复制不符合条件的行
-//            }
-//            // 删除原文件并重命名临时文件
-//            reader.close();
-//            writer.close();
-//            if (new File(tablePath).delete() && new File(tempPath).renameTo(new File(tablePath))) {
-//                System.out.println("删除成功!");
-//            } else {
-//                System.out.println("删除失败（文件操作失败）");
-//                new File(tempPath).delete();  // 清理临时文件
-//            }
-//        } catch (IOException e) {
-//            System.out.println("删除失败: " + e.getMessage());
-//            try {
-//                new File(tempPath).delete();  // 清理临时文件
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-//        }
+        List<Column> columns = tableMap.get(tableName).getColumns();
+        String condCol = null;
+        String condVal = null;
+        if (condition != null && condition.contains("=")) {
+            String[] parts = condition.split("=");
+            condCol = parts[0].trim();
+            condVal = parts[1].trim();
+        }
+        if (condCol == null) System.out.println("删除失败");;
+
+        int pkIndex = -1;
+        for (int i = 0; i < columns.size(); i++) {
+            if (columns.get(i).getName().equalsIgnoreCase(condCol) && columns.get(i).isPrimaryKey()) {
+                pkIndex = i;
+                break;
+            }
+        }
+        if (pkIndex == -1)
+            System.out.println("删除失败");
+
+        Key key = new Key(Arrays.asList(parseValue(columns.get(pkIndex), condVal)), columns);
+        try {
+            tableMap.get(tableName).getTree().delete(key);
+        } catch (IOException e) {
+            System.out.println("删除失败");
+        }
     }
 
     /**
@@ -330,83 +253,52 @@ public class StorageEngine {
      * @param condition 更新条件（如 "age = 18"）
      */
     public void myUpdate(String tableName, String setCol, String newValue, String condition) {
-//        if (!isOpen) {
-//            System.out.println("无选中数据库!");
-//            return;
-//        }
-//        int tableIndex = posIsNos(tableName);
-//        if (tableIndex == -1) {
-//            System.out.println("该表不存在!");
-//            return;
-//        }
-//        Table table = tables.get(tableIndex);
-//        String tablePath = table.getPath();
-//        String tempPath = "save/repos/tmp.txt";  // 临时文件路径
-//
-//        try (BufferedReader reader = new BufferedReader(new FileReader(tablePath));
-//             BufferedWriter writer = new BufferedWriter(new FileWriter(tempPath))) {
-//
-//            String line;
-//            String[] conditionParts = condition.split("=");
-//            if (conditionParts.length != 2) {
-//                System.out.println("更新条件格式错误（示例：age = 18）");
-//                return;
-//            }
-//            String targetCol = conditionParts[0].trim();
-//            String targetValue = conditionParts[1].trim();
-//
-//            // 查找目标列和更新列的索引
-//            int targetColIndex = -1;
-//            int setColIndex = -1;
-//            List<String> columns = table.getColumns();
-//            for (int i = 0; i < columns.size(); i++) {
-//                if (columns.get(i).equals(targetCol)) {
-//                    targetColIndex = i;
-//                }
-//                if (columns.get(i).equals(setCol)) {
-//                    setColIndex = i;
-//                }
-//            }
-//            if (targetColIndex == -1 || setColIndex == -1) {
-//                System.out.println("更新失败：列名不存在");
-//                return;
-//            }
-//
-//            // 复制并更新符合条件的行到临时文件
-//            boolean isHeader = true;  // 标记是否为表头
-//            while ((line = reader.readLine()) != null) {
-//                if (isHeader) {
-//                    writer.write(line + "\n");  // 保留表头
-//                    isHeader = false;
-//                    continue;
-//                }
-//                String[] values = line.trim().split(" ");
-//                if (values.length != columns.size()) {
-//                    continue;  // 跳过格式错误的行
-//                }
-//                if (values[targetColIndex].equals(targetValue)) {
-//                    values[setColIndex] = newValue;  // 更新值
-//                }
-//                // 写入更新后的行
-//                writer.write(String.join(" ", values) + "\n");
-//            }
-//            // 删除原文件并重命名临时文件
-//            reader.close();
-//            writer.close();
-//            if (new File(tablePath).delete() && new File(tempPath).renameTo(new File(tablePath))) {
-//                System.out.println("更新成功!");
-//            } else {
-//                System.out.println("更新失败（文件操作失败）");
-//                new File(tempPath).delete();  // 清理临时文件
-//            }
-//        } catch (IOException e) {
-//            System.out.println("更新失败: " + e.getMessage());
-//            try {
-//                new File(tempPath).delete();  // 清理临时文件
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-//        }
+        List<Column> columns = tableMap.get(tableName).getColumns();
+        // 解析条件
+        String condCol = null;
+        String condVal = null;
+        if (condition != null && condition.contains("=")) {
+            String[] parts = condition.split("=");
+            condCol = parts[0].trim();
+            condVal = parts[1].trim();
+        }
+
+        if (condCol == null)
+            System.out.println("更新失败");;
+
+        // 找主键索引
+        int pkIndex = -1;
+        for (int i = 0; i < columns.size(); i++) {
+            if (columns.get(i).getName().equalsIgnoreCase(condCol) && columns.get(i).isPrimaryKey()) {
+                pkIndex = i;
+                break;
+            }
+        }
+        if (pkIndex == -1)
+            System.out.println("更新失败");
+
+        Key key = new Key(Arrays.asList(parseValue(columns.get(pkIndex), condVal)), columns);
+        List<Object> row = null;
+        try {
+            row = tableMap.get(tableName).getTree().search(key);
+        } catch (IOException e) {
+            System.out.println("更新失败");
+        }
+        if (row == null)
+            System.out.println("更新失败");
+
+        // 更新列
+        int updateIndex = -1;
+        for (int i = 0; i < columns.size(); i++) {
+            if (columns.get(i).getName().equalsIgnoreCase(setCol)) {
+                updateIndex = i;
+                break;
+            }
+        }
+        if (updateIndex == -1)
+            System.out.println("更新失败");
+
+        row.set(updateIndex, parseValue(columns.get(updateIndex), newValue));
     }
     //权限管理
     public void  myGrant(String databaseName, String grantee, List<String> grants){
@@ -420,99 +312,49 @@ public class StorageEngine {
      * @param condition 查询条件（如 "age = 18"）
      */
     public void myQuery(String tableName, String columns, String condition) {
-//        if (!isOpen) {
-//            System.out.println("无选中数据库!");
-//            return;
-//        }
-//        int tableIndex = posIsNos(tableName);
-//        if (tableIndex == -1) {
-//            System.out.println("该表不存在!");
-//            return;
-//        }
-//        Table table = tables.get(tableIndex);
-//        String tablePath = table.getPath();
-//
-//        // 处理查询列（"all" 表示所有列）
-//        List<String> queryCols;
-//        if (columns.equalsIgnoreCase("all")) {
-//            queryCols = table.getColumns();
-//        } else {
-//            queryCols = new ArrayList<>();
-//            for (String col : columns.split(",")) {
-//                queryCols.add(col.trim());
-//            }
-//        }
-//
-//        // 查找查询列的索引
-//        List<Integer> colIndices = new ArrayList<>();
-//        List<String> tableColumns = table.getColumns();
-//        for (String col : queryCols) {
-//            int idx = -1;
-//            for (int i = 0; i < tableColumns.size(); i++) {
-//                if (tableColumns.get(i).equals(col)) {
-//                    idx = i;
-//                    break;
-//                }
-//            }
-//            if (idx == -1) {
-//                System.out.println("查询失败：列名 " + col + " 不存在");
-//                return;
-//            }
-//            colIndices.add(idx);
-//        }
-//
-//        // 读取并过滤数据
-//        try (BufferedReader reader = new BufferedReader(new FileReader(tablePath))) {
-//            String line;
-//            boolean isHeader = true;  // 标记是否为表头
-//            while ((line = reader.readLine()) != null) {
-//                if (isHeader) {
-//                    // 打印表头（仅查询的列）
-//                    StringBuilder header = new StringBuilder();
-//                    for (int idx : colIndices) {
-//                        header.append(tableColumns.get(idx)).append(" ");
-//                    }
-//                    System.out.println(header.toString().trim());
-//                    isHeader = false;
-//                    continue;
-//                }
-//                String[] values = line.trim().split(" ");
-//                if (values.length != tableColumns.size()) {
-//                    continue;  // 跳过格式错误的行
-//                }
-//                // 应用查询条件（示例：仅支持 "col = value" 格式）
-//                boolean conditionMet = true;
-//                if (!condition.isEmpty()) {
-//                    String[] condParts = condition.split("=");
-//                    if (condParts.length != 2) {
-//                        System.out.println("查询条件格式错误（示例：age = 18）");
-//                        return;
-//                    }
-//                    String condCol = condParts[0].trim();
-//                    String condValue = condParts[1].trim();
-//                    int condColIndex = -1;
-//                    for (int i = 0; i < tableColumns.size(); i++) {
-//                        if (tableColumns.get(i).equals(condCol)) {
-//                            condColIndex = i;
-//                            break;
-//                        }
-//                    }
-//                    if (condColIndex == -1 || !values[condColIndex].equals(condValue)) {
-//                        conditionMet = false;
-//                    }
-//                }
-//                if (conditionMet) {
-//                    // 打印符合条件的行（仅查询的列）
-//                    StringBuilder row = new StringBuilder();
-//                    for (int idx : colIndices) {
-//                        row.append(values[idx]).append(" ");
-//                    }
-//                    System.out.println(row.toString().trim());
-//                }
-//            }
-//        } catch (IOException e) {
-//            System.out.println("查询失败: " + e.getMessage());
-//        }
+        List<Column> cols = tableMap.get(tableName).getColumns();
+        List<List<Object>> results = new ArrayList<>();
+
+        // 简单解析条件 "col = value"
+        String condCol = null;
+        String condValue = null;
+        if (condition != null && !condition.isEmpty() && condition.contains("=")) {
+            String[] parts = condition.split("=");
+            condCol = parts[0].trim();
+            condValue = parts[1].trim();
+        }
+
+        if (condCol != null) {
+            // 只支持主键查询
+            int pkIndex = -1;
+            for (int i = 0; i < cols.size(); i++) {
+                if (cols.get(i).getName().equalsIgnoreCase(condCol) && cols.get(i).isPrimaryKey()) {
+                    pkIndex = i;
+                    break;
+                }
+            }
+            if (pkIndex != -1) {
+                Key key = new Key(Arrays.asList(parseValue(cols.get(pkIndex), condValue)), cols);
+                List<Object> row = null;
+                try {
+                    row = tableMap.get(tableName).getTree().search(key);
+                } catch (IOException e) {
+                    System.out.println("更新失败");
+                }
+                if (row != null) results.add(row);
+            }
+        } else {
+            // 条件为空，返回全部（此处简化，实际需遍历叶子节点链表）
+            // 暂时不实现完整扫描
+        }
+        System.out.println(results.toString());
+    }
+
+
+
+    // 带 JOIN 的多表查询,重构方法,和MyQuery是一样的,只是参数类型不一样
+    public void myQuery(String tableName, String joinTableName,
+                        String columns, String joinCondition, String condition) {
     }
 
 
@@ -547,4 +389,14 @@ public class StorageEngine {
         }
         return directory.delete();
     }
+
+    // ===================== 工具 =====================
+    private Object parseValue(Column col, String val) {
+        switch (col.getType()) {
+            case "INT": return Integer.parseInt(val);
+            case "VARCHAR": return val;
+            default: return val;
+        }
+    }
 }
+

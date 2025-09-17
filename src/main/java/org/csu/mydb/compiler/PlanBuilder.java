@@ -162,8 +162,12 @@ public class PlanBuilder {
 
                 ExecutionPlan p = new ExecutionPlan(ExecutionPlan.OperationType.CREATE_TABLE);
                 p.setTableName(tableName);
-                // TODO: 分析字符串构造Columns
-                // p.setColumns(cols);
+
+                List<Column> columns = new ArrayList<>();
+                for (int i = 0; i < cols.size(); i++) {
+                    columns.add(Column.parseColumn(cols.get(i), i)) ;
+                }
+                p.setColumns(columns);
                 return p;
             } else {
                 throw error("CREATE 后面必须跟 DATABASE 或 TABLE", next);

@@ -179,6 +179,26 @@ public class BufferPool {
         }
     }
 
+    // 删除一个页（从缓存 & 脏页链表中都移除，不落盘）
+    public void deletePage(PageManager.GlobalPageId pageId) {
+        lock.writeLock().lock();
+        try {
+            // 从缓存移除
+            pageCache.remove(pageId);
+
+            // 如果在脏页链表，移除
+            DirtyPageNode node = dirtyPages.remove(pageId);
+            if (node != null) {
+                node.prev.next = node.next;
+                node.next.prev = node.prev;
+                dirtyCount--;
+            }
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+
     // 设置缓冲池大小
     public void setPoolSize(int poolSize) {
         this.poolSize = poolSize;
