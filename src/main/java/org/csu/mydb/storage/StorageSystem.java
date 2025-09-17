@@ -51,17 +51,39 @@ public class StorageSystem {
 
     //========================== 存储系统的静态方法（比存储引擎低一层的方法） ============================//
 
+    //往sys_tables.idb插入数据
+    public static boolean insertIntoSysTable(byte[] data){
+        return writePage("save/repos/sys_tables.idb", 1, 3,data);
+    }
+
+    //往sys_columns.idb插入数据
+    public static boolean insertIntoSysColumn(byte[] data){
+        return writePage("save/repos/sys_columns.idb", 2, 3,data);
+    }
 
     /**
-     *
+     * 加载所有表
      * @param dbName 数据库名称
      * @param sysTablesFirstLeafPage sys_tables.idb 的最左叶子结点页号
      * @param sysColumnsFirstLeafPage sys_columns.idb 的最左叶子结点页号
      * @return 当前数据库下的Table列表
      */
-    public static List<Table> loadAllTables(String dbName, int sysTablesFirstLeafPage, int sysColumnsFirstLeafPage){
+    public static List<Table> loadAllTables1(String dbName, int sysTablesFirstLeafPage, int sysColumnsFirstLeafPage){
         try {
             return new systemFileReader(pageManager).getDatabaseTables(dbName, sysTablesFirstLeafPage, sysColumnsFirstLeafPage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 加载所有表
+     * @param dbName 数据库名称
+     * @return 当前数据库下的Table列表
+     */
+    public static List<Table> loadAllTables(String dbName){
+        try {
+            return new systemFileReader(pageManager).getDatabaseTables(dbName, 3, 3);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

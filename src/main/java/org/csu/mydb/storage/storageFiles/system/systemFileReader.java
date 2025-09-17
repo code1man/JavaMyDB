@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//目前假设系统表只存在一个文件的第3页中，（没看成B+树）
 public class systemFileReader {
     private final PageManager pageManager;
 
@@ -76,7 +77,7 @@ public class systemFileReader {
         boolean isFirst = true;
 //        while (currentPage != -1) {
 //        for(int i = 0; i < ByteBuffer.wrap(headPage.getRecord(1)).getInt(); i++){
-        while(currentPage != sysTablesFirstLeafPage || isFirst){
+//        while(currentPage != sysTablesFirstLeafPage || isFirst){
             PageManager.Page page = pageManager.getPage(StorageSystem.SYS_TABLES_IDB_SPACE_ID, currentPage);
 
             for (int slot = 0; slot < page.header.slotCount; slot++) {
@@ -105,7 +106,7 @@ public class systemFileReader {
             isFirst = false;
             // 获取下一页
             currentPage = page.header.nextPage;
-        }
+//        }
 //        }
 
         return tables;
@@ -121,7 +122,7 @@ public class systemFileReader {
 //        PageManager.Page headPage = pageManager.getPage(StorageSystem.SYS_COLUMNS_IDB_SPACE_ID, 0);
         boolean isFirst = true;
 //        while (currentPage != -1) {
-        while(currentPage != sysColumnsFirstLeafPage || isFirst){
+//        while(currentPage != sysColumnsFirstLeafPage || isFirst){
             PageManager.Page page = pageManager.getPage(StorageSystem.SYS_COLUMNS_IDB_SPACE_ID, currentPage);
 
             for (int slot = 0; slot < page.header.slotCount; slot++) {
@@ -150,7 +151,7 @@ public class systemFileReader {
             isFirst = false;
             // 获取下一页
             currentPage = page.header.nextPage;
-        }
+//        }
 
         // 按位置排序
         columns.sort(Comparator.comparingInt(Column::getPosition));
