@@ -1,6 +1,7 @@
 package com.example.mydb;
 
 import org.csu.mydb.storage.BPlusTree.BPlusTree;
+import org.csu.mydb.storage.Initialisation;
 import org.csu.mydb.storage.StorageSystem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,12 +28,11 @@ public class BPlusTreeTest {
         // 模拟 PageManager (你需要保证有一个能跑的实现)
         StorageSystem storageSystem = new StorageSystem();
 
-
         // 定义表结构：一个主键 id(int)，一个 name(string)
         Column idCol = new Column("id", "INT", 4,0,0,true, true, null);   // true 表示是主键
         Column nameCol = new Column("name", "VARCHAR", 10, 0,1, false, false, null);
 
-        List<Column> columns = Arrays.asList(idCol, nameCol);
+        columns = Arrays.asList(idCol, nameCol);
         int spaceId = StorageSystem.createTable("G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jb.idb", columns);
         // order = 3
         tree = new BPlusTree(100, spaceId, storageSystem, columns, "G:\\MyDB\\MyDB\\src\\main\\resources\\test\\jb.idb");
@@ -79,13 +79,13 @@ public class BPlusTreeTest {
 
     @Test
     public void testBulkInsert() throws IOException {
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 50; i++) {
             tree.insert(columns,Arrays.asList(i, "Name" + i));
         }
 
-        List<Object> row = tree.search(new Key(List.of(3), getKeyColumns(tree.getColumns())));
+        List<Object> row = tree.search(new Key(List.of(25), getKeyColumns(tree.getColumns())));
         assertNotNull(row);
-        assertEquals("Name3", row.get(1));
+        assertEquals("Name25", row.get(1));
     }
 
     private List<Column> getKeyColumns(List<Column> columns) {

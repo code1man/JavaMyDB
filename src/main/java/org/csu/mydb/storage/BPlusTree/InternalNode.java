@@ -40,7 +40,7 @@ public class InternalNode extends BPlusNode<Key> {
      *   - 如果向上冒泡并产生新的 root（root-special-case）会返回 new root (InternalNode)
      *   - 否则返回 null
      */
-    public BPlusNode<Key> insertKey(Key key, BPlusNode<Key> child, int order, List<Column> tableColumns) throws IOException {
+    public BPlusNode<Key> insertKey(String filePath, Key key, BPlusNode<Key> child, int order, List<Column> tableColumns) throws IOException {
         // 找到 key 插入位置
         int pos = findInsertPosition(key);
         keys.add(pos, key);
@@ -48,11 +48,11 @@ public class InternalNode extends BPlusNode<Key> {
         child.parent = this;
 
         // 持久化当前 internal node
-        storageSystem.writeInternalNode(this, tableColumns);
+        storageSystem.writeInternalNode(filePath,this, tableColumns);
 
         // 超过阶数 -> split
         if (keys.size() > order) {
-            return split(order, tableColumns);
+            return split(filePath, order, tableColumns);
         }
 
         return null;
@@ -61,7 +61,7 @@ public class InternalNode extends BPlusNode<Key> {
     /**
      * 内部节点分裂
      */
-    public InternalNode split(int order, List<Column> tableColumns) throws IOException {
+    public InternalNode split(String filePath, int order, List<Column> tableColumns) throws IOException {
         int mid = keys.size() / 2;
         Key promoteKey = keys.get(mid);
 
@@ -88,8 +88,8 @@ public class InternalNode extends BPlusNode<Key> {
         children = new ArrayList<>(children.subList(0, mid + 1));
 
         // 写磁盘
-        storageSystem.writeInternalNode(this, tableColumns);
-        storageSystem.writeInternalNode(rightNode, tableColumns);
+        storageSystem.writeInternalNode(filePath,this, tableColumns);
+        storageSystem.writeInternalNode(filePath, rightNode, tableColumns);
 
         return rightNode;  // 保证 rightNode 有 key
     }
@@ -112,7 +112,7 @@ public class InternalNode extends BPlusNode<Key> {
      * @return 装载出的 BPlusNode（叶或内部）
      * @throws IOException 读磁盘或反序列化错误时抛出
      */
-    public BPlusNode<Key> getChildAt(int idx, List<Column> keyColumns) throws IOException {
+    public BPlusNode<Key> getChildAt(String filePath, int idx, List<Column> keyColumns) throws IOException {
         if (idx < 0) throw new IndexOutOfBoundsException("Child index must be >= 0, but got " + idx);
 
         // 如果 children 数量不足以包含 idx，则尝试从磁盘 page 解析并重建 children 指针
@@ -135,7 +135,7 @@ public class InternalNode extends BPlusNode<Key> {
 
         int childPageNo = children.get(idx);
         // 动态从磁盘加载子节点（loadNode 会根据 pageType 返回 LeafNode 或 InternalNode）
-        BPlusNode<Key> childNode = storageSystem.loadNode(new PageManager.GlobalPageId(gid.spaceId, childPageNo), this, keyColumns);
+        BPlusNode<Key> childNode = storageSystem.loadNode(filePath, new PageManager.GlobalPageId(gid.spaceId, childPageNo), this, keyColumns);
 
         return childNode;
     }

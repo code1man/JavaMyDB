@@ -107,7 +107,7 @@ public class StorageSystem {
      * @param data
      * @return 是否插入成功，插入失败说明空间不够
      */
-    public static boolean writePage(String filePath, int spaceId, int pageNo, byte[] data) {
+    public static boolean writePage(String filePath, int spaceId, int pageNo, byte[] data, List<Column> columns) {
         try {
             boolean result;
 
@@ -119,7 +119,7 @@ public class StorageSystem {
             //获得页
             PageManager.Page page = pageManager.getPage(spaceId, pageNo);
 
-            List<Column> columns = spaceIdToColumns.get(spaceId);
+            // List<Column> columns = spaceIdToColumns.get(spaceId);
 
             //分类讨论
             int pageType = page.header.pageType;
@@ -447,7 +447,7 @@ public class StorageSystem {
         // 写入所有 records
         for (List<Object> row : node.records) {
             byte[] rowData = RecordSerializer.serializeDataRow(row, columns);
-            StorageSystem.writePage(filePath, spaceId, pageNo, rowData);
+            StorageSystem.writePage(filePath, spaceId, pageNo, rowData, columns);
         }
 
         node.header.isDirty = true;
@@ -484,7 +484,7 @@ public class StorageSystem {
         byte[] leftOnly = RecordSerializer.serializeKeyPtr(
                 Collections.emptyList(), Collections.emptyList(), leftChildPage
         );
-        StorageSystem.writePage(filePath, spaceId, pageNo, leftOnly);
+        StorageSystem.writePage(filePath, spaceId, pageNo, leftOnly, tableColumns);
 
         // 写 key + right child
         for (int i = 0; i < node.keys.size(); i++) {
@@ -493,7 +493,7 @@ public class StorageSystem {
             byte[] keyPtrData = RecordSerializer.serializeKeyPtr(
                     key.getValues(), key.getKeyColumns(), rightChildPage
             );
-            StorageSystem.writePage(filePath, spaceId, pageNo, keyPtrData);
+            StorageSystem.writePage(filePath, spaceId, pageNo, keyPtrData, tableColumns);
         }
 
         node.header.isDirty = true;

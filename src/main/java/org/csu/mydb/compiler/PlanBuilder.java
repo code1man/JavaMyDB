@@ -491,8 +491,13 @@ public class PlanBuilder {
             String setCol = a1.lexeme; consume();
             expectOperator("="); // '=' may be DELIMITER or OPERATOR in Lexer; if your Lexer uses OPERATOR for "=", alter accept above
             Lexer.Token newVal = peek();
-            if (newVal == null || (newVal.type != Lexer.CONSTANT && newVal.type != Lexer.IDENTIFIER)) throw error("期望新值", newVal);
-            String newValue = newVal.lexeme; consume();
+            String lex = newVal.lexeme;
+            if (lex != null && lex.length() >= 2 && lex.charAt(0) == '\'' && lex.charAt(lex.length() - 1) == '\'') {
+                lex = '#' +  lex.substring(1, lex.length() - 1);
+            }
+            else if (newVal == null || (newVal.type != Lexer.CONSTANT && newVal.type != Lexer.IDENTIFIER)) throw error("期望新值", newVal);
+            String newValue = lex;
+            consume();
 
             // skip possible additional assignments separated by comma (we ignore them or you can error)
             while (peek() != null && peek().type == Lexer.DELIMITER && peek().lexeme.equals(",")) {

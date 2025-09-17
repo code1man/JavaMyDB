@@ -151,7 +151,7 @@ public class Column {
                 }
             }
         }
-        remaining = remaining.substring(typeMatcher.end()).trim();  // 剩余约束部分
+        remaining = remaining.substring(typeMatcher.end()).trim().toUpperCase();  // 剩余约束部分
 
         // 步骤3：解析约束条件（主键、非空、默认值等）
         while (!remaining.isEmpty()) {

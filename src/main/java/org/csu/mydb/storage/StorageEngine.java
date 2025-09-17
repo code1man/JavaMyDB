@@ -4,7 +4,6 @@ import org.csu.mydb.config.ConfigLoader;
 import org.csu.mydb.storage.BPlusTree.BPlusTree;
 import org.csu.mydb.storage.Table.Column.Column;
 import org.csu.mydb.storage.Table.Table;
-import org.csu.mydb.storage.Table.Column.Column;
 import org.csu.mydb.storage.Table.Key;
 
 import java.io.File;
@@ -17,8 +16,8 @@ import java.util.*;
 public class StorageEngine {
     private String prePath = "";       // 数据库路径前缀（如 "save/repos/"）
     private boolean isOpen = false;    // 是否已打开数据库
-    private final List<Table> tables = new ArrayList<>();  // 当前打开的表列表
-    private final HashMap<String, Table> tableMap = new HashMap<>();
+    private final static List<Table> tables = new ArrayList<>();  // 当前打开的表列表
+    private final static HashMap<String, Table> tableMap = new HashMap<>();
     private final StorageSystem storageSystem = new StorageSystem();
 
     public StorageEngine() {
@@ -191,6 +190,12 @@ public class StorageEngine {
     public void myInsert(String tableName, List<Column> columns, List<String> values) {
         Table table = tableMap.get(tableName);
         List<Object> valuesList = new ArrayList<>();
+        if (columns == null && values.size() == table.getColumns().size()) {
+            columns = table.getColumns();
+        } else if (values.size() != table.getColumns().size()) {
+            System.out.println("必须插入所有属性");
+        }
+
         for (int i = 0; i < columns.size(); i++) {
             if (Objects.equals(columns.get(i).getType(), "INT")) {
                 valuesList.add(Integer.parseInt(values.get(i)));
@@ -200,7 +205,11 @@ public class StorageEngine {
                 System.out.println("格式错误");
                 return;
             }
+            if (columns.get(i).getName().equals(table.getColumns().get(i).getName()) && table.getColumns().get(i).isPrimaryKey()) {
+                columns.get(i).setPrimaryKey(true);
+            }
         }
+
         try {
             table.getPrimaryIndex().insert(columns, valuesList);
             System.out.println("插入成功");
@@ -347,7 +356,8 @@ public class StorageEngine {
             // 条件为空，返回全部（此处简化，实际需遍历叶子节点链表）
             // 暂时不实现完整扫描
         }
-        System.out.println(results.toString());
+        System.out.println();
+        results.forEach(result -> result.forEach(System.out::print));
     }
 
 
@@ -355,14 +365,42 @@ public class StorageEngine {
     // 带 JOIN 的多表查询,重构方法,和MyQuery是一样的,只是参数类型不一样
     public void myQuery(String tableName, String joinTableName,
                         String columns, String joinCondition, String condition) {
-    }
+        List<Column> cols = tableMap.get(tableName).getColumns();
+        List<List<Object>> results = new ArrayList<>();
 
+        // 简单解析条件 "col = value"
+        String condCol = null;
+        String condValue = null;
+        if (condition != null && !condition.isEmpty() && condition.contains("=")) {
+            String[] parts = condition.split("=");
+            condCol = parts[0].trim();
+            condValue = parts[1].trim();
+        }
 
-
-    // 带 JOIN 的多表查询,重构方法,和MyQuery是一样的,只是参数类型不一样
-    public void myQuery(String tableName, String joinTableName,
-                        String columns, String joinCondition, String condition) {
-
+        if (condCol != null) {
+            // 只支持主键查询
+            int pkIndex = -1;
+            for (int i = 0; i < cols.size(); i++) {
+                if (cols.get(i).getName().equalsIgnoreCase(condCol) && cols.get(i).isPrimaryKey()) {
+                    pkIndex = i;
+                    break;
+                }
+            }
+            if (pkIndex != -1) {
+                Key key = new Key(Arrays.asList(parseValue(cols.get(pkIndex), condValue)), cols);
+                List<Object> row = null;
+                try {
+                    row = tableMap.get(tableName).getTree().search(key);
+                } catch (IOException e) {
+                    System.out.println("更新失败");
+                }
+                if (row != null) results.add(row);
+            }
+        } else {
+            // 条件为空，返回全部（此处简化，实际需遍历叶子节点链表）
+            // 暂时不实现完整扫描
+        }
+        System.out.println(results);
     }
 
     /**
